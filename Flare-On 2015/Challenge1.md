@@ -13,7 +13,9 @@ This routine functionality can be roughly tranlated to
 
  And when i find what is stored at `byte_402140[ecx]`, this is what i found
  ![image](https://github.com/neziRzz/CTF_Writeups/assets/126742756/def902b2-a2ea-47c4-849b-23ac30e2e7de)
- Since xor operation is symmetric and reflexive, we can just take whatever is stored in `byte_402140[ecx]` and xor it with 0x7D
+ Since xor operation is symmetric and reflexive, we can just take whatever is stored in `byte_402140[ecx]` 
+ and xor it with 0x7D
+
 **Flag:`bunny_sl0pe@flare-on.com`**
 And this is a python script for this challange
 ```python
