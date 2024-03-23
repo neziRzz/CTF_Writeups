@@ -1,6 +1,8 @@
 This challange is rather simple
 - First lets put it in IDA
 ![image](https://github.com/neziRzz/CTF_Writeups/assets/126742756/fe3505cc-de77-484b-84f2-7cfcd0f481ac)
+
+
 This function might seems intimidating but it actually just print out the string `Let's start out easy` and ask for your input by using `WriteFile` and `ReadFile` function
 
 - Then comes the checking routine
