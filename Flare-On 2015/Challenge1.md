@@ -19,6 +19,9 @@ This routine functionality can be roughly translated to
  Since xor operation is symmetric and reflexive, we can just take whatever is stored in `byte_402140[ecx]` 
  and xor it with 0x7D
 
+ ![image](https://github.com/neziRzz/CTF_Writeups/assets/126742756/38f5082f-1016-4e53-910b-c9fb0253cef7)
+
+
 **Flag:`bunny_sl0pe@flare-on.com`**
 And this is a python script for this challange
 ```python
