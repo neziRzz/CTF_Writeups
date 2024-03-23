@@ -7,7 +7,7 @@ This function might seems intimidating but it actually just print out the string
 
 - Then comes the checking routine
 ![image](https://github.com/neziRzz/CTF_Writeups/assets/126742756/d7b87237-8340-4785-8ad8-d92c52069c0c)
-This routine functionality can be roughly tranlated to
+This routine functionality can be roughly translated to
   - Our input is stored in `byte_402158[ecx]` is move into `AL`
   - Our input then xor'ed with 0x7D
   - If its not equal to what is stored at `byte_402140[ecx]` the program then print `You are failure` and the program terminates else increment `ECX`
