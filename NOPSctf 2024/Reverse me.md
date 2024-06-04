@@ -26,7 +26,7 @@ We can fix the parameters name for easier analysis
 
 The program functionality can roughly be translated to
   + Check whether the total number of arguments (including the program's name) is equal to 5
-  + If not the program terminates else the arguments are passed into sub_1460, do some checking there and if the arguments conditions are met, sub_1A50 will be responsible for flag decryption, else the program terminates.
+  + If not the program terminates else the programs' arguments are passed into sub_1460, do some checking there and if the arguments conditions are met, sub_1A50 will be responsible for flag decryption, else the program terminates.
 
 
 sub_1460
