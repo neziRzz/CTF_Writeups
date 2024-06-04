@@ -6,9 +6,9 @@ Using HxD(Hex editor), we can see something strange at the last couple bytes of 
 
 ![image](https://github.com/neziRzz/CTF_Writeups/assets/126742756/766aa259-72ff-4417-abd9-5b7842a1416c)
 
-As the title and the challenge description suggested, we can see that the bytes of this program was reversed (The magic bytes are ELF in reverse)
+As the title and the challenge description suggested, we can see that the bytes of this program were reversed (The magic bytes are ELF in reverse)
 
-After restore the original bytes we can see that the file is a ELF64 executable
+After restoring the original bytes we can see that the file is a ELF64 executable
 
 ![image](https://github.com/neziRzz/CTF_Writeups/assets/126742756/f2226c0f-1113-4a2e-b463-5378d8d19e87)
 
