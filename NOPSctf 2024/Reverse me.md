@@ -30,6 +30,7 @@ The program functionality can roughly be translated to
 
 
 sub_1460
+
 ![image](https://github.com/neziRzz/CTF_Writeups/assets/126742756/6711234f-95f5-45d1-8e3b-77249e38088f)
 
 This function can be easily replicated using z3
