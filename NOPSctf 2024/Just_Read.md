@@ -10,7 +10,7 @@ For the sake of simplicity, we will not analyze the above routine in asm but ins
 
 ![image](https://github.com/neziRzz/CTF_Writeups/assets/126742756/8fbb8f29-a1f9-4fc4-a4d6-a61212ca0147)
 
-The program compare each character of the user's input with the following values and if they are valid and the input's lenght is equal to 23 then we get the flag.
+The program compare each character of the user's input with the following values and if they are valid and the input's length is equal to 23 then we get the flag.
 This is a python script for this challenge
 ```python
 s=["lmaommb"]*23
