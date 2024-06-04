@@ -17,7 +17,17 @@ Put it in IDA (For ELF files, it is better to use Binary Ninja on a Linux machin
 ![image](https://github.com/neziRzz/CTF_Writeups/assets/126742756/13f6359d-3948-4e59-8b78-13e9ce7a3a0d)
 
 We can fix the parameters name for easier analysis
-![image](https://github.com/neziRzz/CTF_Writeups/assets/126742756/9a9e5f65-a24a-483b-91a2-6d03c33e4bcb)
+
+![image](https://github.com/neziRzz/CTF_Writeups/assets/126742756/1df22f94-a1c9-4bed-b38b-ad88bb52c21c)
+
+![image](https://github.com/neziRzz/CTF_Writeups/assets/126742756/3dcff335-af86-4958-b8d1-4c538b421941)
+
+![image](https://github.com/neziRzz/CTF_Writeups/assets/126742756/4b9668bf-b2e8-401e-a6c2-a134ec4aa4d6)
+
+
+
+
+
 
 
 
