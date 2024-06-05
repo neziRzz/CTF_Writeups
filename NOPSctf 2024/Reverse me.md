@@ -33,7 +33,7 @@ sub_1460
 
 ![image](https://github.com/neziRzz/CTF_Writeups/assets/126742756/6711234f-95f5-45d1-8e3b-77249e38088f)
 
-This function can be easily replicated using z3
+This function can easily be replicated using z3
 ```python
 from z3 import *
 a1, a2, a3, a4 = Ints("a1 a2 a3 a4")
