@@ -47,7 +47,11 @@ if(s.check()==unsat):
 else:
     print(s.model()) #[a1 = -3, a3 = -7, a2 = 8, a4 = -9]
 ```
-If you put the above results as the arguments of the program, the flag will be printed out (I will include the flag later since my kali dual boot is broken)
+If you put the above results as the arguments of the program, the flag will be printed out 
+
+![image](https://github.com/neziRzz/CTF_Writeups/assets/126742756/500d9b81-d197-431f-979e-1b16fd4cbbb6)
+
+**Flag:** `N0PS{r1CKUNr0111N6}`
 
 
 
