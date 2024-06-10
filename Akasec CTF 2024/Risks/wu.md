@@ -11,8 +11,8 @@ Bunch of strange instructions and it seems that IDA can't decompile the file
 ![image](https://github.com/neziRzz/CTF_Writeups/assets/126742756/2210166c-03bc-4042-a6f1-a05c0e1427a3)
 
 Try with Ghidra
-
-`undefined8 main(void)
+```
+undefined8 main(void)
 
 {
   char cVar1;
@@ -39,7 +39,8 @@ Try with Ghidra
   }
   printf("nuh uh");
   return 0;
-}`
+}
+```
 
 From the pseudocode that Ghidra provided the program we can see the flow of this program
 + The program takes the users' input
@@ -49,8 +50,9 @@ From the pseudocode that Ghidra provided the program we can see the flow of this
 
   The `check` function
 
-  `undefined8 check(long *param_1)
-
+  
+```
+  undefined8 check(long *param_1)
 {
   undefined8 uVar1;
   
@@ -62,7 +64,9 @@ From the pseudocode that Ghidra provided the program we can see the flow of this
     uVar1 = 0;
   }
   return uVar1;
-}`
+}
+
+```
 
 From this we can use z3 to find the satisfy input
 
