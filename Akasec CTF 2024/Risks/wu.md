@@ -11,7 +11,7 @@ Bunch of strange instructions and it seems that IDA can't decompile the file
 ![image](https://github.com/neziRzz/CTF_Writeups/assets/126742756/2210166c-03bc-4042-a6f1-a05c0e1427a3)
 
 Try with Ghidra
-```
+```C++
 undefined8 main(void)
 
 {
@@ -51,7 +51,7 @@ From the pseudocode that Ghidra provided the program we can see the flow of this
   The `check` function
 
   
-```
+```C++
   undefined8 check(long *param_1)
 {
   undefined8 uVar1;
