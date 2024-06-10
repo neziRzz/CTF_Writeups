@@ -91,6 +91,9 @@ __int64 __fastcall main(int a1, char **a2, char **a3)
   return 0LL;
 }
 ```
+- We can see that `v14` is initiallized using mmap (`VirtualAlloc` equivalent) and there are a lot of value assignments for `v14` also the call to `v14` at the end of the program, it is safe to say that `v14` is the flag checking function and will be initialized at runtime
+
+Put in Binary Ninja
 
 ```python
 cypher_header="#)#1\'!91"
