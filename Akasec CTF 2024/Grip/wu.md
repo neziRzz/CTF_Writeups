@@ -1,4 +1,4 @@
-ELF64 executable
+9ELF64 executable
 
 ![image](https://github.com/neziRzz/CTF_Writeups/assets/126742756/ee97d947-2188-4df0-98b3-a8951aaa95ca)
 
@@ -91,9 +91,29 @@ __int64 __fastcall main(int a1, char **a2, char **a3)
   return 0LL;
 }
 ```
-- We can see that `v14` is initiallized using mmap (`VirtualAlloc` equivalent) and there are a lot of value assignments for `v14` also the call to `v14` at the end of the program, it is safe to say that `v14` is the flag checking function and will be initialized at runtime
+- We can see that `v14` is initiallized using `mmap` (`VirtualAlloc` equivalent) and there are a lot of value assignments for `v14` also the call to `v14` at the end of the program, it is safe to say that `v14` is the flag checking function and will be initialized at runtime
 
 Put in Binary Ninja
+
+   - When we try to put a bp at main, RIP never reaches there so there must be some kind of anti-debugging technique being use, after some debugging, we can identify the anti-debug function
+
+  ![image](https://github.com/neziRzz/CTF_Writeups/assets/126742756/62bf95e4-84c2-4957-bc02-d24e727d349a)
+
+  - We just need to patch out the instruction, set bp at main and press run
+
+  ![image](https://github.com/neziRzz/CTF_Writeups/assets/126742756/5ddb2dab-850b-48ea-8e6f-fbc5452d426a)
+
+  - Set bp at the last call to `v14` (`rdx`) and step into the call
+
+  ![image](https://github.com/neziRzz/CTF_Writeups/assets/126742756/ef287dd0-2a90-4cdd-91fb-4c0a6a816db7)
+
+
+  - Analyze the function in pseudocode
+    
+  ![image](https://github.com/neziRzz/CTF_Writeups/assets/126742756/1a8d2bf1-02b4-4e2a-9aa5-5f98067c4aab)
+
+  - This is just a simple xor routine and can be easily scripted
+
 
 ```python
 cypher_header="#)#1\'!91"
