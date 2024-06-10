@@ -74,6 +74,7 @@ From this we can use z3 to find the satisfy input
 from z3 import *
 param_1 = [BitVec("flag[%d]" %i,64) for i in range(4)]
 s = Solver()
+#conditons can be found in FUN_00101ad4 FUN_00101346 FUN_00100c8c FUN_00100786 and check funtion
 param_1[0] =param_1[0] + 0x75978f47ac76cf
 param_1[1] =param_1[1] + 0xff889b2d229768ef
 param_1[0] =param_1[0] ^ 0x76bf86ade5d5cc
