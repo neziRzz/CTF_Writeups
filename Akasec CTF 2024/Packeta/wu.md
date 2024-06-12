@@ -154,11 +154,11 @@ unsigned __int64 __fastcall sub_1C66(__int64 a1, __int64 a2)
 ![image](https://github.com/neziRzz/CTF_Writeups/assets/126742756/70ef69bc-175d-41ed-bf68-dfa46fa5e51f)
 ![image](https://github.com/neziRzz/CTF_Writeups/assets/126742756/6f3fa5aa-b69d-470d-83ac-d7ae962da97b)
 
-- The cyphertext starts with 0x4D, 0x75 and 0x3C, we can see where are those bytes located in the binary
+- The cyphertext starts with 0x4D, 0x75 and 0x3C, we can see where are those bytes located in the `flag` binary
 
 ![image](https://github.com/neziRzz/CTF_Writeups/assets/126742756/80794f08-6799-4ca0-a1e5-f95931fa6e99)
 
-- Those bytes are located in the .text section, start function of the file, we can write a bruteforce script to find the valid key and compare the decrypt instructions with a normal start function
+- Those bytes are located in the .text section, start function of the `flag` binary, we can write a bruteforce script to find the valid key and compare the decrypt instructions with a normal start function
 ```python
 from Crypto.Cipher import ARC4
 from ctypes import CDLL
