@@ -4,7 +4,7 @@ ELF 64 executables
 ![image](https://github.com/neziRzz/CTF_Writeups/assets/126742756/d18a9012-1d85-4b19-8308-edd368a6f96b)
 ![image](https://github.com/neziRzz/CTF_Writeups/assets/126742756/08ac553b-c47f-419f-bc58-9a006deaebdf)
 
-Open both with IDA
+Open with IDA
 
 - Packeta
 ```C++
