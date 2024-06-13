@@ -163,7 +163,6 @@ unsigned __int64 __fastcall sub_1C66(__int64 a1, __int64 a2)
 from Crypto.Cipher import ARC4
 from ctypes import CDLL
 from capstone import *
-import string
 
 md = Cs(CS_ARCH_X86, CS_MODE_64)
 
@@ -180,7 +179,6 @@ for i in range(500):
 	asm = cipher.decrypt(bytes(ct))
 	for j in md.disasm(asm, 0x401000):
 		print(i, j)
-	print() 
 ```
 - decrypted with `current_time % 500` = 127
 
