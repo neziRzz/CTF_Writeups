@@ -42,7 +42,7 @@ undefined8 main(void)
 }
 ```
 
-From the pseudocode that Ghidra provided the program we can see the flow of this program
+From the pseudocode that Ghidra provided we can see the flow of this program
 + The program takes the users' input
 + Input is stored in `local_20` and `local_28`
 + ``FUN_00101ad4`` ``FUN_00101346`` `FUN_00100c8c` `FUN_00100786` will do some calculation on our input
