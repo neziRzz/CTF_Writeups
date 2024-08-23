@@ -45,7 +45,7 @@ def _ror(val, bits, bit_size):
     return ((val & (2 ** bit_size - 1)) >> bits % bit_size) | \
            (val << (bit_size - (bits % bit_size)) & (2 ** bit_size - 1))
 for i in range(len(cyphertext)>>3):
-    for j in range(0x64):
+    for j in range(0x64): #for some reason AND'ing 0xFF after _ror just won't work
         cyphertext[8*i] = 0xFF&(_ror(cyphertext[8*i]&0xFF,1,8)) - bytes_list[ord(weird_ahh_string[7]) + cyphertext[8*i+7]&0xFF]
         cyphertext[8*i+7] = 0xFF&(_ror(cyphertext[8*i+7]&0xFF,1,8)) - bytes_list[ord(weird_ahh_string[6]) + cyphertext[8*i+6]&0xFF]
         cyphertext[8*i+6] = 0xFF&(_ror(cyphertext[8*i+6]&0xFF,1,8)) - bytes_list[ord(weird_ahh_string[5]) + cyphertext[8*i+5]&0xFF]
