@@ -1,8 +1,8 @@
-Đề cho 1 file PE64
+- Đề cho 1 file PE64
 
 ![image](https://github.com/user-attachments/assets/0ac3dcf8-d094-4f9a-a137-2337268b0db4)
 
-Pseudocode của IDA
+- Pseudocode của IDA (Mình đã đổi tên một số hàm để tiện hơn cho việc phân tích)
 ```C
 int __cdecl main(int argc, const char **argv, const char **envp)
 {
@@ -31,16 +31,16 @@ int __cdecl main(int argc, const char **argv, const char **envp)
   __int64 v26; // [rsp+610h] [rbp-118h]
   char v27[32]; // [rsp+618h] [rbp-110h] BYREF
   char v28[32]; // [rsp+638h] [rbp-F0h] BYREF
-  char v29[32]; // [rsp+658h] [rbp-D0h] BYREF
+  char input[32]; // [rsp+658h] [rbp-D0h] BYREF
   char v30[32]; // [rsp+678h] [rbp-B0h] BYREF
   char v31[32]; // [rsp+698h] [rbp-90h] BYREF
   char v32[32]; // [rsp+6B8h] [rbp-70h] BYREF
   char v33[32]; // [rsp+6D8h] [rbp-50h] BYREF
   char v34[32]; // [rsp+6F8h] [rbp-30h] BYREF
 
-  alloc_mem(v29);
+  alloc_mem(input);
   call_cout(std::cout, "Enter something: ");
-  call_cin(std::cin, v29);
+  call_cin(std::cin, input);
   v21[0] = 2741159;
   v21[1] = 2807211;
   v21[2] = 3698913;
@@ -222,10 +222,10 @@ int __cdecl main(int argc, const char **argv, const char **envp)
   v22[158] = 1618274;
   v22[159] = 1618274;
   v7 = 0;
-  sub_140003860(v31, &unk_140008489);
+  sub_7FF6C5843860(v31, &unk_7FF6C5848489);
   while ( v7 < 400 )
   {
-    if ( *(_BYTE *)getchar(v29, 0i64) == 69 )
+    if ( *(_BYTE *)sub_7FF6C58436B0(input, 0i64) == 'E' )
     {
       v20[0] = 3236549;
       v20[1] = 3203523;
@@ -247,21 +247,21 @@ int __cdecl main(int argc, const char **argv, const char **envp)
       v20[17] = 1089858;
       v20[18] = 1089858;
       v20[19] = 1089858;
-      v14 = 127 * v20[dword_14000B100[v7]];
-      v15 = (*(char *)getchar(v29, dword_14000B100[v7]) + v14) >> 22;
+      v14 = 127 * v20[dword_7FF6C584B100[v7]];
+      v15 = (*(char *)sub_7FF6C58436B0(input, dword_7FF6C584B100[v7]) + v14) >> 22;
       std::string::operator+=(v31, (unsigned __int8)v15);
     }
     else
     {
-      v16 = 127 * v21[dword_14000B100[v7]];
-      v17 = (*(char *)getchar(v29, dword_14000B100[v7]) + v16) >> 22;
+      v16 = 127 * v21[dword_7FF6C584B100[v7]];
+      v17 = (*(char *)sub_7FF6C58436B0(input, dword_7FF6C584B100[v7]) + v16) >> 22;
       std::string::operator+=(v31, (unsigned __int8)v17);
     }
     v7 += 21;
   }
-  v19 = sub_140002040();
-  sub_140003860(v30, "Correct?");
-  if ( (unsigned __int8)sub_140004D40(v19, "1") )
+  v19 = sub_7FF6C5842040();
+  sub_7FF6C5843860(v30, "Correct?");
+  if ( (unsigned __int8)sub_7FF6C5844D40(v19, "1") )
   {
     v23[0] = 1585248;
     v23[1] = 1882482;
@@ -425,46 +425,60 @@ int __cdecl main(int argc, const char **argv, const char **envp)
     v23[159] = 3269575;
     for ( i = 0; i < 160; ++i )
       v22[i] = v23[i];
-    v24 = sub_140003620(v30, v27, 0i64, 7i64);
-    sub_1400037E0(v30, v24);
-    clear_buffer(v27);
-    v19 = sub_140001F00();
+    v24 = sub_7FF6C5843620(v30, v27, 0i64, 7i64);
+    sub_7FF6C58437E0(v30, v24);
+    sub_7FF6C58437B0(v27);
+    v19 = sub_7FF6C5841F00();
   }
   v11 = 0;
   v13 = 1;
   for ( j = 0; j <= 4; ++j )
   {
-    sub_140003860(v32, &unk_14000848A);
+    sub_7FF6C5843860(v32, &unk_7FF6C584848A);
     std::shared_ptr<__ExceptionPtr>::operator=(v34, 32i64 * j + v19);
     v12 = 0;
     v25 = v28;
-    v26 = sub_140003620(v31, v28, 4 * j, 4i64);
-    sub_140001DB0(v33, v26);
+    v26 = sub_7FF6C5843620(v31, v28, 4 * j, 4i64);
+    sub_7FF6C5841DB0(v33, v26);
     for ( k = v11; k < v11 + 32; ++k )
     {
       v18 = 127 * v22[k];
-      v3 = (char *)getchar(v34, v12);
+      v3 = (char *)sub_7FF6C58436B0(v34, v12);
       std::string::operator+=(v32, (unsigned __int8)((*v3 + v18) >> 22));
       ++v12;
     }
     v11 += 32;
     if ( (unsigned __int8)check(v33, v32) )
       v13 = 0;
-    clear_buffer(v33);
-    clear_buffer(v34);
-    clear_buffer(v32);
+    sub_7FF6C58437B0(v33);
+    sub_7FF6C58437B0(v34);
+    sub_7FF6C58437B0(v32);
   }
   if ( !v13 )
   {
     v5 = call_cout(std::cout, "Something unto death?");
-    std::ostream::operator<<(v5, sub_140004E00);
+    std::ostream::operator<<(v5, sub_7FF6C5844E00);
     ExitProcess(0xFFFFFFFF);
   }
-  v4 = sub_140004DB0(std::cout, v30);
-  std::ostream::operator<<(v4, sub_140004E00);
-  clear_buffer(v30);
-  clear_buffer(v31);
-  clear_buffer(v29);
+  v4 = sub_7FF6C5844DB0(std::cout, v30);
+  std::ostream::operator<<(v4, sub_7FF6C5844E00);
+  sub_7FF6C58437B0(v30);
+  sub_7FF6C58437B0(v31);
+  sub_7FF6C58437B0(input);
   return 0;
 }
 ```
+- Ta có thể thấy rằng chương trình ban đầu sẽ nhận input, sau đó dựa vào kí tự đầu tiên của input sẽ chia ra làm 2 luồng (kiểm tra xem kí tự đầu tiên có phải là `E` hay không)
+- Dựa vào vòng lặp while ở trên ta cũng có thể suy ra được độ dài của input là 20
+- Khi mình thử để thử input có kí tự `E` ở đầu và các kí tự còn lại đều là random thì chương trình gen ra 1 chuỗi khá kì lạ
+
+![image](https://github.com/user-attachments/assets/6ac20902-bb66-4411-843b-9b90122bb6be)
+
+- Từ đây ta có thể suy ra rằng các kí tự này sẽ được gen ra một cách cố định và sẽ không phụ thuộc quá nhiều vào input
+- Và bất ngờ thay khi mình thử để input là 20 kí tự `x` thì lại được flag :))) (vì một lí do nào đó mà IDA không show hết được chỗ chuỗi đó nên mình debug trong x64dbg)
+
+![image](https://github.com/user-attachments/assets/5376f8d4-8543-45c1-a849-8e3d54656c72)
+
+- Thực ra mình làm ra được như thế này thì là do hên xui bởi một kĩ thuật tên là hash collison (https://en.wikipedia.org/wiki/Hash_collision) nhưng mà các bạn muốn một cách tiếp cận chắc chắn hơn thì có thể bruteforce các kí tự input bằng cách dùng chuỗi `SUper_e4sy_Md5_CR4CK` làm key thì sẽ ra được input chuẩn
+`Flag:KMACTF{SUper_e4sy_Md5_CR4CK}`
+
