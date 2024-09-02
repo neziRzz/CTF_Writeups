@@ -479,6 +479,6 @@ int __cdecl main(int argc, const char **argv, const char **envp)
 
 ![image](https://github.com/user-attachments/assets/5376f8d4-8543-45c1-a849-8e3d54656c72)
 
-- Thực ra mình làm ra được như thế này thì là do một kĩ thuật tên là hash collision (https://en.wikipedia.org/wiki/Hash_collision) các bạn chỉ cần tạo ra một chuỗi có cũng md5 hash với `v32` nhưng mà các bạn muốn một cách tiếp cận chắc chắn hơn thì có thể bruteforce các kí tự input bằng cách dùng chuỗi `SUper_e4sy_Md5_CR4CK` làm key thì sẽ ra được input chuẩn
+- Thực ra mình làm ra được như thế này thì là do một kĩ thuật tên là hash collision (https://en.wikipedia.org/wiki/Hash_collision) các bạn chỉ cần tạo ra một chuỗi có cùng md5 hash với `v32` nhưng mà các bạn muốn một cách tiếp cận chắc chắn hơn thì có thể bruteforce các kí tự input bằng cách dùng chuỗi `SUper_e4sy_Md5_CR4CK` làm key thì sẽ ra được input chuẩn
 **Flag:**``KMACTF{SUper_e4sy_Md5_CR4CK}``
 
