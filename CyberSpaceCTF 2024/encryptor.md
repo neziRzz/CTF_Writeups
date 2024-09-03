@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
 ```
 
 - The flow of this program is pretty straightfoward. First it decode the base64 encoded key to a stream of bytes then it encrypt the users' input using Blowfish algorithm with ECB mode
-- With these pieces of information, writing a decypting will be easy but without the encrypted flag we can't really do anything . But worry not, there is a file named `enc.txt` in `Resources/assets`
+- With these pieces of information, writing a decrypting will be easy but without the encrypted flag we can't really do anything . But worry not, there is a file named `enc.txt` in `Resources/assets`
 
   ![image](https://github.com/user-attachments/assets/1048368e-0cb8-4bcc-92ed-6e2103fe95ee)
   ![image](https://github.com/user-attachments/assets/a1b26608-1004-4e32-9ade-eb04256d8c5f)
