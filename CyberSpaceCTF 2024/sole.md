@@ -736,7 +736,7 @@ v146 = v147 - flag[7]
 s.add(v146 == -163)
 
 v119 = 0xFFFFFFFF
-v119 = ((v119 & 0x0000FFFF) << 16) + (flag[1] + flag[5])
+v119 = ((v119 & 0xFFFF0000)) + (flag[1] + flag[5])
 
 v119 = v119 - flag[16]
 s.add(v119 == 158)
