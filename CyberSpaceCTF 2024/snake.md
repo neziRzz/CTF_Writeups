@@ -11,7 +11,7 @@
 
 ![image](https://github.com/user-attachments/assets/deb0d772-8b89-410b-a3aa-c345811532b8)
 
-- When dealing with these types of games, it is rather troublesome to actually put it in a disassembler and reverse the game's algorithm instead we should load the game into a debugger (mem-scanner) like Cheat Engine(Windows) or Game Conqueror(Linux)
+- When dealing with these types of games, it is rather troublesome to actually put it in a disassembler and reverse the game's algorithm (only do so when there are no other options) instead we should load the game into a debugger (mem-scanner) like Cheat Engine(Windows) or Game Conqueror(Linux)
 - For this challenge, we will use Game Counqueror ```$ sudo apt install gameconqueror```
 - Game Counqueror interface
 
