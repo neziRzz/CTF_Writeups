@@ -68,8 +68,27 @@ already_printed = set(output)
 for i in already_printed:
     if i in already_printed:
         print(i,end =' ')
-
-
-
-
+```
+```
+x0 S R
+x1 T U
+x2 o p
+x3 d e
+x4 q r
+x5 _ ^
+x6 d e
+x7 4 3
+x8 s r
+x9 y x
+x10 ^ _
+x11 M
+x12 c d
+x13 4 5
+x14 _ ^
+x15 C
+x16 R Q
+x17 4 3
+x18 C
+x19 K
+=>"SUper_e4sy_Md5_CR4CK"?
 ```
