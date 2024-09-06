@@ -663,3 +663,5 @@ while(v7<400):
 - Vậy key đúng là `SUper_e4sy_Md5_CR4CK`
 
 **Flag:** `KMACTF{SUper_e4sy_Md5_CR4CK}`
+
+Also easter egg, nhập 20 chữ `x` làm input cũng làm cho `v31` gen ra key đúng 🐧
