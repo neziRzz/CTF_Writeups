@@ -468,7 +468,7 @@ int __cdecl main(int argc, const char **argv, const char **envp)
   return 0;
 }
 ```
-- Nhìn tổng quan thì chương trình có vẻ sẽ thực hiện các phép tính toán lên input của chúng ta thông qua 1 số các array khác nhau (đây có thể là 1 hash table), và sau khi thực hiện hết các phép toán thì `sub_7FF74B264D70` sẽ có nhiệm vụ kiểm tra rồi set flag tương ứng để in ra string `Correct` hoặc `Something unto death?`
+- Nhìn tổng quan thì chương trình có vẻ sẽ thực hiện các phép tính toán lên input của chúng ta thông qua 1 số các array khác nhau (đây có thể là các hash table), và sau khi thực hiện hết các phép toán thì `sub_7FF74B264D70` sẽ có nhiệm vụ kiểm tra rồi set flag tương ứng để in ra string `Correct` hoặc `Something unto death?`
 - Trước tiên hãy xem input của chúng ta được xử lí như thế nào (để kiểm chứng chúng ta có thể debug)
   + Input được xử lí trong vòng `while(v7<400)` sẽ được gán vào `v31`
   + Từ vòng `while(v7<400)` ta có thể suy ra được input sẽ có độ dài là 20 kí tự
