@@ -570,7 +570,7 @@ x18 C
 x19 K
 =>"SUper_e4sy_Md5_CR4CK" or "SUper_e4sy_Md4_CR4CK" ?
 ```
-- Đến đây tuy là chúng ta đã có flag nhưng mà để thực sự hiểu được hết bài này thì nên tìm thêm cả input, bên dưới là script đề tìm input(với key là `SUper_e4sy_Md5_CR4CK`)
+- Đến đây tuy là chúng ta đã có flag nhưng mà để thực sự hiểu được hết bài này thì nên tìm thêm cả input, bên dưới là script tìm input(với key là `SUper_e4sy_Md5_CR4CK`)
 
 
 ```python
