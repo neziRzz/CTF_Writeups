@@ -473,7 +473,7 @@ int __cdecl main(int argc, const char **argv, const char **envp)
   + Input được xử lí trong vòng `while(v7<400)` sẽ được gán vào `v31`
   + Từ vòng `while(v7<400)` ta có thể suy ra được input sẽ có độ dài là 20 kí tự
   + Có thể thấy tùy thuộc vào kí tự đầu tiên của input mà chương trình có thể chạy qua 1 trong 2 luồng
-  + Nếu kí tự đảu tiên là `E` thì input sẽ được xử lí thông qua `v20` và khi ta nhập 19 kí tự còn lại random thì sẽ nhận được chuỗi `ban_da_bi_lua!!`
+  + Nếu kí tự đầu tiên là `E` thì input sẽ được xử lí thông qua `v20` và khi ta nhập 19 kí tự còn lại random thì sẽ nhận được chuỗi `ban_da_bi_lua!!`
     
     ![image](https://github.com/user-attachments/assets/f9a990be-07ef-49b2-8eb3-6278f0d60fcf)
 
