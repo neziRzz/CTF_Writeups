@@ -19,7 +19,7 @@
 
 ![image](https://github.com/user-attachments/assets/fde701a9-80bc-45cd-b210-c98034e58879)
 
-- Hóa ra đây chính là những giả trị ASCII của flag nhưng ở dưới dạng hex, nhưng mà tại sao chúng lại bị in ngược thì để giải thich cho điều này thì bởi đây là một file sử dụng kiểu Endian là `LE`(Little Endian) tức là những byte nằm ở cuồi sẽ được đọc trước những byte ở đầu
+- Hóa ra đây chính là những giả trị ASCII của flag nhưng ở dưới dạng hex, nhưng mà tại sao chúng lại bị in ngược thì để giải thích cho điều này thì bởi đây là một file sử dụng kiểu Endian là `LE`(Little Endian) tức là những byte nằm ở cuối sẽ được đọc trước những byte ở đầu
 - Với những dữ kiện trên, ta chỉ cần chuột phải (hoặc trỏ vào các value trên rồi bấm r) để convert hết các value về string rồi viết script
 ```python
 x1 = 'vah{CSCK'
