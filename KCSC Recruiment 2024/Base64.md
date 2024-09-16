@@ -97,10 +97,10 @@ print(encode(FLAG))
   + Chương trình sẽ tra bảng `b64` với 6 bit một để tạo ra char tương ứng, concat chúng với nhau rồi pad `=` hoặc `==` và in ra chuỗi đã được encode
 
 - Vậy để viết thuật toán giải mã, ta sẽ làm như sau
-  + Đảo ngược lại cách tra bảng `b64` (ban đầu ta tra binary to string thì bây giờ ta sẽ tra string to binary)
+  + Đảo ngược lại cách tra bảng `b64` (ban đầu ta tra binary to char thì bây giờ ta sẽ tra char to binary)
   + Bỏ các kí tự `=` và `==` có trong string bị encode và xóa số bit tương ứng với 2 ki tự này
   + Biến các kí tự có trong string bị encode về dạng binary (bằng cách tra bảng `b64`)
-  + Biến đổi 8 bit một về các kí tự ASCII tương ừng
+  + Biến đổi 8 bit một về các kí tự ASCII tương ứng
 
 - Dưới đây là script decode
 ```python
