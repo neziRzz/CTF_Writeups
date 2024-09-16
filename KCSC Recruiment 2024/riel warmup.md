@@ -31,4 +31,4 @@ x4 = 'ADI_'
 x5 = '^^}pumraw_laer_siht_retfa_'
 print(x1[::-1]+x2[::-1]+x3+x4[::-1]+x5[::-1])
 ```
-**Flag:KCSC{have_u_known_how_to_use_IDA_after_this_real_warmup}**
+**Flag:** `KCSC{have_u_known_how_to_use_IDA_after_this_real_warmup}*`
