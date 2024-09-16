@@ -96,7 +96,7 @@
 ![image](https://github.com/user-attachments/assets/480b4511-4af7-4ff8-9dff-095f6fb909d9)
 
 
-- Ta có thể thấy rằng v8 là một array chứa các DWORD (mình đã bôi xanh những DWORD thuộc `v8`) , ta chỉ nhặt những byte khác 0 rồi viết script giải
+- Ta có thể thấy rằng v8 là một array chứa các DWORD (0x12000000 -> 0x48000000) , ta chỉ nhặt những byte khác 0 rồi viết script giải
 
 ```python
 from z3 import *
