@@ -81,7 +81,7 @@
   os_Exit();
   }
 ```
-- Khi nhìn vào pseudocode của hàm main, ta có thể thấy được chương trình sẽ nhận input, kiểm tra độ dài của input có bằng 51 hay không, nếu không sẽ in ra chuỗi `Wrong Length!!!` và thoát, tiếp theo chương trình sẽ lấy từng kí tự của input xor với một array base64 với các index của array này được duyệt theo `v5 = i - (i & 0xFFFFFFFFFFFFFFE0LL);` để mỗi khi `v5` > 31 thì v5 sẽ duyệt array này từ đầu (tương tự với việc lấy i % 32), sau đó sẽ kiểm tra kết quả được xor với `v8` và nếu như sai ở bất kì một index nào thì chương trình sẽ in ra chuỗi `Wrong Flag!!!` và thoát
+- Khi nhìn vào pseudocode của hàm main, ta có thể thấy được chương trình sẽ nhận input, kiểm tra độ dài của input có bằng 51 hay không, nếu không sẽ in ra chuỗi `Wrong Length!!!` và thoát, nếu qua được đoạn check này thì tiếp theo chương trình sẽ lấy từng kí tự của input xor với một array base64 với các index của array này được duyệt theo `v5 = i - (i & 0xFFFFFFFFFFFFFFE0LL);` để mỗi khi `v5` > 31 thì v5 sẽ duyệt array này từ đầu (tương tự với việc lấy i % 32), sau đó sẽ kiểm tra kết quả được xor với `v8` và nếu như sai ở bất kì một index nào thì chương trình sẽ in ra chuỗi `Wrong Flag!!!` và thoát
 
 - Như mình đã nói ở trên thì lí do cụ thể hơn cho việc debug song song pseudocode và asm code trong bài này nếu ta debug trong cửa sổ pseudocode, khi ta trỏ chuột vào các biến như `v10`, `v2`,... thì nó sẽ không hiện lên những giá trị như mong đợi, và với những bài mà số lượng các phép tính nhiều và phức tạp thì việc phân tích sẽ dường như là không thể
 
