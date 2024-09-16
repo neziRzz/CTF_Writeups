@@ -102,7 +102,7 @@ print(encode(FLAG))
   + Biến các kí tự có trong string bị encode về dạng binary (bằng cách tra bảng `b64`)
   + Biến đổi 8 bit một về các kí tự ASCII tương ứng
 
-- Dưới đây là script decode
+- Dưới đây là script decode của mình
 ```python
 b64 = {
     "000000": "/",
