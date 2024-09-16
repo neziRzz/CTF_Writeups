@@ -157,7 +157,9 @@ print('Correct!!! Here is your flag: ' + flag)
 ```
 
 - Ta có thể thấy rằng luồng hoạt động của chương trình rất đơn giản, đầu tiên chương trình sẽ kiểm tra độ dài của input, nếu như độ dài của input mà khác 49 thì sẽ in ra `Wrong Length!!!`
+
 - Tiếp theo, chương trình sẽ lấy các phần tử theo index của input để thực hiện tính toán rồi so sánh nó với một số các constant, nếu như bất kì một trong những điều kiện này mà sai thì chương trình sẽ in ra `Wrong Flag!!!` và thoát
+  
 - Ta có thể thấy rằng các các điều kiện này giống như là 1 hệ phương trình với input tại các index là ẩn, và để giải bài này ta sẽ sử dụng z3
 
 ```python
