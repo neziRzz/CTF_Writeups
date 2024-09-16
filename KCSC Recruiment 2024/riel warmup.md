@@ -11,6 +11,7 @@
 ![image](https://github.com/user-attachments/assets/0b0ba9d0-91f4-4a48-aeff-12d2b8de18b7)
 
 - Chúng ta có thể thấy rằng bài sẽ bắt ta phải tự tìm flag được giấu đâu đó trong code, hàm hide đã cho ta một phần nhỏ của flag là `_how_to_use`
+  
 - Bài này đã khiến mình submit sai liên tục vì mình đã quá chú tâm vào mã giả mà không kiểm tra kĩ mã asm của bài, vì vậy để tiếp tục việc phân tích thì từ đây ta sẽ phân tích mã asm của bài
 
 ![image](https://github.com/user-attachments/assets/659ede89-2009-4362-a045-882acad43213)
@@ -20,6 +21,7 @@
 ![image](https://github.com/user-attachments/assets/fde701a9-80bc-45cd-b210-c98034e58879)
 
 - Hóa ra đây chính là những giả trị ASCII của flag nhưng ở dưới dạng hex, nhưng mà tại sao chúng lại bị in ngược thì để giải thích cho điều này thì bởi đây là một file sử dụng kiểu Endian là `LE`(Little Endian) tức là những byte nằm ở cuối sẽ được đọc trước những byte ở đầu
+  
 - Với những dữ kiện trên, ta chỉ cần chuột phải (hoặc trỏ vào các value trên rồi bấm r) để convert hết các value về string rồi viết script
 ```python
 x1 = 'vah{CSCK'
