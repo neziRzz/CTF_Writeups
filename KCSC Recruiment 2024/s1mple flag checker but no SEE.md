@@ -122,7 +122,7 @@ public class Flag_Checker {
   	+ Hàm `check3(ret,input,pos[17,...])`
   	  + Kiểm tra input tại các index theo mảng `pos[]` có chứa kí tự `_` hay không
   	+ Hàm `check4(ret,input,let[])`
-  	  + Thực hiện duyệt phần content (`{content_ở_đây}`) của flag từ 2 đầu nếu như gặp phải kí tự nào **không thuộc bảng chữ cái** thì bỏ qua chúng, ngược lại sẽ đối chiếu chúng với một số kí tự có trong mảng `let[]`
+  	  + Thực hiện duyệt phần content (`KCSC{content_ở_đây}`) của flag từ 2 đầu nếu như gặp phải kí tự nào **không thuộc bảng chữ cái** thì bỏ qua chúng, ngược lại sẽ đối chiếu chúng với một số kí tự có trong mảng `let[]`
   	+ Hàm `check5(ret,input,"")`
   	  + Thực hiện concat vào string `tmp` các kí tự trong input với index được duyệt theo mảng `f1nal[]`
   	  + Lấy các kí tự trong string tmp thực hiện tính toán rồi kiểm tra với các constants
