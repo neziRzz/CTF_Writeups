@@ -1,6 +1,6 @@
 - Đề cho 1 file source bằng Java (Mình đã rename các hàm `check()` để tiện hơn cho việc phân tích)
 
-- Tuy bài này không quá khó nhưng mình lại mất quá nhiều thời gian ngồi sửa script xong cuối cùng không giải được trong lúc thi :(
+- Tuy bài này không khó nhưng mình lại mất quá nhiều thời gian ngồi sửa script xong cuối cùng không giải được trong lúc thi :(
 
 ```Java
 import java.util.*;
