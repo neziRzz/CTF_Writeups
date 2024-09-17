@@ -111,7 +111,7 @@ public class Flag_Checker {
 }
 
 ```
-- Như ta có thể thấy rằng chương trình sẽ kiểm tra input bằng cách lồng rất nhiều hàm `check()` với parameters là input, một số các predefined array và các hàm `check()` khác . Để mà biết rõ được luồng kiểm tra như thế nào khi mà chỉ phân tích tĩnh thì thật sự rất rối, vì vậy ta sẽ nên debug file java này (VSCode có cung cấp extension giúp chúng ta debug )
+- Như ta có thể thấy rằng chương trình sẽ kiểm tra input bằng cách lồng rất nhiều hàm `check()` với parameters là input, một số các predefined array và các hàm `check()` khác . Để mà biết rõ được luồng kiểm tra như thế nào khi mà chỉ phân tích tĩnh thì thật sự rất rối, vì vậy ta nên debug file java này (VSCode có cung cấp extension giúp chúng ta debug )
 
 - Sau khi debug, chúng ta có thể biết được thứ tự gọi các hàm `check()` và các parameters tương ứng
   	+ Hàm `check1(ret,input)`
