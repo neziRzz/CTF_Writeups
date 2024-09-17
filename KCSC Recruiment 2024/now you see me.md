@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/a2721510-a1b2-4d7a-9bf5-2f1aca99fe9c)- Đề cho 1 template web như sau
+- Đề cho 1 template web như sau
 
   ![image](https://github.com/user-attachments/assets/4f25e34e-a46b-4464-9b11-ec2703ea03c7)
 
