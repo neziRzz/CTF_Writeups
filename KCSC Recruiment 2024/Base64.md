@@ -93,7 +93,7 @@ print(encode(FLAG))
 ```
 - Đây là một bài sử dụng một thuật toán base64 encode custom
   + Đầu tiên chương trình sẽ lấy từng kí tự của input và biến chúng thành dạng binary tương ứng và gắn các string binary đấy lại với nhau
-  + Sau đó để đảm bảo độ dài của input là bội của 6 thì chương trình sẽ pad `=` (`11` nếu như đấy là string binary) vào cuối chuỗi base64_encoded nếu modulo với 6 của độ dài string là 4. Pad `==` (`1111` nếu như đấy là string binary) vào cuối chuỗi base64_encoded nếu modulo với 6 của độ dài string là 2
+  + Sau đó để đảm bảo độ dài của binary string là bội của 6 thì chương trình sẽ pad `=` (`11` nếu như đấy là string binary) vào cuối chuỗi base64_encoded nếu modulo với 6 của độ dài string là 4. Pad `==` (`1111` nếu như đấy là string binary) vào cuối chuỗi base64_encoded nếu modulo với 6 của độ dài string là 2
   + Chương trình sẽ tra bảng `b64` với 6 bit một để tạo ra char tương ứng, concat chúng với nhau rồi pad `=` hoặc `==` và in ra chuỗi đã được encode
 
 - Vậy để viết thuật toán giải mã, ta sẽ làm như sau
