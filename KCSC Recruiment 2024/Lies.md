@@ -4,6 +4,305 @@
 
 ![image](https://github.com/user-attachments/assets/71237fe9-bb4a-4450-9bfc-3f2f18415184)
 
+- Pseudocode của IDA (mình đã đổi tên một số hàm để tiện hơn cho việc phân tích)
+
+```C
+int __cdecl main(int argc, const char **argv, const char **envp)
+{
+  char v4; // [esp+0h] [ebp-10h]
+  unsigned int v5; // [esp+0h] [ebp-10h]
+  unsigned __int8 i; // [esp+Fh] [ebp-1h]
+
+  sub_401050("Enter Your Flag: ", v4);
+  sub_4010C0("%s", (char)input);
+  v5 = strlen(input);
+  if ( v5 != 32 )
+  {
+    sub_401050("Wrong Length!!!\n", v5);
+    exit(0);
+  }
+  encrypt1(input);
+  encrypt2(input);
+  encrypt3(input);
+  for ( i = 0; i < 32u; ++i )
+  {
+    if ( input[i] != check[i] )
+    {
+      sub_401050("Wrong Flag!!!\n", 32);
+      exit(0);
+    }
+  }
+  sub_401050("Correct :3\n", 32);
+  return 0;
+}
+```
+- Ta có thể thấy được luồng của chương trình sẽ như sau
+    + Đầu tiên, chương trình sẽ kiểm tra số lượng kí tự nhập vào có phải là 32 hay không, nếu không sẽ in ra `Wrong Length!!!` và kết thúc chương trình
+    + Nếu thỏa mãn điều kiện, chương trình sẽ tiến hành encrypt input thông qua 3 hàm `encrypt1()`, `encrypt2()` và `encrypt3()`
+    + Cuối cùng kiểm tra input sau khi đã được encrypt với array `check[]` và in ra `Correct :3` hoặc `Wrong Flag!!!` tương ứng
+
+- Trước khi đi vào cụ thể các hàm encrypt sẽ làm gì, ta sẽ phải kiểm tra rằng có hàm nào được gọi trước hàm `main()` hay không, để kiểm tra thì các bạn có thể vào cửa sổ `Exports` của IDA
+
+- Ta có thể thấy rằng hàm `TlsCallback_0` và hàm `start` được gọi trước hàm `main()`
+
+  ![image](https://github.com/user-attachments/assets/aa07345a-4c7a-4efe-a6b5-24ca5b452a9b)
+
+- Hàm `TlsCallback_0()`
+
+```C
+NTSTATUS __stdcall TlsCallback_0(int a1, int a2, int a3)
+{
+  NTSTATUS result; // eax
+  ULONG NtGlobalFlag; // [esp+8h] [ebp-Ch]
+  int ProcessInformation; // [esp+Ch] [ebp-8h] BYREF
+
+  NtGlobalFlag = NtCurrentPeb()->NtGlobalFlag;
+  ProcessInformation = 0;
+  result = NtQueryInformationProcess((HANDLE)0xFFFFFFFF, ProcessDebugPort, &ProcessInformation, 4u, 0);
+  if ( !result && ProcessInformation )
+  {
+    result = NtGlobalFlag & 0x70;
+    if ( (NtGlobalFlag & 0x70) != 0 )
+      qmemcpy(&byte_4041A8, &unk_4040A8, 0x100u);
+  }
+  return result;
+}
+```
+- Hàm này thực hiện gọi  `NtQueryInformationProcess()` để lấy các thông tin về tiến trình, sau đó kiểm tra flag `NtGlobalFlag` có được set là 0x70 hay không (kiểm tra debugger), nếu flag này là 0x70 thì sẽ tiến hành overwrite `byte_1641A8` (byte array này sẽ được sử dụng cho hàm `encrypt2()`) thành `unk_1640A8` và điều này sẽ làm ảnh hưởng đến cách mà input được xử lí, [các bạn có thể tìm hiểu thêm về kĩ thuật anti-debug trên ở đây](https://anti-debug.checkpoint.com/techniques/debug-flags.html#manual-checks-ntglobalflag)
+
+- Để bỏ qua đoạn check debug này, các bạn chỉ cần patch lại instruction `jnz  short loc_161161` thành jmp là được
+
+    ![image](https://github.com/user-attachments/assets/2f97e6f5-59c1-4a1f-bbf9-0130a0861584)
+    ![image](https://github.com/user-attachments/assets/e7cdb2f6-daf5-4092-a6d0-d58b45862567)
+
+- Bây giờ thì mình sẽ bắt đầu việc phân tích các hàm encrypt
+
+- Hàm `encrypt1()`
+```C
+unsigned __int8 __cdecl encrypt1(int a1)
+{
+  unsigned __int8 result; // al
+  unsigned __int8 mm; // [esp+2h] [ebp-Ah]
+  unsigned __int8 kk; // [esp+3h] [ebp-9h]
+  unsigned __int8 jj; // [esp+4h] [ebp-8h]
+  unsigned __int8 n; // [esp+5h] [ebp-7h]
+  unsigned __int8 m; // [esp+6h] [ebp-6h]
+  unsigned __int8 k; // [esp+7h] [ebp-5h]
+  unsigned __int8 i; // [esp+8h] [ebp-4h]
+  unsigned __int8 nn; // [esp+9h] [ebp-3h]
+  unsigned __int8 ii; // [esp+Ah] [ebp-2h]
+  unsigned __int8 j; // [esp+Bh] [ebp-1h]
+
+  for ( i = 0; i < 0x20u; ++i )
+    *(_BYTE *)(a1 + i) ^= 0xABu;
+  for ( j = 0; j < 0x20u; ++j )
+    *(_BYTE *)(a1 + j) ^= j - 85;
+  for ( k = 0; k < 0x20u; k += 4 )
+    *(_DWORD *)(a1 + k) ^= 0xC0FEBEEF;
+  for ( m = 0; m < 0x20u; m += 4 )
+    *(_DWORD *)(a1 + m) ^= 0xDEADBABE;
+  for ( n = 0; n < 0x20u; ++n )
+    *(_BYTE *)(a1 + n) ^= 0xCDu;
+  for ( ii = 0; ii < 0x20u; ++ii )
+    *(_BYTE *)(a1 + ii) ^= ii - 51;
+  for ( jj = 0; jj < 0x20u; jj += 4 )
+    *(_DWORD *)(a1 + jj) ^= 0xC0FEBABE;
+  for ( kk = 0; kk < 0x20u; kk += 4 )
+    *(_DWORD *)(a1 + kk) ^= 0xDEADBEEF;
+  for ( mm = 0; ; ++mm )
+  {
+    result = mm;
+    if ( mm >= 0x20u )
+      break;
+    *(_BYTE *)(a1 + mm) ^= 0xEFu;
+  }
+  for ( nn = 0; nn < 0x20u; ++nn )
+  {
+    *(_BYTE *)(a1 + nn) ^= nn - 17;
+    result = nn + 1;
+  }
+  return result;
+}    
+ ```
+
+
+- Hàm này thực hiện phép xor lên input của chúng ta với một số giá trị theo 2 pattern như sau, 1 là xor từng byte và 2 là xor 4 byte một   
+
+
+- Hàm `encrypt2()`
+```C
+int __cdecl encrypt2(int a1)
+{
+  char v2; // [esp+4h] [ebp-4h]
+  unsigned __int8 i; // [esp+5h] [ebp-3h]
+  unsigned __int8 v4; // [esp+6h] [ebp-2h]
+  unsigned __int8 v5; // [esp+7h] [ebp-1h]
+
+  v5 = 0;
+  v4 = 0;
+  for ( i = 0; i < 0x20u; ++i )
+  {
+    v4 += sus[++v5];
+    v2 = sus[v5];
+    sus[v5] = sus[v4];
+    sus[v4] = v2;
+    *(_BYTE *)(a1 + i) ^= sus[((unsigned __int8)sus[v4] + (unsigned __int8)sus[v5]) % 256];
+  }
+  return enum_process_to_find_if_debugged();
+}
+```
+
+
+- Hàm này sẽ xor input của chúng ta sau khi đã biến đổi qua hàm `encrypt1()` với array `sus[]`(array này là `byte_1641A8` nhưng mà mình đã đổi tên) với index của array `sus[]` được duyệt theo `((unsigned __int8)sus[v4] + (unsigned __int8)sus[v5]) % 256` cùng với `v4`, `v5` và `v2`
+
+- Trước khi kết thúc hàm này thì nó sẽ gọi hàm `enum_process_to_find_if_debugged()` để tiến hành check for debugger
+
+
+
+- Hàm `enum_process_to_find_if_debugged()`
+```C
+int enum_process_to_find_if_debugged()
+{
+  DWORD CurrentProcessId; // eax
+  int v2; // [esp+10h] [ebp-288h]
+  int v3; // [esp+1Ch] [ebp-27Ch]
+  int v4; // [esp+20h] [ebp-278h]
+  int v5; // [esp+24h] [ebp-274h]
+  HANDLE hSnapshot; // [esp+28h] [ebp-270h]
+  unsigned __int8 v7; // [esp+57h] [ebp-241h]
+  PROCESSENTRY32W pe; // [esp+5Ch] [ebp-23Ch] BYREF
+  DWORD flOldProtect; // [esp+288h] [ebp-10h] BYREF
+  char Src[6]; // [esp+28Ch] [ebp-Ch] BYREF
+
+  v7 = 0;
+  GetCurrentProcessId();
+  CurrentProcessId = GetCurrentProcessId();
+  v2 = check_parent_process_pid(CurrentProcessId);
+  memset(&pe, 0, sizeof(pe));
+  pe.dwSize = 556;
+  hSnapshot = CreateToolhelp32Snapshot(2u, 0);
+  if ( Process32FirstW(hSnapshot, &pe) )
+  {
+    while ( 1 )
+    {
+      if ( pe.th32ProcessID == v2 )
+      {
+        v5 = wcscmp(pe.szExeFile, (const unsigned __int16 *)sub_161180(aFlagchecker4Ex));
+        if ( v5 )
+          v5 = v5 < 0 ? -1 : 1;
+        if ( v5 )
+        {
+          v4 = wcscmp(pe.szExeFile, (const unsigned __int16 *)sub_161180(aCmdExe));
+          if ( v4 )
+            v4 = v4 < 0 ? -1 : 1;
+          if ( v4 )
+          {
+            v3 = wcscmp(pe.szExeFile, (const unsigned __int16 *)sub_161180(aExplorerExe));
+            if ( v3 )
+              v3 = v3 < 0 ? -1 : 1;
+            if ( v3 )
+              break;
+          }
+        }
+      }
+      if ( !Process32NextW(hSnapshot, &pe) )
+        goto LABEL_14;
+    }
+    v7 = 1;
+  }
+LABEL_14:
+  if ( !v7 )
+  {
+    v7 = 0;
+    Src[0] = 104;
+    Src[5] = -61;
+    *(_DWORD *)&Src[1] = riel_encrypt;
+    VirtualProtect(encrypt3, 6u, 0x40u, &flOldProtect);
+    memcpy(encrypt3, Src, 6u);
+  }
+  CloseHandle(hSnapshot);
+  return v7;
+}
+```
+- Trước tiên hàm này gọi `GetCurrentProcessId()` để lấy PID hiện tại của tiến trình
+
+- Tiếp theo gọi hàm `check_parent_process_pid(CurrentProcessId)` để lấy parent process pid của tiến trình `FlagChecker4.exe` (có nghĩa là tiến trình nào đang chạy `FlagChecker4.exe` thì sẽ lấy PID của tiến trình đó) sau đó gắn vào `v2`
+
+- Tiếp đến gọi hàm `CreateToolhelp32Snapshot(2u, 0)` để tạo ra handle đến snapshot chứa thông tin của các tiến trình đang chạy trên hệ thống (với 2 arguments 2u = TH32CS_SNAPPROCESS và 0 là để include tiến trình hiện tại vào trong snapshot)
+
+- Enumerate snapshot cho đến khi gặp parent process của `FlagChecker4.exe`, tiến hành kiểm tra tên của tiến trình này xem nó có là ``FlagChecker4.exe``, `cmd.exe` hoặc  `explorer.exe`, nếu tên không thuộc 1 trong 3 tiến trình này thì có nghĩa là chương trình bị debug, sau đó sẽ set flag `v7`, đóng handle và thoát khỏi hàm, ngược lại thì sẽ thực hiện dùng hàm `VirtualProtect()` để thực hiện thay đổi quyền truy cập cho hàm `encrypt3()` thành `PAGE_EXECUTE_READWRITE`(0x40) nhằm cấp quyền có thể ghi và đọc hàm này, cuối cùng là overwrite hàm này thành hàm `riel_encrypt()`
+
+
+
+- Hàm `encrypt3()`(bây giờ đã thành hàm `riel_encrypt()`)
+```C
+int __usercall riel_encrypt@<eax>(int a1@<ebp>, const void *a2)
+{
+  int result; // eax
+  unsigned __int8 k; // [esp-47h] [ebp-53h]
+  unsigned __int8 j; // [esp-46h] [ebp-52h]
+  unsigned __int8 jj; // [esp-45h] [ebp-51h]
+  unsigned __int8 ii; // [esp-44h] [ebp-50h]
+  unsigned __int8 n; // [esp-43h] [ebp-4Fh]
+  unsigned __int8 m; // [esp-42h] [ebp-4Eh]
+  unsigned __int8 i; // [esp-41h] [ebp-4Dh]
+  __int128 KCSC_extend_128_bits_key; // [esp-40h] [ebp-4Ch] BYREF
+  _BYTE v11[36]; // [esp-24h] [ebp-30h] BYREF
+  int v12; // [esp+0h] [ebp-Ch]
+  int v13; // [esp+4h] [ebp-8h]
+  int retaddr; // [esp+Ch] [ebp+0h]
+
+  v12 = a1;
+  v13 = retaddr;
+  qmemcpy(v11, a2, 0x20u);
+  for ( i = 0; i < 0x20u; ++i )
+    v11[i] = (0x88 - i) ^ i;
+  for ( j = 0; j < 0x20u; ++j )
+    v11[j] = dec136_pow_v11_mod_251(136u, v11[j]);
+  KCSC_extend_128_bits_key = xmmword_163180;
+  for ( k = 0; k < 0x58u; ++k )
+  {
+    aes_enc(v11, &KCSC_extend_128_bits_key);
+    aes_enc(&v11[16], &KCSC_extend_128_bits_key);
+  }
+  for ( m = 0; m < 0x20u; ++m )
+    *((_BYTE *)a2 + m) = rol(*((_BYTE *)a2 + m), m & 7);
+  for ( n = 0; n < 0x20u; ++n )
+    *((_BYTE *)a2 + n) ^= v11[n];
+  for ( ii = 0; ii < 0x20u; ++ii )
+    *((_BYTE *)a2 + ii) = rol(*((_BYTE *)a2 + ii), 8 - (ii & 7));
+  for ( jj = 0; ; ++jj )
+  {
+    result = jj;
+    if ( jj >= 0x20u )
+      break;
+    *((_BYTE *)a2 + jj) ^= 0xFF - v11[jj];
+  }
+  return result;
+}
+```
+- Đầu tiên gán từng phần tử `v11` với `(0x88 - i) ^ i`
+
+- Sau đó gán các giá trị trả về của hàm `dec136_pow_v11_mod_251(136u, v11[j])` cho từng phần tử của `v11` (cho dù input có là gì đi nữa thì kết quả trả ra luôn là các giá trị cố định, để kiểm chứng các bạn có thể debug) 
+
+- Tiếp đến thực hiện mã hóa AES bằng cách sử dụng 2 inline asm instructions là `aenenc` và `aesenclast` 
+
+- Tiến hành rotate left `m & 7` bit a2(a2 là input đã được xử lí ở 2 hàm `encrypt1()` và `encrypt2()`)
+
+- Xor input với array `v11[]`(là `v11` đã được mã hóa AES)
+ 
+- Tiếp tục rotate left `8 - (ii & 7)` bit a2
+
+- Cuối cùng là xor các phần tử của `a2` với `0xFF - v11[jj]`
+
+
+- Vậy để tìm được lại input ban đầu, mình sẽ rev các hàm `encrypt()` theo thứ tự từ `riel_encrypt()` trở về `encrypt1()`, và mình sẽ chia quá trình này ra làm 2 phase
+
+- Phase 1 mình sẽ thực hiện rev 3 hàm `riel_encrypt()` và `encrypt2()`
+
+- Phase 2 sẽ là để rev `encrypt1()` (mình code bằng C phase này vì để mà implement xor 4 byte 1 trong python khá là loằng ngoằng)
+
+
 - Phase 1
 ```python
 def _ror(val, bits, bit_size):
