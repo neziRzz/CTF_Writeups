@@ -1,6 +1,6 @@
 - Đề cho 1 file PE32
 
-- Mình không thể giải được bài này trong lúc thi nhưng sau khi được author `noobmannn` hint thì mình đã có thể giải được bài này 
+- Mình không thể giải được bài này trong lúc thi nhưng sau khi được author `noobmannn` hint thì mình đã có thể giải được 
 
 ![image](https://github.com/user-attachments/assets/71237fe9-bb4a-4450-9bfc-3f2f18415184)
 
