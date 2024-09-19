@@ -84,7 +84,7 @@ int __cdecl main(int argc, const char **argv, const char **envp)
 
 - Vào hàm `TlsCallback_0()`
 
-```
+```C
 NTSTATUS TlsCallback_0()
 {
   NTSTATUS result; // eax
