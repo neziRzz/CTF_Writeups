@@ -287,11 +287,11 @@ int __usercall riel_encrypt@<eax>(int a1@<ebp>, const void *a2)
 
 - Tiếp đến thực hiện mã hóa AES bằng cách sử dụng 2 inline asm instructions là `aenenc` và `aesenclast` 
 
-- Tiến hành rotate left `m & 7` bit a2(a2 là input đã được xử lí ở 2 hàm `encrypt1()` và `encrypt2()`)
+- Tiến hành rotate left `a2` (`a2` là input đã được xử lí ở 2 hàm `encrypt1()` và `encrypt2()`)   `m & 7` bit 
 
 - Xor input với array `v11[]`(là `v11` đã được mã hóa AES)
  
-- Tiếp tục rotate left `8 - (ii & 7)` bit a2
+- Tiếp tục rotate left `a2`  `8 - (ii & 7)` bit 
 
 - Cuối cùng là xor các phần tử của `a2` với `0xFF - v11[jj]`
 
