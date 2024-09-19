@@ -298,7 +298,7 @@ int __usercall riel_encrypt@<eax>(int a1@<ebp>, const void *a2)
 
 - Vậy để tìm được lại input ban đầu, mình sẽ rev các hàm `encrypt()` theo thứ tự từ `riel_encrypt()` trở về `encrypt1()`, và mình sẽ chia quá trình này ra làm 2 phase
 
-- Phase 1 mình sẽ thực hiện rev 3 hàm `riel_encrypt()` và `encrypt2()`
+- Phase 1 mình sẽ thực hiện rev 2 hàm `riel_encrypt()` và `encrypt2()`
 
 - Phase 2 sẽ là để rev `encrypt1()` (mình code bằng C phase này vì để mà implement xor 4 byte 1 trong python khá là loằng ngoằng)
 
