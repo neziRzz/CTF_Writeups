@@ -107,7 +107,7 @@ NTSTATUS TlsCallback_0()
 ```
 - Có thể thấy rắng hàm này sẽ thực hiện gọi 1 hàm là `NtQueryInformationProcess()`, hàm này có nhiệm vụ lấy những thông tin về process đang chạy [tham khảo ở đây](https://learn.microsoft.com/en-us/windows/win32/api/winternl/nf-winternl-ntqueryinformationprocess), sau đó kiểm tra giá trị trả về trong class `ProcessDebugPort` có trả về 0 (không bị debug) hay không, nếu trả về giá trị khác 0 ( cụ thể là 0xFFFFFFFF or -1 và có nghĩa tiến trình bị debug) thì sẽ thực hiện overwrite 4 byte mà mình vừa đề cập trước đó sang các giá trị khác ([các bạn có thể tham khảo thêm về kĩ thuật trên cũng như là các kĩ thuật anti debug khác ở đây](https://anti-debug.checkpoint.com/techniques/debug-flags.html#using-win32-api-ntqueryinformationprocess))
 
-- Điều kì lạ ở đây là, khi mình kiểm tra xrefs đến hàm `TlsCallback_0()` thì không hề có hàm nào gọi tới nó cả, vậy thì tại sao hàm này lại được gọi?
+- Điều kì lạ ở đây là, khi mình kiểm tra xrefs đến hàm `TlsCallback_0()` thì không hề có hàm nào gọi tới nó cả, vậy thì tại sao chương trình lại chạy đến hàm này?
 
 ![image](https://github.com/user-attachments/assets/31e2bc29-5b45-458b-abc0-6baa913caaa7)
 
