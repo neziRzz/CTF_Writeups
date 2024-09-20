@@ -305,7 +305,7 @@ int __usercall riel_encrypt@<eax>(int a1@<ebp>, const void *a2)
   
 - Phase 1 mình sẽ thực hiện rev 2 hàm `riel_encrypt()` và `encrypt2()`
 
-- Phase 2 sẽ là để rev `encrypt1()` (mình code bằng C phase này vì để mà implement xor 4 byte 1 trong python khá là loằng ngoằng)
+- Phase 2 sẽ là để rev `encrypt1()` từ kết quả của Phase 1 (mình code bằng C phase này vì để mà implement xor 4 byte 1 trong python khá là loằng ngoằng)
 
 
 - Phase 1
