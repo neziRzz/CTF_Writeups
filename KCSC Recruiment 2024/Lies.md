@@ -234,7 +234,8 @@ LABEL_14:
 
 - Để bypass đoạn check này, các bạn chỉ cần patch instructions `jnz  loc_161565` thành `jmp` là được
 
-![image](https://github.com/user-attachments/assets/f61604e6-8d25-46ca-884f-d2ebbc0042e6)
+![image](https://github.com/user-attachments/assets/0af52086-9943-4e32-ac6d-d9527ce9819a)
+
 ![image](https://github.com/user-attachments/assets/4b7970c9-0eaf-4d5e-8e40-84d5d2337ecc)
 
 
