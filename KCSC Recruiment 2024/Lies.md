@@ -290,7 +290,7 @@ int __usercall riel_encrypt@<eax>(int a1@<ebp>, const void *a2)
 
 - Sau đó gán các giá trị trả về của hàm `dec136_pow_v11_mod_251(136u, v11[j])` cho từng phần tử của `v11` qua 2 dữ kiện đầu tiên thì ta có thể thấy rằng v11 không hề phụ thuộc vào a2) (**qmemcpy chỉ để đánh lạc hướng**)
 
-- Tiếp đến thực hiện mã hóa AES bằng cách sử dụng 2 inline asm instructions là `aesnenc` và `aesenclast` 
+- Tiếp đến thực hiện mã hóa AES bằng cách sử dụng 2 inline asm instructions là `aesenc` và `aesenclast` 
 
 - Tiến hành rotate left `a2` (`a2` là input đã được xử lí ở 2 hàm `encrypt1()` và `encrypt2()`)   `m & 7` bit 
 
