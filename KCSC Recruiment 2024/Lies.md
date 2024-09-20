@@ -310,7 +310,8 @@ int __usercall riel_encrypt@<eax>(int a1@<ebp>, const void *a2)
 
 - Phase 1
 ```python
-def _ror(val, bits, bit_size):
+#Phase 1: Tim input sau khi da duoc xu li qua encrypt1()
+def _ror(val, bits, bit_size): 
     return ((val & (2 ** bit_size - 1)) >> bits % bit_size) | \
            (val << (bit_size - (bits % bit_size)) & (2 ** bit_size - 1))
 cyphertext = [0]*32
@@ -382,6 +383,7 @@ for i in cyphertext:
 - Phase 2
   
 ```C
+//Phase 2: Tim lai plaintext tu `encrypt1()`
 #include <stdint.h>
 #include <stdio.h>
 
