@@ -153,7 +153,7 @@ int __cdecl encrypt2(int a1)
 ```
 
 
-- Hàm này sẽ xor input của chúng ta sau khi đã biến đổi qua hàm `encrypt1()` với array `sus[]`(array này là `byte_1641A8` nhưng mà mình đã đổi tên) với index của array `sus[]` được duyệt theo `((unsigned __int8)sus[v4] + (unsigned __int8)sus[v5]) % 256` cùng với `v4`, `v5` và `v2`
+- ~~Hàm này sẽ xor input của chúng ta sau khi đã biến đổi qua hàm `encrypt1()` với array `sus[]`(array này là `byte_1641A8` nhưng mà mình đã đổi tên) với index của array `sus[]` được duyệt theo `((unsigned __int8)sus[v4] + (unsigned __int8)sus[v5]) % 256` cùng với `v4`, `v5` và `v2`~~ Hàm này thực chất dùng mã hóa RC4 sử dụng kĩ thuật `Pseudo-random generation algorithm (PRGA)` ([nếu các bạn muốn tìm hiểu rõ hơn về thuật này thì nhấn vào đây](https://en.wikipedia.org/wiki/RC4#Pseudo-random_generation_algorithm_(PRGA))) ([về cách mà mã hóa RC4 được thực hiện trong C](https://github.com/B-Con/crypto-algorithms/blob/master/arcfour.c))
 
 - Trước khi kết thúc hàm này thì nó sẽ gọi hàm `enum_process_to_find_if_debugged()` để tiến hành check for debugger
 
