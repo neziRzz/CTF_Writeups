@@ -301,7 +301,7 @@ int __usercall riel_encrypt@<eax>(int a1@<ebp>, const void *a2)
 - Cuối cùng là xor các phần tử của `a2` với `0xFF - v11[jj]`
 
 
-- Vậy để tìm được lại input ban đầu, mình sẽ rev các hàm `encrypt()` theo thứ tự từ `riel_encrypt()` trở về `encrypt1()`, và mình sẽ chia quá trình này ra làm 2 phase ( khả thi vì trong hàm `riel_encrypt()` thì `a2` sẽ được xor với key `v11` chứa các giá trị constants sau khi được encrypt bằng AES và để xử lí 2 phép `rol` kia thì ta chỉ cần làm ngược lại là sử dụng phép `ror`, `encrypt1()` và `encrypt2()` thì chỉ là các phép xor, ta chỉ cần lưu ý vào hàm `encrypt1()` hơn một chút vì cách chúng sử dụng phép xor sẽ có chút đặc biệt là xor 1 byte 1 và xor 4 byte 1)
+- Vậy để tìm được lại input ban đầu, mình sẽ rev các hàm `encrypt()` theo thứ tự từ `riel_encrypt()` trở về `encrypt1()`, và mình sẽ chia quá trình này ra làm 2 phase ( khả thi vì trong hàm `riel_encrypt()` thì `a2` sẽ được xor với key `v11` chứa các giá trị constants sau khi được encrypt bằng AES và để xử lí 2 phép `rol` kia thì ta chỉ cần làm ngược lại là sử dụng phép `ror`, còn `encrypt1()` và `encrypt2()` thì chỉ là các phép xor, ta chỉ cần lưu ý vào hàm `encrypt1()` hơn một chút vì cách chúng sử dụng phép xor sẽ có chút đặc biệt là xor 1 byte 1 và xor 4 byte 1)
   
 - Phase 1 mình sẽ thực hiện rev 2 hàm `riel_encrypt()` và `encrypt2()`
 
