@@ -232,7 +232,7 @@ LABEL_14:
 
 - Enumerate snapshot cho đến khi gặp parent process của `FlagChecker4.exe`, tiến hành kiểm tra tên của tiến trình này xem nó có là ``FlagChecker4.exe``, `cmd.exe` hoặc  `explorer.exe`, nếu tên không thuộc 1 trong 3 tiến trình này thì có nghĩa là chương trình bị debug, sau đó sẽ set flag `v7`, đóng handle và thoát khỏi hàm, ngược lại thì sẽ thực hiện dùng hàm `VirtualProtect()` để thực hiện thay đổi quyền truy cập cho hàm `encrypt3()` thành `PAGE_EXECUTE_READWRITE`(0x40) nhằm cấp quyền có thể ghi và đọc hàm này, cuối cùng là overwrite hàm này thành hàm `riel_encrypt()`
 
-- Để bypass đoạn check này, các bạn chỉ cần patch instructions `jnz  loc_16160E` thành `jmp` là được
+- Để bypass đoạn check này, các bạn chỉ cần patch instructions `jnz  loc_161565` thành `jmp` là được
 
 ![image](https://github.com/user-attachments/assets/f61604e6-8d25-46ca-884f-d2ebbc0042e6)
 ![image](https://github.com/user-attachments/assets/4b7970c9-0eaf-4d5e-8e40-84d5d2337ecc)
