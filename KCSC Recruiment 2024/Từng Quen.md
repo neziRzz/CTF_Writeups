@@ -76,7 +76,7 @@ int __cdecl main(int argc, const char **argv, const char **envp)
 
 ![image](https://github.com/user-attachments/assets/176cfa83-870c-4be7-b33f-8a7e6ea32fe0)
 
-- Vậy để đảo ngược chu trình mã hóa, đầu tiên ta sẽ phải tìm seed đúng, vì `v14` là key cho việc mã hóa hơn nữa `v14` lại được gen ra từ hàm `rand()`. Sau khi tìm được seed đúng xong, ta chỉ cần lấy `v14` xor với cyphertext là sẽ ra được flag. Về mặt ý tưởng thì bài này khá giống bài `Time travel`.
+- Vậy để đảo ngược chu trình mã hóa, đầu tiên ta sẽ phải tìm seed đúng, vì `v14` là key cho việc mã hóa và được gen ra từ hàm `rand()`. Sau khi tìm được seed đúng xong, ta chỉ cần lấy `v14` xor với cyphertext là sẽ ra được flag. Về mặt ý tưởng thì bài này khá giống bài `Time travel`.
 
 - Mình đã có đề cập ở trên là 4 byte 0xCA, 0xFE, 0xBE, 0xEF có điều đặc biệt. Khi mình kiểm tra xem những byte này được truy cập ở những đâu (trỏ vào rồi bấm x để mở cửa sổ xrefs trên IDA) thì thấy có điều đặc biệt
 
