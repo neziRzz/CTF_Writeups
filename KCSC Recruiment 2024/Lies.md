@@ -290,7 +290,7 @@ int __usercall riel_encrypt@<eax>(int a1@<ebp>, const void *a2)
 
 - Sau đó gán các giá trị trả về của hàm `dec136_pow_v11_mod_251(136u, v11[j])` cho từng phần tử của `v11` qua 2 dữ kiện đầu tiên thì ta có thể thấy rằng v11 không hề phụ thuộc vào a2) (**qmemcpy chỉ để đánh lạc hướng**)
 
-- Tiếp đến thực hiện mã hóa AES bằng cách sử dụng 2 inline asm instructions là `aenenc` và `aesenclast` 
+- Tiếp đến thực hiện mã hóa AES bằng cách sử dụng 2 inline asm instructions là `aesnenc` và `aesenclast` 
 
 - Tiến hành rotate left `a2` (`a2` là input đã được xử lí ở 2 hàm `encrypt1()` và `encrypt2()`)   `m & 7` bit 
 
@@ -301,8 +301,8 @@ int __usercall riel_encrypt@<eax>(int a1@<ebp>, const void *a2)
 - Cuối cùng là xor các phần tử của `a2` với `0xFF - v11[jj]`
 
 
-- Vậy để tìm được lại input ban đầu, mình sẽ rev các hàm `encrypt()` theo thứ tự từ `riel_encrypt()` trở về `encrypt1()`, và mình sẽ chia quá trình này ra làm 2 phase
-
+- Vậy để tìm được lại input ban đầu, mình sẽ rev các hàm `encrypt()` theo thứ tự từ `riel_encrypt()` trở về `encrypt1()`, và mình sẽ chia quá trình này ra làm 2 phase ( khả thi vì trong hàm `riel_encrypt()` thì `a2` sẽ được xor với key `v11` chứa các giá trị constants sau khi được encrypt bằng AES và để xử lí 2 phép `rol` kia thì ta chỉ cần làm ngược lại là sử dụng phép `ror`, `encrypt1()` và `encrypt2()` thì chỉ là các phép xor, ta chỉ cần lưu ý vào hàm `encrypt1()` hơn một chút vì cách chúng sử dụng phép xor sẽ có chút đặc biệt là xor 1 byte 1 và xor 4 byte 1)
+  
 - Phase 1 mình sẽ thực hiện rev 2 hàm `riel_encrypt()` và `encrypt2()`
 
 - Phase 2 sẽ là để rev `encrypt1()` (mình code bằng C phase này vì để mà implement xor 4 byte 1 trong python khá là loằng ngoằng)
