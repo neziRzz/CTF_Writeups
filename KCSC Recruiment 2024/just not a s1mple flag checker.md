@@ -185,9 +185,111 @@ void __fastcall remove_top_node(_QWORD **a1)
 ------------------------------------------------------------------------------------------------------------------------------
 - Quay về phân tích luồng của chương trình, ta có thể thấy rằng
 
-- Đầu tiên chương trình sẽ bắt đầu lấy các phần tử ớ offsets 
+- Đầu tiên chương trình sẽ bắt đầu lấy các phần tử với offsets tối đa là ở 1692 byte(bắt đầu ở byte thứ 1692) tính từ arr `fake_flag[]` và tiến hành lấy các phần tử ở đó push vào trong stack
 
+- Tiếp đến chương trình sẽ thực hiện lấy input và kiểm tra độ dài của input có bằng 53 hay không, nếu không sẽ in ra chuỗi `Wrong input length` và thoát
 
+- Nếu thỏa mãn điều kiện trên thì chương trình sẽ push từng phần tử của input vào trong stack với con trỏ `head1` con trỏ là head, gọi hàm `base_convert(&head1, &head2, 10, 2)` để đổi giá trị của từng phần tử của input sang hệ cơ số 2 (binary) và kết quả sẽ được đẩy vào stack `head2`
 
+--------------------------------------------------------------------------------------------------------------------------------
+
+- Hàm `base_convert()`
+```C
+_QWORD *__fastcall base_convert(_QWORD *a1, _QWORD *a2, int a3, int a4)
+{
+  _QWORD *result; // rax
+  unsigned __int8 node_non_zero_val; // al
+  unsigned __int8 v6; // al
+  int i; // [rsp+20h] [rbp-28h]
+  char v8[8]; // [rsp+28h] [rbp-20h] BYREF
+
+  if ( a3 == 10 )
+  {
+    while ( 1 )
+    {
+      result = a1;
+      if ( !*a1 )
+        break;
+      node_non_zero_val = get_node_from_head(*a1);
+      base10_to(a2, node_non_zero_val, a4);
+      pop_node_from_list((_QWORD **)a1);
+    }
+  }
+  else
+  {
+    while ( 1 )
+    {
+      result = a1;
+      if ( !*a1 )
+        break;
+      for ( i = 0; i < 8; ++i )
+      {
+        v8[i] = get_node_from_head(*a1);
+        pop_node_from_list((_QWORD **)a1);
+      }
+      v6 = to_base10((__int64)v8, a3);
+      base10_to(a2, v6, a4);
+    }
+  }
+  return result;
+}
+```
+- Đầu tiên hàm này sẽ check xem hệ ban đầu cần đổi có phải là hệ 10 hay không (`a3 == 10`), nếu có thì sẽ tiến hành kiểm tra con trỏ `a1` (head của stack) có `NULL` hay không, rồi sau đó lấy các node này đổi từ hệ 10 sang hệ được specified trong argument `a4`
+
+- Nếu argument `a3 != 10` (hệ ban đầu không phải là 10), thì sẽ pop các giá trị trong stack có head là `a1` bỏ vào array `v8[]` (pop 8 node một lần), rồi thực hiện biến đổi các giá trị có trong array này sang hệ 10 bằng hàm `to_base10()`. Ví dụ nếu giá trị trong array lần lượt là [0,0,0,0,0,1,2,3] thì giá trị trả về của hàm sẽ là `123` , về cách biến đổi 1 hệ bất kì sang hệ 10, các bạn có thể tham khảo ở [đây](https://www.rapidtables.com/convert/number/base-converter.html)
+
+- Hàm `base10_to()`
+```C
+__int64 __fastcall base10_to(_QWORD *a1, unsigned __int8 a2, int a3)
+{
+  __int64 result; // rax
+  _BYTE *node; // rax
+  _BYTE *v5; // rax
+  int i; // [rsp+20h] [rbp-18h]
+
+  for ( i = 0; ; ++i )
+  {
+    result = a2;
+    if ( !a2 )
+      break;
+    node = create_node(a2 % a3);
+    push_to_list(a1, node);
+    a2 /= a3;
+  }
+  while ( i < 8 )
+  {
+    v5 = create_node(0);
+    push_to_list(a1, v5);
+    result = (unsigned int)++i;
+  }
+  return result;
+}
+```
+-  Hàm này sẽ tiến hành lấy giá trị các node chia modulo cho argument `a3` (trong trường hợp này sẽ là 2), sau đó sẽ lấy các giá trị trả về của phép tính trên push vào stack có head là `a1` và tiếp tục chia cho đến khi `a2 = 0`. Bạn nào mà đã học kĩ môn lập trình căn bản từ hồi năm nhất thì sẽ có thể thấy rằng đây là thuật toán đổi một số từ hệ 10 sang 1 hệ bất kì sử dụng stack
+
+-  Vòng `while i < 8` có nhiệm vụ đảm bảo rằng mỗi giá trị sau khi được biến đổi sẽ có độ lớn là 8 bit (or byte) bằng cách là nếu khi mà ở vòng lặp for phía trên khi mà số lượng giá trị của các node sau khi được biến đổi mà không đủ 8 thì sẽ fill các giá trị còn lại là 0
+
+- Hàm `to_base10()`
+```C
+__int64 __fastcall to_base10(__int64 target, int base_of_target)
+{
+  unsigned __int8 v3; // [rsp+20h] [rbp-28h]
+  int i; // [rsp+24h] [rbp-24h]
+  double v5; // [rsp+30h] [rbp-18h]
+
+  v3 = 0;
+  for ( i = 0; i < 8; ++i )
+  {
+    v5 = (double)*(unsigned __int8 *)(target + i);
+    v3 = (int)((double)v3 + v5 * pow((double)base_of_target, (double)(8 - i - 1)));
+  }
+  return v3;
+}
+```
+- Hàm này thực chất chỉ biến đổi các giá trị trong array `target[]` về giá trị base10 theo công thức được đề cập trong [đây](https://www.rapidtables.com/convert/number/base-converter.html) với 2 parameters là array `target[]` và base hiện tại của array `target[]`
+
+--------------------------------------------------------------------------------------------------------------------------------
+
+- Quay lại về luồng hoạt động của chương trình, sau khi đã biến đổi các giá trị của `input` về base2 và push kết quả vào trong stack có head là `head2` thì tiến hành xor các giá trị có trong array `binary_arr[]` (bắt đầu từ cuối) với step là 4 byte với các giá trị được pop từ `head2`
 
 
