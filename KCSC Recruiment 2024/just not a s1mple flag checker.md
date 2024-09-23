@@ -182,9 +182,8 @@ void __fastcall remove_top_node(_QWORD **a1)
 
 - Vì vậy ta có thể kết luận rằng, đây là một implementation của stack bằng linked list, nó sẽ thực hiện 2 chức năng chính là đẩy value vào stack và pop value ra khỏi stack
 
-
-
-- Quay về phân tích luồng của chương trình, ta có thể thấy rằng[^1]
+------------------------------------------------------------------------------------------------------------------------------
+- Quay về phân tích luồng của chương trình, ta có thể thấy rằng
 
 - Đầu tiên chương trình sẽ bắt đầu lấy các phần tử ớ offsets 
 
