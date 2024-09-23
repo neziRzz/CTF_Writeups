@@ -290,7 +290,9 @@ __int64 __fastcall to_base10(__int64 target, int base_of_target)
 
 --------------------------------------------------------------------------------------------------------------------------------
 
-- Quay lại về luồng hoạt động của chương trình, sau khi đã biến đổi các giá trị của `input` về base2 và push kết quả vào trong stack có head là `head2` thì tiến hành xor các giá trị có trong array `binary_arr[]` (bắt đầu từ cuối) với step là 4 byte với các giá trị được pop từ `head2`
+- Quay lại về luồng hoạt động của chương trình, sau khi đã biến đổi các giá trị của `input` về base2 và push kết quả vào trong stack có head là `head2` thì tiến hành xor các giá trị có trong array `binary_arr[]` (bắt đầu từ cuối) với step là 4 byte với các giá trị được pop từ `head2` (là các giá trị của 8 bit của input)
+
+
 
 ```python
 fake_flag = [
