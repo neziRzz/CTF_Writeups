@@ -236,7 +236,7 @@ _QWORD *__fastcall base_convert(_QWORD *a1, _QWORD *a2, int a3, int a4)
 ```
 - Đầu tiên hàm này sẽ check xem hệ ban đầu cần đổi có phải là hệ 10 hay không (`a3 == 10`), nếu có thì sẽ tiến hành kiểm tra con trỏ `a1` (head của stack) có `NULL` hay không, rồi sau đó lấy các node này đổi từ hệ 10 sang hệ được specified trong argument `a4`
 
-- Nếu argument `a3 != 10` (hệ ban đầu không phải là 10), thì sẽ pop các giá trị trong stack có head là `a1` bỏ vào array `v8[]` (pop 8 node một lần), rồi thực hiện biến đổi các giá trị có trong array này sang hệ 10 bằng hàm `to_base10()`. Ví dụ nếu giá trị trong array lần lượt là [1,0,1,1,1,0,1,1] thì giá trị trả về của hàm sẽ là `187`(trong debugger sẽ trả `0xBB`) , bằng cách biến đổi 1 hệ bất kì sang hệ 10, các bạn có thể tham khảo ở [đây](https://www.rapidtables.com/convert/number/base-converter.html)
+- Nếu argument `a3 != 10` (hệ ban đầu không phải là 10), thì sẽ pop các giá trị trong stack có head là `a1` bỏ vào array `v8[]` (pop 8 node một lần), rồi thực hiện biến đổi các giá trị có trong array này sang hệ 10 bằng hàm `to_base10()`. Ví dụ nếu giá trị trong array lần lượt là [1,0,1,1,1,0,1,1] thì giá trị trả về của hàm sẽ là `187`(trong debugger sẽ trả `0xBB`) , bằng cách biến đổi 1 hệ bất kì sang hệ 10, các bạn có thể tham khảo ở [đây](https://www.rapidtables.com/convert/number/base-converter.html) và cuối cùng biến đổi sang base có arguments `a4` bằng hàm `base10_to()`
 
 - Hàm `base10_to()`
 ```C
@@ -292,7 +292,7 @@ __int64 __fastcall to_base10(__int64 target, int base_of_target)
 
 - Quay lại về luồng hoạt động của chương trình, sau khi đã biến đổi các giá trị của `input` về base2 và push kết quả vào trong stack có head là `head2` thì tiến hành xor các giá trị có trong array `binary_arr[]` (bắt đầu từ cuối và kết thúc ở đầu) với step là 4 byte với các giá trị được pop từ `head2` (là các giá trị của 8 bit của input)
 
-- Tiếp đến là push các giá trị trong `binary_arr[]` vào trong stack có con trỏ head là `head2` theo thứ tự là các index `[4 * m + 4]` và `[4*m]` rồi biến đổi các giá trị trong stack này sang hệ base8 và kết quả sẽ được push vào stack có con trỏ `head1`
+- Tiếp đến là push các giá trị trong `binary_arr[]` vào trong stack có con trỏ head là `head2` theo thứ tự là các index `[4 * m + 4]` và `[4*m]` rồi biến đổi các giá trị trong stack này sang hệ base10 rồi sang hệ base8 (Về lí do thì mình đã phân tích ở hàm `base_convert()`) và kết quả sẽ được push vào stack có con trỏ `head1`
 
 - Thực hiện lần lượt 8 values trong stack `head1` lưu vào 1 placeholder array là `v27[]` rồi thực hiện biến đổi các chữ số khác 0 trong array đó sang base10. Cụ thể như sau, giả sử trong array đang có các giá trị như sau [0,0,0,0,0,1,2,3] thì giá trị trả về sau khi đổi sang base10 sẽ là `123`, và gán chúng vào `v11`
 
