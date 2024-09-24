@@ -339,3 +339,4 @@ bytes_list = [flag[i:i + 8] for i in range(0, len(flag), 8)]
 ascii_string = ''.join(chr(int(''.join(map(str, byte)), 2)) for byte in bytes_list)
 print(ascii_string)
 ```
+**Flag:** `KCSC{3V3rY_r3v3R53_En91n33r_kN0w_H0W_TH3_5t4ck_w0Rkk}`
