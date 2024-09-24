@@ -294,9 +294,9 @@ __int64 __fastcall to_base10(__int64 target, int base_of_target)
 
 - Tiếp đến là push các giá trị trong `binary_arr[]` vào trong stack có con trỏ head là `head2` theo thứ tự là các index `[4 * m + 4]` và `[4*m]` rồi biến đổi các giá trị trong stack này sang hệ base10 rồi sang hệ base8 (Về lí do thì mình đã phân tích ở hàm `base_convert()`) và kết quả sẽ được push vào stack có con trỏ `head1`
 
-- Thực hiện lần lượt 8 values trong stack `head1` lưu vào 1 placeholder array là `v27[]` rồi thực hiện biến đổi các chữ số khác 0 trong array đó sang base10. Cụ thể như sau, giả sử trong array đang có các giá trị như sau [0,0,0,0,0,1,2,3] thì giá trị trả về sau khi đổi sang base10 sẽ là `123`, và gán chúng vào `v11`
+- Thực hiện lần lượt pop 8 values trong stack `head1` lưu vào 1 placeholder array là `v27[]` rồi biến đổi các chữ số khác 0 trong array đó sang base10. Cụ thể như sau, giả sử trong array đang có các giá trị như sau [0,0,0,0,0,1,2,3] thì giá trị trả về sau khi đổi sang base10 sẽ là `123` (giá trị trả về trong debugger là 0x7B), và gán chúng vào `v11`
 
-- Xor v11 với các giá trị tương ứng theo index của `dword_7FF745214160[]` và push chúng vào stack `head2`
+- Xor `v11` với các giá trị tương ứng theo index của `dword_7FF745214160[]` và push chúng vào stack `head2`
 
 - Cuối cùng pop các giá trị trong stack `head2` cho đến khi NULL và so sánh từng giá trị với các giá trị được pop ở `head3` (chứa array `fake_flag[]`)
 
