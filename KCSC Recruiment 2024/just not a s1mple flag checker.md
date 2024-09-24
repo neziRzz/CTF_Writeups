@@ -300,7 +300,7 @@ __int64 __fastcall to_base10(__int64 target, int base_of_target)
 
 - Cuối cùng pop các giá trị trong stack `head2` cho đến khi NULL và so sánh từng giá trị với các giá trị được pop ở `head3` (chứa array `fake_flag[]`)
 
-- Bên dưới là script python của mình để đảo ngược quá trình trên, vì một lí do nào đó mà mình mất tận nửa ngày để ngồi sửa cái script này để cho nó đúng 💀
+- Bên dưới là script python của mình để đảo ngược quá trình trên, vì một lí do nào đó mà mình mất tận nửa ngày ngồi sửa cái script này để cho nó đúng 💀
 
 ```python
 fake_flag = [
