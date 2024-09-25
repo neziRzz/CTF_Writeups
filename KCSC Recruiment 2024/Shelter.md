@@ -1,6 +1,20 @@
 - Đề cho 1 file PE32
 
 ![image](https://github.com/user-attachments/assets/03f411b9-7a5d-4314-ac4c-82f010f14ed0)
+
+- Pseudocode của IDA
+```C
+int __cdecl main(int argc, const char **argv, const char **envp)
+{
+  get_input();
+  pad();
+  init_sha256_key();
+  init_MD5_IV();
+  start_encrypt();
+  check();
+  return 0;
+}
+```
 ```python
 from Crypto.Cipher import AES
 from Crypto.Hash import SHA256, MD5
