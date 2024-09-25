@@ -60,7 +60,7 @@ unsigned int sub_9210B0()
 
 - Hàm `init_sha256_key()`
 ```C
-BOOL sub_921150()
+BOOL init_sha256_key()
 {
   BOOL result; // eax
   DWORD pdwDataLen; // [esp+14h] [ebp-10h] BYREF
@@ -97,7 +97,7 @@ BOOL sub_921150()
 
 - Hàm `init_MD5_IV()`
 ```C
-BOOL sub_921280()
+BOOL init_MD5_IV()
 {
   BOOL result; // eax
   DWORD pdwDataLen; // [esp+14h] [ebp-10h] BYREF
