@@ -33,7 +33,7 @@ char *get_input()
 
 - Hàm `pad()`
 ```C
-unsigned int sub_9210B0()
+unsigned int pad()
 {
   unsigned int result; // eax
   unsigned int v1; // [esp+Ch] [ebp-14h]
