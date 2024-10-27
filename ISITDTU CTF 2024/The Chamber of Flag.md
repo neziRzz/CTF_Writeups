@@ -1,4 +1,4 @@
-# Mics
+# Misc
 - Đề cho 1 file PE64
 
 ![image](https://github.com/user-attachments/assets/2b254465-38fd-4a4d-b07c-9b231e7b5d39)
