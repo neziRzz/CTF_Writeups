@@ -220,7 +220,7 @@ int sub_140001A00()
               do
 ///......
 ```
-- Hàm decrypt của chúng ta được gọi tại đây, tiến hành debug để kiểm tra thì mình thấy rằng chương trình không hề chạy vào luồng này, và khi mình thử patch lại chương trình thì xuất hiện lỗi như sau
+- Hàm decrypt của chúng ta được gọi tại đây, tiến hành debug để kiểm tra thì mình thấy rằng chương trình không hề chạy vào luồng này, và khi mình thử patch lại chương trình để chạy được vào hàm decrypt thì xuất hiện lỗi như sau
 
 ![image](https://github.com/user-attachments/assets/3775ec4e-ca6e-4eab-bfed-2a2d8b383476)
 
