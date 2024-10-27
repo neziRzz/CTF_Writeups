@@ -234,7 +234,7 @@ Sau khi mò xung quanh vùng nhớ chứa giá trị của RCX thì mình có t�
 
 ![image](https://github.com/user-attachments/assets/b7b65c85-ba45-4000-b5cf-bb1de4c8b9d9)
 
-- Mình thử set lại cho `RCX` trỏ vào vùng này thì ra flag được in ra màn hình
+- Mình thử set lại cho `RCX` trỏ vào vùng này và tiếp tục luồng thực thi của chương trình thì ra flag được in ra màn hình
 
 ![image](https://github.com/user-attachments/assets/a6d8f94a-33e7-4134-86c7-e5aa93f07c5c)
 
