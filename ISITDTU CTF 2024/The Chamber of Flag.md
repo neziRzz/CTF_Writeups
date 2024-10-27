@@ -102,3 +102,141 @@ char __fastcall sub_140001530(double a1)
 - Khi chọn mục `Flag` thì mình nghĩ đến đây là xong nhưng chương trình lại in ra chuỗi sau
 
 ![image](https://github.com/user-attachments/assets/ef4fd0af-3172-44a4-9a59-a809f9e8bc96)
+
+- Có lẽ trong lúc decrypt flag thì chương trình đã bị lỗi ở đâu đó, nên mình quyết định tìm hàm decrypt và trace ngược lại hàm nào đã gọi nó
+
+- Hàm `sub_1400010C8` (decrypt)
+```C
+__int64 __fastcall sub_1400010C8(PUCHAR pbInput, __int64 a2, __int64 a3, UCHAR *a4, PUCHAR a5)
+{
+  phAlgorithm = 0i64;
+  phKey = 0i64;
+  *(_DWORD *)pbOutput = 0;
+  v7 = 98;
+  pcbResult = 0;
+  wcscpy(pszAlgId, L"b#'1");                    // AES
+  v8 = 0i64;
+  while ( 1 )
+  {
+    pszAlgId[++v8] ^= v7;
+    if ( v8 >= 3 )
+      break;
+    v7 = pszAlgId[0];
+  }
+  pszAlgId[4] = 0;
+  if ( BCryptOpenAlgorithmProvider(&phAlgorithm, &pszAlgId[1], 0i64, 0) )
+    return 0i64;
+  v9 = 0i64;
+  *(_DWORD *)pbInputa = 6881346;
+  v10 = 1;
+  v23 = 0;
+  v22 = 1;
+  v25 = 6815840;
+  v11 = 111;
+  v26 = 6815855;
+  v27 = 6684783;
+  v28 = 7209036;
+  v29 = 6553701;
+  v30 = 4390978;
+  v31 = 66;
+  while ( 1 )
+  {
+    *(_WORD *)&pbInputa[2 * v9++] ^= v10;
+    if ( v9 >= 0xF )
+      break;
+    v10 = v22;
+  }
+  HIWORD(v31) = 0;
+  v12 = 41;
+  wcscpy(pszProperty, L")jAH@G@GNdFML");        // ChainingMode - CBC
+  v13 = 0i64;
+  while ( 1 )
+  {
+    pszProperty[++v13] ^= v12;
+    if ( v13 >= 0xC )
+      break;
+    v12 = pszProperty[0];
+  }
+  pszProperty[13] = 0;
+  if ( BCryptSetProperty(phAlgorithm, &pszProperty[1], pbInputa, 0x20u, 0) )
+    return 0i64;
+  wcscpy(pszProperty, L"o \r\x05\n\f\x1B#\n\x01\b\x1B\a");// ObjectLength
+  v14 = 0i64;
+  while ( 1 )
+  {
+    pszProperty[++v14] ^= v11;
+    if ( v14 >= 0xC )
+      break;
+    v11 = pszProperty[0];
+  }
+  pszProperty[13] = 0;
+  if ( BCryptGetProperty(phAlgorithm, &pszProperty[1], pbOutput, 4u, &pcbResult, 0) )
+    return 0i64;
+  v15 = *(_DWORD *)pbOutput;
+  ProcessHeap = GetProcessHeap();
+  v17 = (UCHAR *)HeapAlloc(ProcessHeap, 0, v15);
+  if ( !v17 )
+    return 0i64;
+  if ( BCryptGenerateSymmetricKey(phAlgorithm, &phKey, v17, *(ULONG *)pbOutput, &pbSecret, 0x20u, 0) )
+    return 0i64;
+  v36 = 16;
+  if ( BCryptDecrypt(phKey, pbInput, 0x10u, 0i64, a4, 0x10u, a5, 0x10u, &v36, 0) )
+    return 0i64;
+  BCryptDestroyKey(phKey);
+  BCryptCloseAlgorithmProvider(phAlgorithm, 0);
+  v18 = GetProcessHeap();
+  HeapFree(v18, 0, v17);
+  return 1i64;
+}
+```
+- Hàm này có nhiệm vụ decrypt flag cho chúng ta bằng thuật toán `AES` với mode là `CBC`, sử dụng cửa sổ xref của IDA, ta có thể thấy có 1 hàm gọi đến hàm này
+
+![image](https://github.com/user-attachments/assets/62213cbc-cb03-45f2-91b7-97539f82fcbd)
+
+- Hàm `sub_140001A00`
+```C
+int sub_140001A00()
+{
+///......
+ if ( VirtualQuery(v14, &Buffer, 0x30ui64) )
+      {
+        if ( Buffer.BaseAddress )
+        {
+          memset(v13, 0, 0x200ui64);
+          v15 = *((_QWORD *)v13 + 67);
+          v16 = 0;
+          v17 = 0;
+          if ( v15 != *((_QWORD *)v13 + 68) )
+          {
+            v18 = _mm_load_si128((const __m128i *)&xmmword_140004E50);
+            v19 = (UCHAR *)(v15 + 4);
+            do
+            {
+              memset(v35, 0, sizeof(v35));
+              if ( !(unsigned int)sub_1400010C8(v19, v35) )
+                *(__m128i *)v35 = v18;
+              v20 = 0;
+              v21 = v35;
+              do
+///......
+```
+- Hàm decrypt của chúng ta được gọi tại đây, tiến hành debug để kiểm tra thì mình thấy rằng chương trình không hề chạy vào luồng này, và khi mình thử patch lại chương trình thì xuất hiện lỗi như sau
+
+![image](https://github.com/user-attachments/assets/3775ec4e-ca6e-4eab-bfed-2a2d8b383476)
+
+- Lí do cho điều này là bởi một trong những arguments (cyphertext) của hàm decrypt `sub_1400010C8` không trỏ đến một vùng nhớ hợp lệ
+
+![image](https://github.com/user-attachments/assets/c21bbd64-fbf8-4b60-bd04-abd73036c928)
+![image](https://github.com/user-attachments/assets/224a81b4-6d20-4a33-8a87-18c3798a4f61)
+
+- Ta có thể thấy rằng register `RCX` không trỏ đến 1 vùng nhớ không hợp lệ, nhưng giờ kể cả có tìm được vùng nhớ hợp lệ đi chăng nữa thì liệu đó có đúng là vùng nhớ chứa cyphertext?
+Sau khi mò xung quanh vùng nhớ chứa giá trị của RCX thì mình có tìm được một chuỗi hex khá đáng nghi
+
+![image](https://github.com/user-attachments/assets/b7b65c85-ba45-4000-b5cf-bb1de4c8b9d9)
+
+- Mình thử set lại cho `RCX` trỏ vào vùng này thì ra flag được in ra màn hình
+
+![image](https://github.com/user-attachments/assets/a6d8f94a-33e7-4134-86c7-e5aa93f07c5c)
+
+# Script and Flag
+**Flag:**: `ISITDTU{STATIC_STRUCt_INITIALIZATION_FAiLED}`
