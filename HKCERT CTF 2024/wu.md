@@ -39,3 +39,4 @@
 
 ![image](https://github.com/user-attachments/assets/ad3967a6-d2aa-46f3-960a-5380e8e47c03)
 
+- Với dữ kiện là chương trình được build bằng `.NET` framework, ta sẽ phải dump được các DLLs .NET từ trong APK package, để làm điều đó có thể sử dụng tool [này](https://github.com/jakev/pyxamstore)
