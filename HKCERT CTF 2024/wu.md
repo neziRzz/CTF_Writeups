@@ -39,4 +39,267 @@
 
 ![image](https://github.com/user-attachments/assets/ad3967a6-d2aa-46f3-960a-5380e8e47c03)
 
-- Với dữ kiện là chương trình được build bằng `.NET` framework, ta sẽ phải dump được các DLLs .NET từ trong APK package, để làm điều đó có thể sử dụng tool [này](https://github.com/jakev/pyxamstore)
+- Với dữ kiện là chương trình được build bằng `.NET` framework, ta sẽ phải dump được các DLLs .NET từ trong APK package trong thư mục `assemblies`(APK thực chất chỉ là một file đóng gói nên ta có thể sử dung `WinRar` để extract những file cần thiểt), để làm điều đó có thể sử dụng tool [này](https://github.com/jakev/pyxamstore)
+
+- Sau khi unpack xong, sử dụng `dnSpy` để phân tích DLL `CrackMe.dll`
+
+- hàm `checkFlag`
+```C#
+// CrackMe.MainPage
+// Token: 0x0600000B RID: 11 RVA: 0x00018548 File Offset: 0x00016748
+[NullableContext(1)]
+private bool checkFlag(string f)
+{
+	int[] array = new int[]
+	{
+		9,
+		10,
+		11,
+		12,
+		13,
+		32,
+		33,
+		34,
+		35,
+		36,
+		37,
+		38,
+		39,
+		40,
+		41,
+		42,
+		43,
+		44,
+		45,
+		46,
+		47,
+		48,
+		49,
+		50,
+		51,
+		52,
+		53,
+		54,
+		55,
+		56,
+		57,
+		58,
+		59,
+		60,
+		61,
+		62,
+		63,
+		64,
+		65,
+		66,
+		67,
+		68,
+		69,
+		70,
+		71,
+		72,
+		73,
+		74,
+		75,
+		76,
+		77,
+		78,
+		79,
+		80,
+		81,
+		82,
+		83,
+		84,
+		85,
+		86,
+		87,
+		88,
+		89,
+		90,
+		91,
+		92,
+		93,
+		94,
+		95,
+		96,
+		97,
+		98,
+		99,
+		100,
+		101,
+		102,
+		103,
+		104,
+		105,
+		106,
+		107,
+		108,
+		109,
+		110,
+		111,
+		112,
+		113,
+		114,
+		115,
+		116,
+		117,
+		118,
+		119,
+		120,
+		121,
+		122,
+		123,
+		124,
+		125,
+		126
+	};
+	int[] array2 = new int[]
+	{
+		58,
+		38,
+		66,
+		88,
+		78,
+		39,
+		80,
+		125,
+		64,
+		106,
+		48,
+		49,
+		98,
+		32,
+		42,
+		59,
+		126,
+		93,
+		33,
+		56,
+		112,
+		120,
+		60,
+		117,
+		111,
+		45,
+		87,
+		35,
+		10,
+		68,
+		61,
+		77,
+		11,
+		55,
+		121,
+		74,
+		107,
+		104,
+		65,
+		63,
+		46,
+		110,
+		34,
+		41,
+		102,
+		97,
+		81,
+		12,
+		47,
+		51,
+		103,
+		89,
+		115,
+		75,
+		54,
+		92,
+		90,
+		76,
+		113,
+		122,
+		114,
+		52,
+		72,
+		70,
+		50,
+		94,
+		91,
+		73,
+		84,
+		95,
+		36,
+		82,
+		124,
+		53,
+		108,
+		101,
+		9,
+		13,
+		44,
+		96,
+		67,
+		85,
+		116,
+		123,
+		100,
+		37,
+		43,
+		119,
+		71,
+		105,
+		118,
+		69,
+		99,
+		79,
+		86,
+		109,
+		62,
+		83,
+		40,
+		57
+	};
+	ulong[] array3 = new ulong[]
+	{
+		16684662107559623091UL,
+		13659980421084405632UL,
+		11938144112493055466UL,
+		17764897102866017993UL,
+		11375978084890832581UL,
+		14699674141193569951UL
+	};
+	ulong num = 14627333968358193854UL;
+	int num2 = 8;
+	Dictionary<int, int> dictionary = new Dictionary<int, int>();
+	for (int i = 0; i < array.Length; i++)
+	{
+		dictionary[array[i]] = array2[i];
+	}
+	StringBuilder stringBuilder = new StringBuilder();
+	foreach (char c in f)
+	{
+		stringBuilder.Append((char)dictionary[(int)c]);
+	}
+	int num3 = num2 - f.Length % num2;
+	string text = stringBuilder.ToString() + new string('\u0001', num3);
+	List<ulong> list = new List<ulong>();
+	for (int k = 0; k < text.Length - 1; k += num2)
+	{
+		ulong num4 = BitConverter.ToUInt64(Encoding.ASCII.GetBytes(text.Substring(k, num2)), 0);
+		list.Add(num4);
+	}
+	List<ulong> list2 = new List<ulong>();
+	foreach (ulong num5 in list)
+	{
+		ulong num6 = num ^ num5;
+		list2.Add(num6);
+	}
+	for (int l = 0; l < array3.Length; l++)
+	{
+		if (array3[l] != list2[l])
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+```
+
