@@ -34,3 +34,8 @@
 - Với những chall liên quan đến Java hay APK, ta có thể decompile bằng [JADX](https://github.com/skylot/jadx), nhưng sau khi kiểm tra hàm hoạt động chính của chương trình thì không đem lại kết quả gì
 
 ![image](https://github.com/user-attachments/assets/6930eaaf-0bcd-4bb7-b9fa-8e800db13cef)
+
+- Khi kiểm tra các package lân cận ta có thể đoán rằng chương trình được build bằng `.NET MAUI` framework và cụ thể hơn là `Xamarin`
+
+![image](https://github.com/user-attachments/assets/ad3967a6-d2aa-46f3-960a-5380e8e47c03)
+
