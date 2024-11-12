@@ -738,3 +738,4 @@ print("🙆🙅"[c0 != c1])
 print(c1)
 ```
 **Flag:** `hkcert24{y0u_c4n_h00k_func710ns_t0_35c4p3_fr0m_r3v3r5e_3n9e3r1n9}`
+# ISA 101
