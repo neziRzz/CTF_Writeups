@@ -302,4 +302,64 @@ private bool checkFlag(string f)
 }
 
 ```
+- Hàm này có nhiệm vụ kiểm tra input của player, cụ thể như sau
+  + Khởi tạo một dictionary với `array[i]` làm index và `array2[i]` là các phần tử trong dictionary
+  + Mỗi kí tự của input sẽ được map dựa theo dictionary vào `StringBulider`
+  + Sau khi map xong, buffer được tạo bởi `StringBuilder` sẽ được chia ra làm các khối 32 bits, khối cuối cùng sẽ được append `0x01`
+  + Mỗi khối trong buffer kể trên sẽ được XOR với `num` và lưu vào `list2`
+  + Cuối cùng sẽ kiểm tra từng phần tử trong `list2` với `array3`, tiếp tục loop nếu thỏa mãn và thoát nếu ngược lại
 
+- Với source khá rõ ràng như này, việc viết script sẽ không quá khó khăn, bên dưới là script giải của mình
+## Script and Flag
+```python
+import struct
+
+def reverse_check_flag(output):
+    array = [
+        9, 10, 11, 12, 13, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58,
+        59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90,
+        91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118,
+        119, 120, 121, 122, 123, 124, 125, 126
+    ]
+    
+    array2 = [
+        58, 38, 66, 88, 78, 39, 80, 125, 64, 106, 48, 49, 98, 32, 42, 59, 126, 93, 33, 56, 112, 120, 60, 117, 111, 45, 87, 35, 10, 68, 61, 77,
+        11, 55, 121, 74, 107, 104, 65, 63, 46, 110, 34, 41, 102, 97, 81, 12, 47, 51, 103, 89, 115, 75, 54, 92, 90, 76, 113, 122, 114, 52, 72, 70,
+        50, 94, 91, 73, 84, 95, 36, 82, 124, 53, 108, 101, 9, 13, 44, 96, 67, 85, 116, 123, 100, 37, 43, 119, 71, 105, 118, 69, 99, 79, 86, 109,
+        62, 83, 40, 57
+    ]
+    
+    array3 = [
+        16684662107559623091, 13659980421084405632, 11938144112493055466, 17764897102866017993,
+        11375978084890832581, 14699674141193569951
+    ]
+    
+    num = 14627333968358193854
+    num2 = 8
+    
+
+    inverse_dict = {array2[i]: array[i] for i in range(len(array))}
+    
+    
+    list2 = list(map(int, output.split(',')))  
+    
+
+    reversed_chunks = [num ^ chunk for chunk in list2]
+    
+
+    decoded_string = ''.join([struct.unpack('8s', struct.pack('Q', chunk))[0].decode('ascii') for chunk in reversed_chunks])
+    
+
+    result = decoded_string.rstrip('\x01')
+    
+
+    original_flag = ''.join([chr(inverse_dict[ord(c)]) for c in result])
+    
+    return original_flag
+
+output = "16684662107559623091,13659980421084405632,11938144112493055466,17764897102866017993,11375978084890832581,14699674141193569951"  # Example output from checkFlag
+original_flag = reverse_check_flag(output)
+print(original_flag)
+
+```
+**Flag:** `hkcert24{f0r3v3r_r3m3mb3r_x4m4r1n_2024-5-1}`
