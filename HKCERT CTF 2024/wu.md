@@ -505,7 +505,7 @@ if(s.check()==sat):
 ![image](https://github.com/user-attachments/assets/93ce9a7b-0c11-4703-a6ea-5c181dd04d0c)
 ![image](https://github.com/user-attachments/assets/2881bb16-4e4e-4ead-898d-0651233a2ad4)
 
-- Vậy từ đây ta sẽ phải đổi hướng tiếp cận đó chính là sử dụng thư viện `dis` của python để lấy ra bytecode và từ đó build thủ công lại chương trình. Bên dưới là script để biến đổi
+- Vậy từ đây ta sẽ phải đổi hướng tiếp cận đó chính là sử dụng thư viện `dis` của python để lấy ra bytecode và từ đó build lại chương trình. Bên dưới là script để biến đổi
 ```python
 import dis
 import marshal
@@ -655,7 +655,55 @@ Disassembly of <code object get_nonce at 0x00000202C11F4420, file "sser.py", lin
 
   7     >>  138 JUMP_BACKWARD           68 (to 4)
 ```
-- Để 
+
+- Tuy hơi mất não nhưng ta có thể đưa đoạn code trên lên ChatGPT và nhờ nó convert về lại python source 💀
+
+```python
+import os
+import requests
+from Crypto.Cipher import AES
+import hashlib
+
+def get_nonce():
+    while True:
+        nonce = os.urandom(16)  # Generate a random 16-byte nonce
+        # Hash with a prefix and check if the first three bytes are zero
+        if hashlib.sha256(b'pow/' + nonce).digest()[:3] == b'\x00\x00\x00':
+            return nonce
+
+# Ask for user input
+print("What is the flag?> ")
+flag = input().encode()
+
+# Get the nonce value using the get_nonce function
+nonce = get_nonce()
+
+# Make a request with the nonce as part of a JSON payload
+r = requests.post("https://c12-cypress.hkcert24.pwnable.hk/", json={"nonce": nonce.hex()})
+
+# Convert the response text from hex to bytes
+c0 = bytes.fromhex(r.text)
+
+# Generate keys for AES encryption using SHA-256 digests of nonce and different prefixes
+key = hashlib.sha256(b'key/' + nonce).digest()[:16]
+iv = hashlib.sha256(b'iv/' + nonce).digest()[:16]
+
+# Create AES cipher in CFB mode with the generated key and IV
+cipher = AES.new(key, AES.MODE_CFB, iv)
+
+# Encrypt the flag with the cipher
+c1 = cipher.encrypt(flag)
+
+# Check if c0 (received ciphertext) is different from c1 (locally encrypted flag)
+print("🙆🙅"[c0 != c1])  # Print different emoji based on comparison
+
+```
+- Từ đây ta có thể suy ra flow của chương trình như sau
+  + Đầu tiên chương trình nhận input của user
+  + Tạo request đến `https://c12-cypress.hkcert24.pwnable.hk/` để lấy ra flag data đã bị mã hóa
+  + Thực hiện encrypt input của user bằng thuật toán `AES` với mode `CFB`, key là `key/` được hash bằng thuật toán `SHA-256`, IV là `iv/` và so sánh với cyphertext nhận được từ `https://c12-cypress.hkcert24.pwnable.hk/`
+
+- Biết cách thức mã hóa, ta có thể viết script giải mã hoặc sửa luôn trong script trên từ `cipher.encrypt(flag)` thành `cipher.decrypt(c0)` và in kết quả ra màn hình
 ## Script and Flag
 ```python
 import os
