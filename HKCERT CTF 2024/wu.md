@@ -746,9 +746,110 @@ print(c1)
 ## Misc
 ## Detailed Analysis
 - IDA's Pseudocode
-```C
+```C// positive sp value has been detected, the output may be wrong!
+int __fastcall main(int argc, const char **argv, const char **envp)
+{
+  __int64 v3; // rax
+  __int64 v4; // rax
+  std::string flag; // [rsp+0h] [rbp-40h] BYREF
+  unsigned __int64 v7; // [rsp+28h] [rbp-18h]
 
+  v7 = __readfsqword(0x28u);
+  ((void (__fastcall *)(std::string *, const char **, const char **))std::string::basic_string)(&flag, argv, envp);
+  v3 = std::operator<<<std::char_traits<char>>((std::ostream *)&std::cout);
+  ((void (__fastcall *)(__int64, __int64 (__fastcall *)(std::ostream *)))std::ostream::operator<<)(
+    v3,
+    std::endl<char,std::char_traits<char>>);
+  std::operator>><char>((std::istream *)&std::cin);
+  decompress((char *)verify_0, 86, 50);
+  if ( verify_0(&flag) )
+  {
+    decompress((char *)verify_1, 86, 112);
+    if ( verify_1(&flag) )
+    {
+      decompress((char *)verify_2, 86, 115);
+      if ( verify_2(&flag) )
+      {
+        decompress((char *)&verify_3, 86, 53);
+        if ( (unsigned __int8)((__int64 (__fastcall *)(std::string *))verify_3)(&flag) == 1 )
+        {
+          decompress((char *)verify_4, 86, 121);
+          if ( verify_4(&flag) )
+          {
+            decompress((char *)verify_5, 86, -106);
+            if ( verify_5(&flag) )
+            {
+              decompress((char *)verify_6, 86, 84);
+              if ( verify_6(&flag) )
+              {
+                decompress((char *)verify_7, 86, -118);
+                if ( verify_7(&flag) )
+                {
+                  decompress((char *)verify_8, 86, 106);
+                  if ( verify_8(&flag) )
+                  {
+                    decompress((char *)verify_9, 86, 57);
+                    if ( verify_9(&flag) )
+                    {
+                      decompress((char *)verify_10, 86, -112);
+                      if ( verify_10(&flag) )
+                      {
+                        decompress((char *)verify_11, 86, -42);
+                        if ( verify_11(&flag) )
+                        {
+                          decompress((char *)verify_12, 86, 43);
+                          if ( verify_12(&flag) )
+                          {
+                            decompress((char *)verify_13, 86, -93);
+                            if ( verify_13(&flag) )
+                            {
+                              decompress((char *)verify_14, 86, 7);
+                              verify_14(&flag);
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  v4 = std::operator<<<std::char_traits<char>>((std::ostream *)&std::cout);
+  ((void (__fastcall *)(__int64, __int64 (__fastcall *)(std::ostream *)))std::ostream::operator<<)(
+    v4,
+    std::endl<char,std::char_traits<char>>);
+  ((void (__fastcall *)(std::string *))std::string::~string)(&flag);
+  return -1;
+}
 ```
+- Ta có thể thấy luồng của chương trình như sau. Đầu tiên chương trình sẽ tiến hành nhận input từ user, tiếp đến hàm `decompress` sẽ có nhiệm vụ `unpack?`(decrypt?) các hàm `verify` và nếu như input của user thỏa mãn điều kiện thì mới tiếp tục chuyển luồng đến các hàm `decompress` và `verify` tiếp theo
+
+- Hàm `decompress`
+```C
+void __cdecl decompress(char *memory, int size, char k)
+{
+  int i; // [rsp+1Ch] [rbp-4h]
+
+  for ( i = 0; i < size; ++i )
+    memory[i] ^= k;
+}
+```
+- Với các arguments dưới format như sau `((char *)verify_?, 86, key)` thì ta có thể suy ra được chức năng của hàm này sẽ là XOR data của hàm được define trong argument đầu tiên với một key bất kì để `decompress` data trong hàm đó, sau khi decompress thì các hàm `verify` sẽ có format như sau (mình sẽ chỉ lấy ví dụ cho 1 hàm verify bởi nó có tận 52 hàm như thế 💀)
+```C
+bool __cdecl verify_1(std::string *flag)
+{
+  unsigned __int8 v1; // bl
+
+  v1 = *(_BYTE *)std::string::operator[](flag, 14LL);
+  return (v1 ^ *(_BYTE *)std::string::operator[](flag, 15LL)) == 93;
+}
+```
+- Hàm này sẽ có nhiệm vụ check 2 kí tự 1 XOR với nhau với một constant(Các hàm `verify` còn lại có chức năng tương tự). Vậy để giải ta sẽ phải step qua từng hàm và nhặt từng điều kiện trong đó ra 💀
 ## Script and Flag
 ```python
 from z3 import *
