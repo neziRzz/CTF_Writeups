@@ -739,11 +739,11 @@ print(c1)
 ```
 **Flag:** `hkcert24{y0u_c4n_h00k_func710ns_t0_35c4p3_fr0m_r3v3r5e_3n9e3r1n9}`
 # Morph
+## Misc
 - Đề cho một file ELF64
 
 ![image](https://github.com/user-attachments/assets/98b6fee8-4dc0-40ad-b3df-c9960cf9c91a)
 
-## Misc
 ## Detailed Analysis
 - IDA's Pseudocode
 ```C// positive sp value has been detected, the output may be wrong!
