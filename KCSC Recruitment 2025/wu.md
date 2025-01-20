@@ -1539,3 +1539,9 @@ if __name__ == "__main__":
 ```
 **Flag:** `KCSC{XTEA_encryption_and_debugger_detection_:>>}`
 # OptimusPrize
+## Mics
+- Đề cho 1 file PE64
+
+![image](https://github.com/user-attachments/assets/27b494df-3a9d-4be5-af3b-c91d2d65541d)
+
+
