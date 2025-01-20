@@ -67,3 +67,11 @@ print("Flag:", flag)
 
 ```
 **Flag:** `KCSC{you_can't_see_me:v}`
+
+# easyre
+## Misc
+- Đề cho 1 file PE64
+
+  ![image](https://github.com/user-attachments/assets/3f407fb9-d11d-45cd-b401-b85cdafb462f)
+
+# Detailed Analysis
