@@ -1570,6 +1570,434 @@ int __cdecl __noreturn main(int argc, const char **argv, const char **envp)
 ![image](https://github.com/user-attachments/assets/153f81ad-43ee-4571-95c1-ef460c23b690)
 ![image](https://github.com/user-attachments/assets/58f1d7ff-bca8-40f5-869e-85882d19b3af)
 
-- Ta có thể thấy rằng chương trình sử dụng hàm `initterm` để gọi các hàm trong khoảng offset `dword_363104` đến `dword_363118` ở trước hàm `main`. Theo MSDN ``` Internal methods that walk a table of function pointers and initialize them.
-
+- Ta có thể thấy rằng chương trình sử dụng hàm `initterm` để gọi các hàm trong khoảng offset `dword_363104` đến `dword_363118` ở trước hàm `main`. Theo [MSDN](https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/initterm-initterm-e?view=msvc-170)  ``` initterm is internal methods that walk a table of function pointers and initialize them.
 The first pointer is the starting location in the table and the second pointer is the ending location. ```
+
+- Ta có thể hiểu nôm na là `initterm` sẽ thực hiện gọi các hàm nằm trong offset được chỉ định trong 2 arguments `PVFV *First` và `PVFV *Last`, Kĩ thuật này khá giống với kĩ thuật gọi `TLSCallback` để thực thi code trước hàm `main`, bây giờ ta sẽ lần lượt đi qua từng hàm đã được nêu trên
+
+- Hàm `sub_3621C6`
+
+![image](https://github.com/user-attachments/assets/e16a53ce-de82-4e0c-8303-49eb14ffc501)
+
+- Đây có lẽ là 1 hàm được gen ra bởi compiler
+
+- Hàm `sub_361000`
+```C
+int __usercall sub_361000@<eax>(int a1@<ebx>, int a2@<edi>, int a3@<esi>)
+{
+  int result; // eax
+
+  result = (unsigned __int8)sub_361060(a1, a2, a3);
+  dword_364400 = (unsigned __int8)result;
+  return result;
+}
+```
+- Hàm này gọi `sub_361060` và lưu giá trị trả về của nó vào `dword_364400`
+
+- Hàm `sub_361060`
+```C
+// bad sp value at call has been detected, the output may be wrong!
+char __usercall sub_361060@<al>(int a1@<ebx>, int a2@<edi>, int a3@<esi>)
+{
+  int *v3; // eax
+  int v4; // ecx
+  int *v5; // eax
+  int v6; // ecx
+  int *v7; // eax
+  int v8; // ecx
+  struct _LIST_ENTRY *v9; // eax
+  int (__cdecl *v10)(int, int, int, int); // esi
+  int v11; // ebx
+  int (__stdcall *v12)(int, int *); // edi
+  int v13; // esi
+  int v14; // edi
+  int v15; // esi
+  char v16; // bl
+  char v17; // bh
+  unsigned int v18; // ecx
+  unsigned int v19; // ecx
+  signed int v20; // eax
+  unsigned int v21; // ecx
+  unsigned int v22; // ecx
+  signed int v23; // eax
+  unsigned int v24; // eax
+  unsigned int v25; // eax
+  signed int v26; // eax
+  int v29; // [esp+0h] [ebp-49Ch]
+  void (__cdecl *v30)(int); // [esp+0h] [ebp-49Ch]
+  int v31; // [esp+4h] [ebp-498h]
+  int (__stdcall *v32)(int, int *); // [esp+4h] [ebp-498h]
+  int v33; // [esp+8h] [ebp-494h]
+  int (__stdcall *v34)(int, int *); // [esp+8h] [ebp-494h]
+  int v35; // [esp+Ch] [ebp-490h]
+  int (__stdcall *v36)(int, _DWORD); // [esp+Ch] [ebp-490h]
+  void (__stdcall *v37)(int); // [esp+10h] [ebp-48Ch]
+  int (__stdcall *v38)(int, int *); // [esp+14h] [ebp-488h]
+  char v39; // [esp+1Bh] [ebp-481h]
+  int v40[139]; // [esp+1Ch] [ebp-480h] BYREF
+  int v41[139]; // [esp+248h] [ebp-254h] BYREF
+  int v42[3]; // [esp+474h] [ebp-28h] BYREF
+  char v43; // [esp+480h] [ebp-1Ch]
+  int v44[3]; // [esp+484h] [ebp-18h] BYREF
+  int v45[2]; // [esp+490h] [ebp-Ch] BYREF
+
+  v44[0] = 0xF7FBEACE;
+  v3 = v44;
+  v44[1] = 0xADE6F1F6;
+  v4 = 0xC;
+  v44[2] = 0x83E6FBE6;
+  do
+  {
+    *(_BYTE *)v3 ^= 0x83u;                      // Mixture.exe
+    v3 = (int *)((char *)v3 + 1);
+    --v4;
+  }
+  while ( v4 );
+  v45[0] = 0xADE7EEE0;
+  v5 = v45;
+  v45[1] = 0x83E6FBE6;
+  v6 = 8;
+  do
+  {
+    *(_BYTE *)v5 ^= 0x83u;                      // cmd.exe
+    v5 = (int *)((char *)v5 + 1);
+    --v6;
+  }
+  while ( v6 );
+  v42[0] = 0xEFF3FBE6;
+  v7 = v42;
+  v42[1] = 0xF1E6F1EC;
+  v8 = 0xD;
+  v42[2] = 0xE6FBE6AD;
+  v43 = 0x83;
+  do
+  {
+    *(_BYTE *)v7 ^= 0x83u;                      // explorer.exe
+    v7 = (int *)((char *)v7 + 1);
+    --v8;
+  }
+  while ( v8 );
+  procAddr_GetCurrentProcessID = (int (__stdcall *)(_DWORD, _DWORD, _DWORD))API_Hashing((void *)0xFCCA572B);
+  procAddr_CreateToolhelp32Snapshot = (int)API_Hashing((void *)0xF3FFD4A7);
+  procAddr_Process32FirstW = (int)API_Hashing((void *)0xF9BD7A1C);
+  procAddr_Process32NextW = (int)API_Hashing((void *)0xFDAA1062);
+  procAddr_CloseHandle = (int)API_Hashing((void *)0xFC95A7B0);
+  procAddr_SetUnhandledExceptionFilter = (int)API_Hashing((void *)0xF6CACF0B);
+  procAddr_LoadLibraryA = (int)API_Hashing((void *)0xF1C2F5AC);
+  v9 = API_Hashing((void *)0xF9D023F7);
+  v10 = (int (__cdecl *)(int, int, int, int))procAddr_GetCurrentProcessID;
+  procAddr_GetProcAddress = (int)v9;
+  v35 = procAddr_CreateToolhelp32Snapshot;
+  v33 = procAddr_Process32FirstW;
+  v31 = procAddr_Process32NextW;
+  v29 = procAddr_CloseHandle;
+  v39 = 0;
+  procAddr_GetCurrentProcessID(a2, a3, a1);
+  v11 = v10(v29, v31, v33, v35);
+  sub_3617C0();
+  v12 = (int (__stdcall *)(int, int *))procAddr_Process32FirstW;
+  v38 = (int (__stdcall *)(int, int *))procAddr_Process32NextW;
+  v37 = (void (__stdcall *)(int))procAddr_CloseHandle;
+  memset(&v40[1], 0, 0x228u);
+  v40[0] = 0x22C;
+  v13 = ((int (__stdcall *)(int, _DWORD))procAddr_CreateToolhelp32Snapshot)(2, 0);
+  if ( v12(v13, v40) )
+  {
+    while ( v40[2] != v11 )
+    {
+      if ( !v38(v13, v40) )
+        goto LABEL_10;
+    }
+    v14 = v40[6];
+  }
+  else
+  {
+LABEL_10:
+    v14 = 0xFFFFFFFF;
+  }
+  v37(v13);
+  memset(&v41[1], 0, 0x228u);
+  v41[0] = 0x22C;
+  v15 = v36(2, 0);
+  if ( v34(v15, v41) )
+  {
+    v16 = v44[0];
+    v17 = v45[0];
+    while ( 1 )
+    {
+      if ( v41[2] == v14 )
+      {
+        v18 = 0;
+        if ( v16 )
+        {
+          do
+          {
+            word_364418[v18] = *((char *)v44 + v18);
+            ++v18;
+          }
+          while ( *((_BYTE *)v44 + v18) );
+        }
+        v19 = v18;
+        if ( v19 >= 0x100 )
+LABEL_37:
+          sub_362036();
+        word_364418[v19] = 0;
+        v20 = wcscmp((const unsigned __int16 *)&v41[9], word_364418);
+        if ( v20 )
+          v20 = v20 < 0 ? 0xFFFFFFFF : 1;
+        if ( v20 )
+        {
+          v21 = 0;
+          if ( v17 )
+          {
+            do
+            {
+              word_364418[v21] = *((char *)v45 + v21);
+              ++v21;
+            }
+            while ( *((_BYTE *)v45 + v21) );
+          }
+          v22 = v21;
+          if ( v22 >= 0x100 )
+            goto LABEL_37;
+          word_364418[v22] = 0;
+          v23 = wcscmp((const unsigned __int16 *)&v41[9], word_364418);
+          if ( v23 )
+            v23 = v23 < 0 ? 0xFFFFFFFF : 1;
+          if ( v23 )
+          {
+            v24 = 0;
+            if ( LOBYTE(v42[0]) )
+            {
+              do
+              {
+                word_364418[v24] = *((char *)v42 + v24);
+                ++v24;
+              }
+              while ( *((_BYTE *)v42 + v24) );
+            }
+            v25 = v24;
+            if ( v25 >= 0x100 )
+              goto LABEL_37;
+            word_364418[v25] = 0;
+            v26 = wcscmp((const unsigned __int16 *)&v41[9], word_364418);
+            if ( v26 )
+              v26 = v26 < 0 ? 0xFFFFFFFF : 1;
+            if ( v26 )
+              break;
+          }
+        }
+      }
+      if ( !v32(v15, v41) )
+        goto LABEL_35;
+    }
+    v39 = 1;
+  }
+LABEL_35:
+  v30(v15);
+  return v39;
+}
+```
+- Hàm này sử dụng kĩ thuật `API Hashing` để resolve ra các hàm cần thiết cho việt enumerate các process đang chạy, sau đó kiểm tra tiến trình đang chạy là gì và có thuộc 1 trong ba tiến trình Mixture.exe,cmd.exe hay explorer.exe hay không, nếu không phải thì có nghĩa là đang bị debug và trả về giá trị 1(bị debug) và 0(không bị debug) tương ứng. Một chút về kĩ thuật này, thay vì gọi trực tiếp các hàm ra thì ta có thể sử dụng kĩ thuật kể trên để giấu đi việc gọi hàm gì, kĩ thuật này hay được sử dụng trong malware nhằm làm khó việc phân tích. Để phân tích được các hàm sau khi hashing là gì, ta có thể lên mạng tra hash hoặc là debug
+
+- Hàm `sub_361010`
+```C
+int sub_361010()
+{
+  int result; // eax
+
+  if ( dword_364400 )
+  {
+    dword_364404 = (int)"S0NTQ3tuVUUwcFVaNllsOTNxM3Bocko5MXFVSXZNRjV3bzIwaXEyUzBMMnQvcXcwNUR6amtwVXVVWkg1c0REPT19";
+  }
+  else
+  {
+    result = sub_361440();
+    dword_364404 = (int)"YXV0aG9ybm9vYm1hbm5uZnJvbWtjc2M=";
+  }
+  return result;
+}
+```
+- Hàm này có nhiệm vụ kiểm tra `dword_364400`(giá trị trả về của `sub_361060` )là 0 hay 1 và thực thi vào luồng tương ứng
+
+```C
+int sub_871440()
+{
+  int (__stdcall *v0)(int *); // edx
+  int *v1; // eax
+  int (__stdcall *v2)(int, int *); // edi
+  int v3; // ecx
+  int v4; // esi
+  int *v5; // eax
+  int v6; // ecx
+  int v7; // ecx
+  int *v8; // eax
+  int v9; // ecx
+  int *v10; // eax
+  int v11; // ecx
+  int *v12; // eax
+  int v13; // ecx
+  int *v14; // eax
+  int v15; // ecx
+  int *v16; // eax
+  int v17; // ecx
+  int *v18; // eax
+  int v19; // ecx
+  int *v20; // eax
+  int result; // eax
+  int v22[5]; // [esp+8h] [ebp-A4h] BYREF
+  char v23; // [esp+1Ch] [ebp-90h]
+  int v24[5]; // [esp+20h] [ebp-8Ch] BYREF
+  int v25[4]; // [esp+34h] [ebp-78h] BYREF
+  char v26; // [esp+44h] [ebp-68h]
+  int v27[4]; // [esp+48h] [ebp-64h] BYREF
+  int v28[4]; // [esp+58h] [ebp-54h] BYREF
+  int v29[3]; // [esp+68h] [ebp-44h] BYREF
+  __int16 v30; // [esp+74h] [ebp-38h]
+  char v31; // [esp+76h] [ebp-36h]
+  int v32[3]; // [esp+78h] [ebp-34h] BYREF
+  __int16 v33; // [esp+84h] [ebp-28h]
+  int v34[3]; // [esp+88h] [ebp-24h] BYREF
+  char v35; // [esp+94h] [ebp-18h]
+  int v36[3]; // [esp+98h] [ebp-14h] BYREF
+  char v37; // [esp+A4h] [ebp-8h]
+
+  v0 = (int (__stdcall *)(int *))procAddr_LoadLibraryA;
+  v1 = v36;
+  v2 = (int (__stdcall *)(int, int *))procAddr_GetProcAddress;
+  v3 = 0xD;
+  v36[0] = 0x16011336;
+  v36[1] = 0x45441E07;
+  v36[2] = 0x1B1B1359;
+  v37 = 0x77;
+  do
+  {
+    *(_BYTE *)v1 ^= 0x77u;                      // Advapi32.dll
+    v1 = (int *)((char *)v1 + 1);
+    --v3;
+  }
+  while ( v3 );
+  v4 = v0(v36);
+  v22[0] = 0x70E0534;
+  v22[1] = 0x6143603;
+  v5 = v22;
+  v22[2] = 0x12051E02;
+  v6 = 0x15;
+  v22[3] = 0x3191834;
+  v22[4] = 0x36030F12;
+  v23 = 0x77;
+  do
+  {
+    *(_BYTE *)v5 ^= 0x77u;                      // CryptAcquireContextA
+    v5 = (int *)((char *)v5 + 1);
+    --v6;
+  }
+  while ( v6 );
+  dword_8743C0 = v2(v4, v22);
+  v7 = 0x10;
+  v28[0] = 0x70E0534;
+  v8 = v28;
+  v28[1] = 0x12053403;
+  v28[2] = 0x3F120316;
+  v28[3] = 0x771F0416;
+  do
+  {
+    *(_BYTE *)v8 ^= 0x77u;                      // CryptCreateHash
+    v8 = (int *)((char *)v8 + 1);
+    --v7;
+  }
+  while ( v7 );
+  dword_8743C4 = v2(v4, v28);
+  v9 = 0xE;
+  v32[0] = 0x70E0534;
+  v10 = v32;
+  v32[1] = 0x4163F03;
+  v32[2] = 0x316331F;
+  v33 = 0x7716;
+  do
+  {
+    *(_BYTE *)v10 ^= 0x77u;                     // CryptHashData
+    v10 = (int *)((char *)v10 + 1);
+    --v9;
+  }
+  while ( v9 );
+  dword_8743C8 = v2(v4, v32);
+  v11 = 0xF;
+  v29[0] = 0x70E0534;
+  v12 = v29;
+  v29[1] = 0x5123303;
+  v29[2] = 0x3C12011E;
+  v30 = 0xE12;
+  v31 = 0x77;
+  do
+  {
+    *(_BYTE *)v12 ^= 0x77u;                     // CryptDeriveKey
+    v12 = (int *)((char *)v12 + 1);
+    --v11;
+  }
+  while ( v11 );
+  procAddr_CryptDeriveKey = v2(v4, v29);
+  v13 = 0x11;
+  v25[0] = 0x70E0534;
+  v14 = v25;
+  v25[1] = 0x4123303;
+  v25[2] = 0xE180503;
+  v25[3] = 0x1F04163F;
+  v26 = 0x77;
+  do
+  {
+    *(_BYTE *)v14 ^= 0x77u;                     // CryptDestroyHash
+    v14 = (int *)((char *)v14 + 1);
+    --v13;
+  }
+  while ( v13 );
+  procAddr_CryptDestroyHash = v2(v4, v25);
+  v15 = 0xD;
+  v34[0] = 0x70E0534;
+  v16 = v34;
+  v34[1] = 0x14193203;
+  v34[2] = 0x3070E05;
+  v35 = 0x77;
+  do
+  {
+    *(_BYTE *)v16 ^= 0x77u;                     // CryptEncrypt
+    v16 = (int *)((char *)v16 + 1);
+    --v15;
+  }
+  while ( v15 );
+  procAddr_CryptEncrypt = v2(v4, v34);
+  v17 = 0x10;
+  v27[0] = 0x70E0534;
+  v18 = v27;
+  v27[1] = 0x4123303;
+  v27[2] = 0xE180503;
+  v27[3] = 0x770E123C;
+  do
+  {
+    *(_BYTE *)v18 ^= 0x77u;                     // CryptDestroyKey
+    v18 = (int *)((char *)v18 + 1);
+    --v17;
+  }
+  while ( v17 );
+  procAddr_CryptDestroyKey = v2(v4, v27);
+  v19 = 0x14;
+  v24[0] = 0x70E0534;
+  v20 = v24;
+  v24[1] = 0x1B122503;
+  v24[2] = 0x12041612;
+  v24[3] = 0x3191834;
+  v24[4] = 0x77030F12;
+  do
+  {
+    *(_BYTE *)v20 ^= 0x77u;                     // CryptReleaseContext
+    v20 = (int *)((char *)v20 + 1);
+    --v19;
+  }
+  while ( v19 );
+  result = v2(v4, v24);
+  procAddr_CryptReleaseContext = result;
+  return result;
+}
+```
+- Hàm này có nhiệm vụ load dll `Advapi32.dll` resolve ra các hàm `Wincrypt` (Có thể liên quan đến mã hóa flag)
+- 
