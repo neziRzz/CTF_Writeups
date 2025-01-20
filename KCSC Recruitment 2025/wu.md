@@ -424,3 +424,117 @@ if __name__ == "__main__":
 **Flag:** `KCSC{Easy_Encryption_With_DotNET_Program:3}`
 # EzRev
 ## Mics
+- Đề cho 1 file PE64
+
+![image](https://github.com/user-attachments/assets/c5d6c30a-1b51-47b3-8f27-6c0d5412f2cc)
+
+## Detailed Analysis
+- Hàm `main`
+
+```C
+int __fastcall main(int argc, const char **argv, const char **envp)
+{
+  int i; // [rsp+20h] [rbp-28h]
+  __int64 v5; // [rsp+28h] [rbp-20h]
+
+  sub_140001200("Enter Something: ", argv, envp);
+  sub_1400012D0("%s", byte_1400047A8);
+  if ( (unsigned int)sub_140001100(byte_1400047A8) == 0x89D5B562 )
+  {
+    v5 = -1i64;
+    do
+      ++v5;
+    while ( byte_1400047A8[v5] );
+    if ( v5 == 40 )
+    {
+      sub_140001000((__int64)byte_1400047A8);
+      dword_1400047A0 = 1;
+      for ( i = 0; i < 40; ++i )
+      {
+        if ( dword_140004080[i] != dword_140004700[i] )
+          dword_1400047A0 = 0;
+      }
+    }
+  }
+  if ( dword_1400047A0 )
+    sub_140001200("Excellent!! Here is your flag: KCSC{%s}", byte_1400047A8);
+  else
+    sub_140001200("You're chicken!!!");
+  return 0;
+}
+```
+- Đầu tiên chương trình sẽ kiểm tra hash `FNV-1a` bằng hàm `sub_140001100` của input, nếu hash thỏa mãn thì input sẽ tiếp tục được biến đổi tại `sub_140001000`, cuối cùng kiểm tra input sau khi được biến đổi với `dword_140004080`, thỏa mãn thì in ra flag và ngược lại in ra string `You're chicken!!!`
+
+- Hàm `sub_140001000`
+
+```C
+__int64 __fastcall sub_140001000(__int64 a1)
+{
+  __int64 result; // rax
+  unsigned int v2; // [rsp+0h] [rbp-38h]
+  unsigned int i; // [rsp+4h] [rbp-34h]
+  int j; // [rsp+8h] [rbp-30h]
+  int v5; // [rsp+Ch] [rbp-2Ch]
+  int v6; // [rsp+10h] [rbp-28h]
+  __int64 v7; // [rsp+18h] [rbp-20h]
+
+  v7 = -1i64;
+  do
+    ++v7;
+  while ( *(_BYTE *)(a1 + v7) );
+  for ( i = 0; ; ++i )
+  {
+    result = (unsigned int)v7;
+    if ( i >= (unsigned int)v7 )
+      break;
+    v5 = 4;
+    v6 = 6;
+    v2 = *(unsigned __int8 *)(a1 + (int)i);
+    for ( j = 0; j < 5; ++j )
+    {
+      v2 ^= __ROL4__(v2, v5) ^ __ROR4__(v2, v6);
+      v5 *= 2;
+      v6 *= 2;
+    }
+    dword_140004700[i] = v2;
+  }
+  return result;
+}
+```
+- Hàm này biến đổi input của chúng ta bằng các phép rol4, ror4 và Xor. Có điều phải chú ý rằng các phép rol và ror thực hiện trên trường số 32 bit. Bởi hàm này chỉ xử lí từng kí tự 1 của input nên để giải ta có thể build lại hàm này và viết script bằng cách bruteforce
+
+## Script and Flag
+```python
+def rol(val, bits, bit_size):
+    return (val << bits % bit_size) & (2 ** bit_size - 1) | \
+           ((val & (2 ** bit_size - 1)) >> (bit_size - (bits % bit_size)))
+def ror(val, bits, bit_size):
+    return ((val & (2 ** bit_size - 1)) >> bits % bit_size) | \
+           (val << (bit_size - (bits % bit_size)) & (2 ** bit_size - 1))
+dest = [0xF30C0330, 0x340DDE9D, 0x750D9AC9, 0x391FBC2A, 0x9F16AF5B, 0xE6180661, 0x6C1AAC6B, 0x340DDE9D, 0xB60D5635, 0x9F16AF5B,
+0xA3195364, 0x681BBD3A, 0xF30C0330, 0xA3195364, 0xAB1B71C6, 0xF30C0330, 0xF21D5274, 0x9F16AF5B, 0xE6180661, 0x300CCFCC,
+0xF21D5274, 0x9F16AF5B, 0xAB1B71C6, 0xA3195364, 0x750D9AC9, 0xA3195364, 0x9F16AF5B, 0xF21D5274, 0xF30C0330, 0xA3195364,
+0xF21D5274, 0x351C8FD9, 0x710C8B98, 0xF70D1261, 0x2D1AE83F, 0xF30C0330, 0xEE1A24C3, 0xF70D1261, 0x6108CEDC, 0x6108CEDC,]
+count = 0
+while(count<len(dest)-1):
+    for j in range(0x20,0x7f):
+        v5 = 4
+        v6 = 6
+        v2 = j
+        for i in range(5):
+
+            v2 ^= rol(v2, v5,32) ^ ror(v2, v6,32)
+            v5 *= 2
+            v6 *= 2
+        if(v2 == dest[count]):
+            print(chr(j),end='')
+            count +=1
+```
+**Flag:** `KCSC{345y_fl46_ch3ck3r_f0r_kc5c_r3cru17m3n7!}`
+# Waiterfall
+## Mics
+- Đề cho 1 file PE64 🐧
+
+![image](https://github.com/user-attachments/assets/83547248-353a-4e82-bcd0-6c807390472c)
+
+## Detailed Analysis
