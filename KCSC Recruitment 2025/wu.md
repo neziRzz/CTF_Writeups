@@ -338,7 +338,7 @@ private static void Main()
 ## Script and Flag
 ```python
 import base64 as b64
-import numpy as np
+
 
 def xor(a, b):
     #Performs XOR operation on two character arrays.
