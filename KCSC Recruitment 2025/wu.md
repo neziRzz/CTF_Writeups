@@ -2252,7 +2252,7 @@ int main() {
     };
     DWORD plaintextLen = sizeof(ciphertext);
 
-    // Example ciphertext in hexadecimal (F850CCEFE63A1ECB3106B2E7C561C59BCE5EA988379A7AFD406277B637)
+    // Example ciphertext in hexadecimal 
 
     DWORD ciphertextLen = sizeof(ciphertext);
 
