@@ -1553,8 +1553,8 @@ if __name__ == "__main__":
 ## Script and Flag
 **Flag:** `KCSC{just_a_sort_of_O-OoOptim...ize_references}`
 # Cat Laughing At You
-## Đề cho 1 file PE32
-
+## Mics
+- Đề cho 1 file PE32
 ![image](https://github.com/user-attachments/assets/6b54156a-5d92-4a18-9ca4-cea16a00cf2b)
 
 ## Detailed Analysis
