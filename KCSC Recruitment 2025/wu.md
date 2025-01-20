@@ -1549,7 +1549,89 @@ if __name__ == "__main__":
 - Hàm `main`
 
 ```C
+int __fastcall main(int argc, const char **argv, const char **envp)
+{
+  unsigned __int8 v4; // [rsp+21h] [rbp-27h]
+  int i; // [rsp+24h] [rbp-24h]
+  int v6; // [rsp+28h] [rbp-20h]
+  char v7; // [rsp+2Ch] [rbp-1Ch]
+  char v8; // [rsp+30h] [rbp-18h]
+  char v9; // [rsp+34h] [rbp-14h]
+
+  for ( i = 0; i < 50; ++i )
+  {
+    sub_14010DEB0(&unk_140112860, 0i64, dword_140112100[i]);
+    v7 = *(_DWORD *)sub_14010E2B0(&unk_140112860, dword_140112100[i] >> 1);
+    v8 = BYTE1(*(_DWORD *)sub_14010E2B0(&unk_140112860, dword_140112100[i] >> 1)) ^ v7;
+    v9 = HIWORD(*(_DWORD *)sub_14010E2B0(&unk_140112860, dword_140112100[i] >> 1)) ^ v8;
+    v4 = HIBYTE(*(_DWORD *)sub_14010E2B0(&unk_140112860, dword_140112100[i] >> 1)) ^ v9;
+    v6 = sub_14010DFD0((unsigned int)(2 * i));
+    sub_14010D9C0(
+      "%c",
+      byte_1401120C0[i] ^ v4 ^ (unsigned int)(unsigned __int8)(HIBYTE(v6) ^ BYTE2(v6) ^ BYTE1(v6) ^ v6));
+  }
+  return 0;
+}
 ```
+- Hàm này thực hiện biến đổi một số data có sẵn thông qua `sub_14010DEB0`, sau đó in flag ra màn hình nhưng có vẻ như là in ra rất lâu
+
+![image](https://github.com/user-attachments/assets/a1d04f1e-19c4-4065-9309-a72e1dbf693b)
+
+- Kiểm tra hàm `sub_14010DEB0` để xem trong đó làm gì
+```C
+__int64 __fastcall sub_14010DEB0(__int64 a1, unsigned int a2, unsigned int a3)
+{
+  __int64 result; // rax
+  __int64 v4; // rax
+  unsigned int v5; // [rsp+20h] [rbp-28h]
+  _DWORD *v6; // [rsp+28h] [rbp-20h]
+  __int64 v7; // [rsp+30h] [rbp-18h]
+
+  result = a3;
+  if ( (int)a2 < (int)a3 )
+  {
+    v5 = (int)(a3 + a2) >> 1;
+    sub_14010DEB0(a1, a2, v5);
+    sub_14010DEB0(a1, v5 + 1, a3);
+    v6 = (_DWORD *)sub_14010E250(a1, v5);
+    if ( *v6 > *(_DWORD *)sub_14010E250(a1, (int)a3) )
+    {
+      v7 = sub_14010E2B0(a1, (int)a3);
+      v4 = sub_14010E2B0(a1, v5);
+      sub_14010E510(v4, v7);
+    }
+    return sub_14010DEB0(a1, a2, a3 - 1);
+  }
+  return result;
+}
+```
+- Hàm này mô phỏng lại thuật toán `Quick Sort` nhưng đã bị custom lại một chút, cụ thể là gọi thêm một số hàm đệ quy không cần thiết để làm tăng thời gian thực thi của chương trình. Qua đây ta cũng có thể mường tượng ra hướng làm cho bài này là sẽ phải tối ưu hóa lại các hàm sao cho phù hợp để đẩy nhanh tốc độ thực thi
+- Hàm `sub_14010E2B0`
+```C
+__int64 __fastcall sub_14010E2B0(_QWORD *a1, __int64 a2)
+{
+  return *a1 + 4 * a2;
+}
+```
+- Hàm này có nhiệm vụ return giá trị tại 1 index cụ thể của 1 array
+
+- Hàm `sub_14010DFD0`
+```C
+__int64 __fastcall sub_14010DFD0(int a1)
+{
+  int v2; // [rsp+20h] [rbp-18h]
+
+  if ( !a1 )
+    return 0i64;
+  if ( a1 == 1 )
+    return 1i64;
+  v2 = sub_14010DFD0((unsigned int)(a1 - 1));
+  return (unsigned int)sub_14010DFD0((unsigned int)(a1 - 2)) + v2;
+}
+```
+- Một hàm quen thuộc, đây chính là thuật toán tìm số Fibonacci thứ n bằng cách gọi đệ quy, mà như chúng ta đã biết, đệ quy sẽ làm thời gian thực thi của chương trình lâu một cách đáng kể, vậy đây cũng là một hàm ta cần phải tối ưu 
+
+-  Với những dữ kiện trên, để giải ta có 2 cách, cách đẩu tiên là patch thẳng lại chương trình để chương trình lại nhanh hơn hoặc là code lại toàn bộ chương trình với data có sẵn (số lượng data rất nhiều nên hãy cân nhắc việc sử dụng script để hỗ trợ lấy data). Bài này mình giải theo cách code lại nên là script mình sẽ để ở một file riêng :v
 ## Script and Flag
 **Flag:** `KCSC{just_a_sort_of_O-OoOptim...ize_references}`
 # Cat Laughing At You
