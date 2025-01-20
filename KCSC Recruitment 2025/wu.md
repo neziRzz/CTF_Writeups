@@ -335,3 +335,65 @@ private static void Main()
 }
 
 ```
+## Script and Flag
+```python
+import base64 as b64
+import numpy as np
+
+def xor(a, b):
+    #Performs XOR operation on two character arrays.
+    max_len = max(len(a), len(b))
+    result = []
+    for i in range(max_len):
+        if len(a) >= len(b):
+            result.append(chr(ord(a[i]) ^ ord(b[i % len(b)])))
+        else:
+            result.append(chr(ord(a[i % len(a)]) ^ ord(b[i])))
+    return ''.join(result)
+
+def solve():
+    # Source byte array
+    source = [
+        85, 122, 105, 71, 17, 94, 71, 24, 114, 78, 107, 11, 108, 106, 107, 113,
+        121, 51, 91, 117, 86, 110, 100, 18, 124, 104, 71, 66, 123, 3, 111, 99,
+        74, 107, 69, 77, 111, 2, 120, 125, 83, 99, 62, 99, 109, 76, 119, 111,
+        59, 32, 1, 93, 69, 117, 84, 106, 73, 85, 112, 66, 114, 92, 61, 80,
+        80, 104, 111, 72, 98, 28, 88, 94, 27, 120, 15, 76, 15, 67, 86, 117,
+        81, 108, 18, 37, 34, 101, 104, 109, 23, 30, 62, 78, 88, 10, 2, 63,
+        43, 72, 102, 38, 76, 23, 34, 62, 21, 97, 1, 97
+    ]
+    source_chars = ''.join(chr(e) for e in source)
+
+    # The URL used in the XOR process
+    text = "https://www.youtube.com/watch?v=L8XbI9aJOXk"
+
+    # Reverse XOR with the URL text
+    temp_array = xor(source_chars, text)
+
+    # Calculate the length of the original input
+    n = len(temp_array)
+
+    # Split the reversed XOR result back into parts
+    num = n // 4
+    array2 = temp_array[:num]
+    array3 = temp_array[num:2*num]
+    array4 = temp_array[2*num:3*num]
+    array5 = temp_array[3*num:]
+
+    # Reverse the sequence of XOR operations
+    array5 = xor(array5, array2)
+    array4 = xor(array4, array5)
+    array3 = xor(array3, array4)
+    array2 = xor(array2, array3)
+
+    # Combine the parts to reconstruct the original input
+    original_input = array2 + array3 + array4 + array5
+
+    return original_input
+
+if __name__ == "__main__":
+    result = solve()
+    for _ in range(3):
+        result = b64.b64decode(result)
+    print(result)
+```
