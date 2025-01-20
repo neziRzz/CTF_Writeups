@@ -1409,6 +1409,133 @@ LABEL_13:
 ## Script and Flag
 **Flag:** `KCSC{chachacha_w1th_me_and_welc0me_2_KCSC}`
 # Reverse me
+## Mics
 - Đề cho 1 file ELF64
 
 ![image](https://github.com/user-attachments/assets/2381d76d-3cc0-4dfb-95da-fe3d08722116)
+
+## Detailed Analysis
+
+- Hàm `main`
+
+```C
+__int64 __fastcall main(int a1, char **a2, char **a3)
+{
+  int i; // [rsp+18h] [rbp-58h]
+  int j; // [rsp+1Ch] [rbp-54h]
+  char s[56]; // [rsp+30h] [rbp-40h] BYREF
+  unsigned __int64 v7; // [rsp+68h] [rbp-8h]
+
+  v7 = __readfsqword(0x28u);
+  memset(s, 0, 0x31uLL);
+  printf("FLAG: ");
+  __isoc99_scanf("%48s", s);
+  for ( i = 0; i <= 47; i += 8 )
+    sub_12D4(&s[i], &s[i + 4]);
+  for ( j = 0; ; ++j )
+  {
+    if ( j > 47 )
+    {
+      puts("Correct!");
+      return 0LL;
+    }
+    if ( s[j] != byte_4040[j] )
+      break;
+  }
+  puts("Incorrect!");
+  return 0LL;
+}
+```
+- Chương trình sẽ có nhiệm vụ lấy input của user (48 kí tự) và biến đổi chúng qua hàm `sub_12D4`, sau đó kiểm tra với `byte_4040`
+
+- Hàm `sub_12D4`
+```C
+unsigned int *__fastcall sub_12D4(unsigned int *a1, unsigned int *a2)
+{
+  unsigned int *result; // rax
+  unsigned int i; // [rsp+10h] [rbp-10h]
+  unsigned int v4; // [rsp+14h] [rbp-Ch]
+  unsigned int v5; // [rsp+18h] [rbp-8h]
+  unsigned int v6; // [rsp+1Ch] [rbp-4h]
+
+  v4 = *a1;
+  v5 = *a2;
+  v6 = 0;
+  for ( i = 0; i < dword_4020; ++i )
+  {
+    v4 += (((v5 >> 5) ^ (16 * v5)) + v5) ^ (dword_40C0[v6 & 3] + v6);
+    v6 += dword_40A0;
+    v5 += (((v4 >> 5) ^ (16 * v4)) + v4) ^ (dword_40C0[(v6 >> 11) & 3] + v6);
+  }
+  *a1 = v4;
+  result = a2;
+  *a2 = v5;
+  return result;
+}
+```
+- Hàm này mô phỏng lại thuật toán mã hóa tựa TEA để mã hóa input với key là `dword_40C0` và delta là `dword_40A0`, vậy để giải thì ta chỉ cần tìm thuật toán trên mạng hoặc tự code lại là ra được flag.
+- Nhưng khoan đã, một bài medium mà chỉ có như thế này thì có gì đó không đúng lắm, ít nhất thì cũng phải có anti debug, và nghi ngờ của mình là đúng. Trước hàm main thì có gọi 1 hàm nữa đó chính là hàm `sub_11E9`
+
+```C
+_DWORD *sub_11E9()
+{
+  _DWORD *result; // rax
+  int i; // [rsp+8h] [rbp-8h]
+  int j; // [rsp+Ch] [rbp-4h]
+
+  result = (_DWORD *)((unsigned __int64)ptrace(PTRACE_TRACEME, 0LL, 0LL, 0LL) >> 63);
+  if ( (_BYTE)result )
+  {
+    for ( i = 0; i <= 3; ++i )
+    {
+      result = dword_40C0;
+      dword_40C0[i] = dword_4080[i] ^ dword_4070[i];
+    }
+  }
+  else
+  {
+    for ( j = 0; j <= 3; ++j )
+    {
+      result = dword_40C0;
+      dword_40C0[j] = dword_4090[j] ^ dword_4070[j];
+    }
+  }
+  return result;
+}
+```
+- Hàm này sẽ kiểm tra debugger bằng `ptrace`. Nếu như gọi đến `ptrace` mà fail (return -1) thì có nghĩa là đang có debugger. Khi có sự hiện diện của debugger thì hàm này sẽ gen ra key giả. Vậy ta chỉ cần bypass, lấy key ở luồng ngược lại và viết script
+
+## Script and Flag
+```python
+def decrypt(a1, a2, dword_key, delta, num_rounds):
+    v4 = a1
+    v5 = a2
+    v6 = delta * num_rounds
+
+    for _ in range(num_rounds):
+        v5 -= (((v4 >> 5) ^ (v4 * 16)) + v4) ^ (dword_key[(v6 >> 11) & 3] + v6)
+        v5 &=0xFFFFFFFF
+        v6 -= delta
+        v6 &=0xFFFFFFFF
+        v4 -= (((v5 >> 5) ^ (v5 * 16)) + v5) ^ (dword_key[v6 & 3] + v6)
+        v4 &=0xFFFFFFFF
+
+    return v4, v5
+
+if __name__ == "__main__":
+    data = [0x1C37B6EC, 0xB0E36676, 0x4137C16F, 0x454D466D, 0x7A0AFE3B, 0x235B5B39, 0xCA317196, 0x7DB9C036, 0xBAC3881C, 0x089925A4,
+0xFE2A59A9, 0x94E61826]
+    for i in range(0,12,2):
+        encrypted_a1 = data[i]  
+        encrypted_a2 = data[i+1]  
+        dword_key = [0x3AB27278, 0x0A840805B, 0x0E864925B, 0x0B7B1EEDE] 
+        delta = 0x9E3779B9
+        num_rounds = 32
+
+        decrypted_a1, decrypted_a2 = decrypt(encrypted_a1, encrypted_a2, dword_key, delta, num_rounds)
+        print(bytes.fromhex(hex(decrypted_a1).strip("0x")).decode("utf-8")[::-1],end='')
+        print(bytes.fromhex(hex(decrypted_a2).strip("0x")).decode("utf-8")[::-1],end='')
+
+```
+**Flag:** `KCSC{XTEA_encryption_and_debugger_detection_:>>}`
+# OptimusPrize
