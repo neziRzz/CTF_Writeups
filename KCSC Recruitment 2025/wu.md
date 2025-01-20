@@ -2381,3 +2381,90 @@ int main() {
 }
 ```
 **Flag:** `KCSC{The_m1xture_mak3_hard_challenge_4_y0u!!!}`
+# steal
+## Mics
+- Đề cho 1 file PE64 và 1 file pcapng
+
+![image](https://github.com/user-attachments/assets/424a862e-ef54-42aa-88f3-73a791a96b5d)
+
+## Detailed Analysis
+## Script and Flag
+```C
+#include <stdio.h>
+#include <string.h>
+#include <stdint.h>
+
+
+void ksa(const uint8_t* key, int key_length, uint8_t* S) {
+    int i, j = 0;
+    uint8_t temp;
+
+ 
+    for (i = 0; i < 256; i++) {
+        S[i] = i;
+    }
+
+  
+    for (i = 0; i < 256; i++) {
+        j = (j + S[i] + key[i % key_length]) % 256;
+        temp = S[i];
+        S[i] = S[j];
+        S[j] = temp;
+    }
+}
+
+void prga(const uint8_t* input, uint8_t* output, int length, uint8_t* S) {
+    int i = 0, j = 0, k, t;
+    uint8_t temp;
+
+    for (k = 0; k < length; k++) {
+    
+        i = (i + 1) % 256;
+        j = (j + S[i]) % 256;
+
+       
+        temp = S[i];
+        S[i] = S[j];
+        S[j] = temp;
+
+       
+        t = (S[i] + S[j]) % 256;
+        uint8_t keystream_byte = S[t];
+
+   
+        output[k] = input[k] ^ keystream_byte;
+    }
+}
+void rc4_decrypt(const unsigned char* key, const uint8_t* cyphertext, uint8_t* plaintext, int length) {
+    uint8_t S[256];
+    int key_length = strlen((const char*)key);
+
+
+    ksa(key, key_length, S);
+
+ 
+    prga(cyphertext, plaintext, length, S);
+}
+
+int main() {
+    unsigned char key[] = { 0x54, 0x68, 0x21, 0x73, 0x5F, 0x31, 0x73, 0x5F, 0x52, 0x33, 0x34, 0x6C, 0x5F, 0x4B, 0x33, 0x79, 0x5F, 0x66, 0x30, 0x72, 0x5F, 0x52, 0x63, 0x34, 0x5F, 0x44, 0x33, 0x63, 0x72, 0x79, 0x70, 0x74, };
+    unsigned char cyphertext[] = { 0x4f, 0x33, 0xd6, 0xb6, 0xdb, 0x5f, 0x48, 0x2e,
+0xd6, 0x6c, 0x77, 0x5f, 0x53, 0x39, 0xd5, 0x45,
+0x7d, 0x8f, 0xb8, 0xc7, 0x45, 0xfa, 0x79, 0xdc,
+0x87, 0xc0, 0x9f, 0x41, 0xe4, 0x76, 0xe8, 0xba,
+0x8a, 0xbc, 0xb0, 0x7f };
+size_t cyphertext_length = sizeof(cyphertext);
+    uint8_t plaintext[1024] = { 0 }; 
+
+
+    rc4_decrypt(key, cyphertext, plaintext, cyphertext_length);
+
+    for (int i = 0; i < sizeof(plaintext); i++) {
+        printf("%c", plaintext[i]);
+    }
+
+    return 0;
+}
+
+```
+**Flag:** `KCSC{The_Truth_Lies_Beyond_The_Code}`
