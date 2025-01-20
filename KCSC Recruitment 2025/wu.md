@@ -1544,4 +1544,32 @@ if __name__ == "__main__":
 
 ![image](https://github.com/user-attachments/assets/27b494df-3a9d-4be5-af3b-c91d2d65541d)
 
+## Detailed Analysis
 
+- Hàm `main`
+
+```C
+```
+## Script and Flag
+**Flag:** `KCSC{just_a_sort_of_O-OoOptim...ize_references}`
+# Cat Laughing At You
+## Đề cho 1 file PE32
+
+![image](https://github.com/user-attachments/assets/6b54156a-5d92-4a18-9ca4-cea16a00cf2b)
+
+## Detailed Analysis
+- Hàm `main`
+```C
+int __cdecl __noreturn main(int argc, const char **argv, const char **envp)
+{
+  __halt();
+}
+```
+- Hàm `main` không có gì bên trong, đương nhiên rồi bởi đây là 1 bài hard. Có lẽ code đã được thực thi ở đâu đó, khi mình kiểm tra trước hàm main có những gì thì có phát hiện một điều đặc biệt
+
+![image](https://github.com/user-attachments/assets/153f81ad-43ee-4571-95c1-ef460c23b690)
+![image](https://github.com/user-attachments/assets/58f1d7ff-bca8-40f5-869e-85882d19b3af)
+
+- Ta có thể thấy rằng chương trình sử dụng hàm `initterm` để gọi các hàm trong khoảng offset `dword_363104` đến `dword_363118` ở trước hàm `main`. Theo MSDN ``` Internal methods that walk a table of function pointers and initialize them.
+
+The first pointer is the starting location in the table and the second pointer is the ending location. ```
