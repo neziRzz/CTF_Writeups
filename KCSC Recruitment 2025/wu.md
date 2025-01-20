@@ -74,7 +74,7 @@ print("Flag:", flag)
 
   ![image](https://github.com/user-attachments/assets/3f407fb9-d11d-45cd-b401-b85cdafb462f)
 
-# Detailed Analysis
+## Detailed Analysis
 - Hàm `main`
 ```C
 int __fastcall main(int argc, const char **argv, const char **envp)
@@ -163,7 +163,7 @@ LABEL_13:
   return 0;
 }
 ```
-- Đầu tiên hàm `main` sẽ kiểm tra độ dài của input có phải là 32 hay không, nếu thỏa mãn thì sẽ tiến hành encode input bằng base64, sau đó sẽ xor input với `byte_7FF6A9F35078`, đoạn xor này sẽ được chia ra làm 2 phần, phần đầu là xor 16 bytes và phần cuối sẽ xor từng byte một. Cuối cùng input sẽ được kiểm tra với `byte_7FF6A9F332F0` nếu thỏa mãn sẽ in ra string `Correct!` hoặc `Incorrect!` tương ứng
+- Đầu tiên hàm `main` sẽ kiểm tra độ dài của input có phải là 32 hay không, nếu thỏa mãn thì sẽ tiến hành encode input bằng base64, sau đó sẽ xor input với `byte_7FF6A9F35078`, đoạn xor này sẽ được chia ra làm 2 phần, phần đầu là xor 16 bytes và phần còn lại sẽ xor từng byte một. Cuối cùng input sẽ được kiểm tra với `byte_7FF6A9F332F0` nếu thỏa mãn sẽ in ra string `Correct!` hoặc `Incorrect!` tương ứng
 
 - Với các dữ kiện như trên, ta có thể dễ dàng viết script
 
@@ -180,6 +180,16 @@ cypher = [0xC1, 0x91, 0x69, 0xB4, 0x66, 0xF9, 0x04, 0x12, 0xB2, 0xD3,
   0xAF, 0xE2, 0x9C, 0x46, 0x2B, 0xEC, 0x9F, 0x63, 0x38, 0x23, 
   0x54, 0x78, 0xCD, 0xF2]
 for i in range (len(cypher)):
-    print(chr(cypher[i]^key[i]),end='') //Remember to decode it back from b64
+    print(chr(cypher[i]^key[i]),end='') #Remember to decode it back from b64
 ```
 **Flag:** `KCSC{eNcoDe_w1th_B4sE64_aNd_XoR}`
+
+# Spy Room
+## Misc
+- Đề cho 1 file .NET 64-bit
+
+  ![image](https://github.com/user-attachments/assets/ddace5f7-63fe-4818-991f-bae77ca7d459)
+
+## Detailed Analysis
+
+- Với những file được build bằng .NET, ta sẽ phải phân tích bằng `DnSpy`, các bạn có thể tải tại [đây](https://github.com/dnSpy/dnSpy)
