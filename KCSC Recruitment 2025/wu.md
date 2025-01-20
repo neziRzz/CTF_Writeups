@@ -186,10 +186,152 @@ for i in range (len(cypher)):
 
 # Spy Room
 ## Misc
-- Đề cho 1 file .NET 64-bit
+- Đề cho 1 file .NET 32-bit
 
   ![image](https://github.com/user-attachments/assets/ddace5f7-63fe-4818-991f-bae77ca7d459)
 
 ## Detailed Analysis
 
 - Với những file được build bằng .NET, ta sẽ phải phân tích bằng `DnSpy`, các bạn có thể tải tại [đây](https://github.com/dnSpy/dnSpy)
+
+- Hàm `Main`
+```C#
+// TestEzDotNET.Program
+// Token: 0x06000001 RID: 1 RVA: 0x00002050 File Offset: 0x00000250
+private static void Main()
+{
+	Console.Write("Enter Something: ");
+	char[] array = Console.ReadLine().ToCharArray();
+	int num = array.Length;
+	char[] array2 = array.Take(num / 4).ToArray<char>();
+	char[] array3 = array.Skip(num / 4).Take(num / 4).ToArray<char>();
+	char[] array4 = array.Skip(2 * num / 4).Take(num / 4).ToArray<char>();
+	char[] array5 = array.Skip(3 * num / 4).ToArray<char>();
+	array2 = Program.Xor(array2, array3);
+	array3 = Program.Xor(array3, array4);
+	array4 = Program.Xor(array4, array5);
+	array5 = Program.Xor(array5, array2);
+	char[] array6 = array2.Concat(array3).Concat(array4).Concat(array5).ToArray<char>();
+	string text = "https://www.youtube.com/watch?v=L8XbI9aJOXk";
+	array6 = Program.Xor(array6, text.ToCharArray());
+	byte[] source = new byte[]
+	{
+		85,
+		122,
+		105,
+		71,
+		17,
+		94,
+		71,
+		24,
+		114,
+		78,
+		107,
+		11,
+		108,
+		106,
+		107,
+		113,
+		121,
+		51,
+		91,
+		117,
+		86,
+		110,
+		100,
+		18,
+		124,
+		104,
+		71,
+		66,
+		123,
+		3,
+		111,
+		99,
+		74,
+		107,
+		69,
+		77,
+		111,
+		2,
+		120,
+		125,
+		83,
+		99,
+		62,
+		99,
+		109,
+		76,
+		119,
+		111,
+		59,
+		32,
+		1,
+		93,
+		69,
+		117,
+		84,
+		106,
+		73,
+		85,
+		112,
+		66,
+		114,
+		92,
+		61,
+		80,
+		80,
+		104,
+		111,
+		72,
+		98,
+		28,
+		88,
+		94,
+		27,
+		120,
+		15,
+		76,
+		15,
+		67,
+		86,
+		117,
+		81,
+		108,
+		18,
+		37,
+		34,
+		101,
+		104,
+		109,
+		23,
+		30,
+		62,
+		78,
+		88,
+		10,
+		2,
+		63,
+		43,
+		72,
+		102,
+		38,
+		76,
+		23,
+		34,
+		62,
+		21,
+		97,
+		1,
+		97
+	};
+	if (!array6.SequenceEqual((from e in source
+	select (char)e).ToArray<char>()))
+	{
+		Console.WriteLine("Wrong!!");
+		return;
+	}
+	Console.WriteLine("Decode It!!");
+}
+
+```
