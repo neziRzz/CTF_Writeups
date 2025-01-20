@@ -1798,7 +1798,7 @@ LABEL_35:
   return v39;
 }
 ```
-- Hàm này sử dụng kĩ thuật `API Hashing` để resolve ra các hàm cần thiết cho việt enumerate các process đang chạy, sau đó kiểm tra tiến trình đang chạy là gì và có thuộc 1 trong ba tiến trình Mixture.exe,cmd.exe hay explorer.exe hay không, nếu không phải thì có nghĩa là đang bị debug và trả về giá trị 1(bị debug) và 0(không bị debug) tương ứng. Một chút về kĩ thuật này, thay vì gọi trực tiếp các hàm ra thì ta có thể sử dụng kĩ thuật kể trên để giấu đi việc gọi hàm gì, kĩ thuật này hay được sử dụng trong malware nhằm làm khó việc phân tích. Để phân tích được các hàm sau khi hashing là gì, ta có thể lên mạng tra hash hoặc là debug
+- Hàm này sử dụng kĩ thuật `API Hashing` để resolve ra các hàm cần thiết cho việc enumerate các process đang chạy, sau đó kiểm tra tiến trình đang chạy là gì và có thuộc 1 trong ba tiến trình Mixture.exe,cmd.exe hay explorer.exe hay không, nếu không phải thì có nghĩa là đang bị debug và trả về giá trị 1(bị debug) và 0(không bị debug) tương ứng. Một chút về kĩ thuật này, thay vì gọi trực tiếp các hàm ra thì ta có thể sử dụng kĩ thuật kể trên để giấu đi việc gọi hàm gì, kĩ thuật này hay được sử dụng trong malware nhằm làm khó việc phân tích. Để phân tích được các hàm sau khi hashing là gì, ta có thể lên mạng tra hash hoặc là debug
 
 - Hàm `sub_361010`
 ```C
@@ -1893,7 +1893,7 @@ int sub_871440()
     --v6;
   }
   while ( v6 );
-  dword_8743C0 = v2(v4, v22);
+  procAddr_CryptAcquireContextA = v2(v4, v22);
   v7 = 0x10;
   v28[0] = 0x70E0534;
   v8 = v28;
@@ -1907,7 +1907,7 @@ int sub_871440()
     --v7;
   }
   while ( v7 );
-  dword_8743C4 = v2(v4, v28);
+  procAddr_CryptCreateHash = v2(v4, v28);
   v9 = 0xE;
   v32[0] = 0x70E0534;
   v10 = v32;
@@ -1921,7 +1921,7 @@ int sub_871440()
     --v9;
   }
   while ( v9 );
-  dword_8743C8 = v2(v4, v32);
+  procAddr_CryptHashData = v2(v4, v32);
   v11 = 0xF;
   v29[0] = 0x70E0534;
   v12 = v29;
