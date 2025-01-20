@@ -192,7 +192,7 @@ for i in range (len(cypher)):
 
 ## Detailed Analysis
 
-- Với những file được build bằng .NET, ta sẽ phải phân tích bằng `DnSpy`, các bạn có thể tải tại [đây](https://github.com/dnSpy/dnSpy)
+- Với những file được build bằng .NET, ta sẽ phải phân tích bằng `dnSpy`, các bạn có thể tải tại [đây](https://github.com/dnSpy/dnSpy)
 
 - Hàm `Main`
 ```C#
@@ -333,8 +333,32 @@ private static void Main()
 	}
 	Console.WriteLine("Decode It!!");
 }
-
 ```
+
+- Chương trình thực hiện chia input của chúng ta ra làm 4 phần, tiếp đến sẽ sử dụng một hàm `Xor` custom để xor từng block này với nhau theo dạng `block1^block2`, `block2^block3`,... Cuối cùng thì sẽ gộp lại các block trên lại với nhau và xor với string `https://www.youtube.com/watch?v=L8XbI9aJOXk` và kiểm tra với `source`
+
+- Hàm `Xor`
+```C#
+private static char[] Xor(char[] a, char[] b)
+{
+	int num = Math.Max(a.Length, b.Length);
+	char[] array = new char[num];
+	for (int i = 0; i < num; i++)
+	{
+		if (a.Length >= b.Length)
+		{
+			array[i] = (a[i] ^ b[i % b.Length]);
+		}
+		else
+		{
+			array[i] = (a[i % a.Length] ^ b[i]);
+		}
+	}
+	return array;
+}
+```
+- Hàm này chỉ là kiểm tra xem độ dài của 2 array để xor. Nếu độ dài arr1 lớn hơn arr2 thì khi arr1 xor hết các phần tử của arr2 thì lúc này phần tử tiếp đến của arr1 sẽ được xor lại từ phần tử đầu tiên của arr2
+- Vậy để giải ta chỉ cần đảo ngược lại quá trình trên, output sau khi tìm được sẽ là 1 string b64 được encode 3 lần nên ta cần phải chú ý
 ## Script and Flag
 ```python
 import base64 as b64
@@ -397,3 +421,6 @@ if __name__ == "__main__":
         result = b64.b64decode(result)
     print(result)
 ```
+**Flag:** `KCSC{Easy_Encryption_With_DotNET_Program:3}`
+# EzRev
+## Mics
