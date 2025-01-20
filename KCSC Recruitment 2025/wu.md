@@ -1066,4 +1066,5 @@ int __cdecl main(int argc, const char **argv, const char **envp)
   }
 }
 ```
-- Hàm này sẽ thực hiện gọi `SystemFunction036` để gen ra số ngẫu nghiên (Hàm này thực chât là ``RtlGenRandom``), tiếp đến là mở file ``
+- Hàm này sẽ thực hiện gọi `SystemFunction036` để gen ra số ngẫu nghiên (Hàm này thực chât là ``RtlGenRandom``) làm key và nonce cho quá trình mã hóa, tiếp đến là mở file `important_note.txt` và tiến hành mã hóa file này (với tên bài như vậy thì ta cũng có thể phần nào đoán được thuật toán mã hóa là ChaCha20). Sau khi mã hóa xong thì chương trình sẽ in ra `Some important file has been encrypted!!!`
+- Về việc tại sao có thể xác định được hàm `SystemFunction036` là `RtlGenRandom` thì theo như (MSDN)[https://learn.microsoft.com/en-us/windows/win32/api/ntsecapi/nf-ntsecapi-rtlgenrandom] thì hàm này không có import library của riêng nó và tên của nó trong resource là `SystemFunction036`
