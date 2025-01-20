@@ -949,8 +949,121 @@ print(valid_input)
 
 # ChaChaCha
 ## Mics
-- Đề cho 1 file PE32
+- Đề cho 1 file PE32, DMP và important_note.txt
 
 ![image](https://github.com/user-attachments/assets/69f8d999-655a-49b9-a591-ca431f0f98b0)
 
 ## Detailed Analysis
+- Hàm `main`
+
+```C
+int __cdecl main(int argc, const char **argv, const char **envp)
+{
+  HMODULE LibraryA; // eax
+  BOOLEAN (__stdcall *SystemFunction036)(PVOID, ULONG); // eax
+  HMODULE v5; // eax
+  BOOLEAN (__stdcall *ProcAddress)(PVOID, ULONG); // eax
+  HANDLE FileW; // eax
+  void *v8; // ebx
+  signed int FileSize; // edi
+  _BYTE *v11; // ebx
+  int v12; // ecx
+  _BYTE *v13; // ecx
+  signed int v14; // esi
+  signed int v15; // ebx
+  _BYTE *v16; // eax
+  char v17; // al
+  char v18; // [esp+0h] [ebp-D8h]
+  HANDLE hFile; // [esp+Ch] [ebp-CCh]
+  signed int v20; // [esp+10h] [ebp-C8h]
+  char *v21; // [esp+14h] [ebp-C4h]
+  _BYTE *v22; // [esp+18h] [ebp-C0h]
+  char *v23; // [esp+1Ch] [ebp-BCh]
+  DWORD NumberOfBytesWritten; // [esp+20h] [ebp-B8h] BYREF
+  DWORD NumberOfBytesRead; // [esp+24h] [ebp-B4h] BYREF
+  char v26[48]; // [esp+28h] [ebp-B0h] BYREF
+  int v27; // [esp+58h] [ebp-80h]
+  char v28[64]; // [esp+68h] [ebp-70h] BYREF
+  char v29[32]; // [esp+A8h] [ebp-30h] BYREF
+  unsigned __int8 v30[12]; // [esp+C8h] [ebp-10h] BYREF
+
+  LibraryA = LoadLibraryA("advapi32.dll");
+  SystemFunction036 = (BOOLEAN (__stdcall *)(PVOID, ULONG))GetProcAddress(LibraryA, "SystemFunction036");
+  SystemFunction036(v29, 32);
+  v5 = LoadLibraryA("advapi32.dll");
+  ProcAddress = (BOOLEAN (__stdcall *)(PVOID, ULONG))GetProcAddress(v5, "SystemFunction036");
+  ProcAddress(v30, 12);
+  FileW = CreateFileW(FileName, 0xC0000000, 0, 0, 3u, 0x80u, 0);
+  v8 = FileW;
+  hFile = FileW;
+  if ( FileW == (HANDLE)-1 )
+  {
+    sub_401590("Cannot Open File", v18);
+    CloseHandle((HANDLE)0xFFFFFFFF);
+    return 1;
+  }
+  else
+  {
+    FileSize = GetFileSize(FileW, 0);
+    v20 = FileSize;
+    v21 = (char *)malloc(FileSize);
+    if ( ReadFile(v8, v21, FileSize, &NumberOfBytesRead, 0) )
+    {
+      v11 = malloc(FileSize);
+      v22 = v11;
+      sub_4013D0(v26, (unsigned __int8 *)v29, v12, v30);
+      v14 = 0;
+      if ( FileSize > 0 )
+      {
+        v23 = v28;
+        do
+        {
+          sub_401000(v26, v28, v13);
+          ++v27;
+          v15 = v14 + 64;
+          if ( !__OFSUB__(v14, v14 + 64) )
+          {
+            v16 = v22;
+            do
+            {
+              if ( v14 >= FileSize )
+                break;
+              v13 = &v16[v14];
+              v17 = v23[v14] ^ v16[v14 + v21 - v22];
+              ++v14;
+              FileSize = v20;
+              *v13 = v17;
+              v16 = v22;
+            }
+            while ( v14 < v15 );
+          }
+          v23 -= 64;
+          v14 = v15;
+        }
+        while ( v15 < FileSize );
+        v11 = v22;
+      }
+      SetFilePointer(hFile, 0, 0, 0);
+      if ( WriteFile(hFile, v11, FileSize, &NumberOfBytesWritten, 0) )
+      {
+        CloseHandle(hFile);
+        sub_401590("Some important file has been encrypted!!!\n", (char)FileName);
+        return 0;
+      }
+      else
+      {
+        sub_401590("Cannot Write File", v18);
+        CloseHandle(hFile);
+        return 1;
+      }
+    }
+    else
+    {
+      sub_401590("Cannot Read File", v18);
+      CloseHandle(v8);
+      return 1;
+    }
+  }
+}
+```
+- Hàm này sẽ thực hiện gọi `SystemFunction036` để gen ra số ngẫu nghiên (Hàm này thực chât là ``RtlGenRandom``), tiếp đến là mở file ``
