@@ -885,7 +885,7 @@ LABEL_191:
 ```
 - Chương trình này đã bị obfuscated bằng kĩ thuật `Control Flow Flattening`, nói ngắn gọn thi kĩ thuật này sẽ đưa hết tất cả các chức năng của chương trình vào trong 1 state và thực thi các state này thông qua 1 switch case (về cơ bản thì khá giống VM), nếu các bạn muốn tìm hiểu thêm thì có thể tham khảo tại (đây)[https://zerotistic.blog/posts/cff-remover/]
 - Về hướng giải quyết thì ta có 2 cách, 1 sẽ là viết một disassembler (symbolic executioner) cho nó hoặc ta có thể ngồi debug
-- Cơ bản thì chương trình sẽ gán cho 1 số kí tự các giá trị cụ thể và index của một vài kí tự nhất định. Sau đó thì dựa vào các bit của giá trị này để kiểm tra đúng sai. Bên dưới là script giải của mình
+- Cơ bản thì chương trình sẽ gán cho 1 số kí tự các giá trị cụ thể và index của một vài kí tự nhất định. Sau đó thì dựa vào các bit tại index cụ thể của giá trị này để kiểm tra đúng sai. Bên dưới là script giải của mình
 
 ## Script and Flag
 ```python
