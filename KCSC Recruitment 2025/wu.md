@@ -2000,4 +2000,302 @@ int sub_871440()
 }
 ```
 - Hàm này có nhiệm vụ load dll `Advapi32.dll` resolve ra các hàm `Wincrypt` (Có thể liên quan đến mã hóa flag)
-- 
+
+- Hàm `sub_871040`
+```C
+int sub_871040()
+{
+  int result; // eax
+
+  if ( (char *)dword_874404 == "YXV0aG9ybm9vYm1hbm5uZnJvbWtjc2M=" )
+    return procAddr_SetUnhandledExceptionFilter(sub_8718D0);
+  return result;
+}
+```
+- Hàm này thực hiện check giá trị của `dword_874404` với string được gán trong trường hợp không có debugger, sau đó gắn hàm xử lí ngoại lệ là hàm `sub_8718D0` bằng hàm `SetUnhandledExceptionFilter`. Theo [MSDN](https://learn.microsoft.com/en-us/windows/win32/api/errhandlingapi/nf-errhandlingapi-setunhandledexceptionfilter), hàm `SetUnhandledExceptionFilter` sẽ có nhiệm vụ chuyển luồng xử lí ngoại lệ sang hàm được chỉ định trong `lpTopLevelExceptionFilter` trong trường hợp này sẽ là `sub_8718D0`
+- Nếu ta quay lại hàm `main` thì có thể thấy rằng nếu như ta chạy vào đó thì ngay lập tức xảy ra ngoại lệ như sau
+
+![image](https://github.com/user-attachments/assets/18f7d344-631f-4cf8-b8d4-a0dfdb643b0e)
+
+- Vậy có thể thấy rằng sau khi chạy vào hàm `main` thì luồng thực thi lúc này sẽ được chuyển vào `sub_8718D0`, và đây chính là hàm thực thi chuẩn của chúng ta
+
+- Hàm `sub_8718D0`
+```C
+int __stdcall sub_FC18D0(_DWORD **a1)
+{
+  char *v1; // eax
+  int v2; // ecx
+  char *v3; // eax
+  int v4; // ecx
+  CHAR *v5; // eax
+  int v6; // ecx
+  __int16 *v7; // eax
+  int v8; // ecx
+  CHAR *v9; // eax
+  int v10; // ecx
+  __int16 v12; // [esp+0h] [ebp-90h] BYREF
+  char v13[2]; // [esp+4h] [ebp-8Ch] BYREF
+  char v14; // [esp+6h] [ebp-8Ah]
+  char Source[52]; // [esp+8h] [ebp-88h] BYREF
+  char Destination[52]; // [esp+3Ch] [ebp-54h] BYREF
+  char Format[4]; // [esp+70h] [ebp-20h] BYREF
+  int v18; // [esp+74h] [ebp-1Ch]
+  int v19; // [esp+78h] [ebp-18h]
+  int v20; // [esp+7Ch] [ebp-14h]
+  __int16 v21; // [esp+80h] [ebp-10h]
+  CHAR Caption[4]; // [esp+84h] [ebp-Ch] BYREF
+  int v23; // [esp+88h] [ebp-8h]
+
+  if ( **a1 == 0xC0000096 )
+  {
+    *(_DWORD *)Format = 0xCEDFC5EE;
+    v1 = Format;
+    v18 = 0xC4F88BD9;
+    v2 = 0x12;
+    v19 = 0xC3DFCEC6;
+    v20 = 0x91CCC5C2;
+    v21 = 0xAB8B;
+    do
+    {
+      *v1++ ^= 0xABu;
+      --v2;
+    }
+    while ( v2 );
+    printf(Format, v12);
+    *(_WORD *)v13 = 0xBEE8;
+    v14 = 0xCD;
+    v3 = v13;
+    v4 = 3;
+    do
+    {
+      *v3++ ^= 0xCDu;
+      --v4;
+    }
+    while ( v4 );
+    scanf(v13, (char)Source);
+    if ( (unsigned __int8)sub_FC1D20(Source) )
+    {
+      *(_DWORD *)Caption = 0xACBCACA4;
+      v5 = Caption;
+      LOBYTE(v23) = 0x94;
+      v6 = 5;
+      do
+      {
+        *v5++ ^= 0xEFu;
+        --v6;
+      }
+      while ( v6 );
+      memset(Destination, 0, 0x32u);
+      *(_DWORD *)Destination = *(_DWORD *)Caption;
+      Destination[4] = v23;
+      strcat_s(Destination, 0x32u, Source);
+      v12 = 0xA5F5;
+      v7 = &v12;
+      v8 = 2;
+      do
+      {
+        *(_BYTE *)v7 ^= 0x88u;
+        v7 = (__int16 *)((char *)v7 + 1);
+        --v8;
+      }
+      while ( v8 );
+      *(_DWORD *)Caption = 0xBDBBB6BC;
+      v23 = 0xFADBDBDB;
+      Destination[HIBYTE(v12)] = v12;
+      v9 = Caption;
+      v10 = 8;
+      do
+      {
+        *v9++ ^= 0xFAu;
+        --v10;
+      }
+      while ( v10 );
+      MessageBoxA(0, Destination, Caption, 0x40u);
+    }
+    else
+    {
+      `init_cat_laugh`();
+    }
+  }
+  return 1;
+}
+```
+- Hàm này có nhiệm vụ nhận input của user, sau đó biến đổi thông qua hàm `sub_FC1D20`, nếu input đúng thì chương trình hiện MessageBox thông báo, ngược lại thì sẽ gọi hàm `init_cat_laugh` để tiến hành troll user
+- Hàm `sub_FC1D20`
+```C
+char __thiscall sub_FC1D20(const char *this)
+{
+  int (__stdcall *v1)(int, MACRO_CALG, _DWORD, _DWORD, int *); // edi
+  void (__stdcall *v2)(int); // esi
+  void (__stdcall *v3)(int, _DWORD); // ebx
+  int *v4; // eax
+  int v5; // ecx
+  int v6; // eax
+  size_t v7; // esi
+  void *v8; // edi
+  int v9; // ecx
+  int v10; // edi
+  int v12; // [esp-4h] [ebp-64h]
+  int (__stdcall *v13)(int, _DWORD, int, _DWORD, void *, size_t *, size_t); // [esp+Ch] [ebp-54h]
+  int (__stdcall *v15)(int, MACRO_CALG, int, _DWORD, int *); // [esp+14h] [ebp-4Ch]
+  int (__stdcall *v16)(int, int *, int, _DWORD); // [esp+18h] [ebp-48h]
+  void (__stdcall *v17)(int); // [esp+1Ch] [ebp-44h]
+  size_t Size; // [esp+20h] [ebp-40h] BYREF
+  int v19; // [esp+24h] [ebp-3Ch] BYREF
+  int v20; // [esp+28h] [ebp-38h] BYREF
+  int v21; // [esp+2Ch] [ebp-34h] BYREF
+  int v22[10]; // [esp+30h] [ebp-30h] BYREF
+  __int16 v23; // [esp+58h] [ebp-8h]
+  char v24; // [esp+5Ah] [ebp-6h]
+
+  Size = strlen(this);
+  if ( Size != 0x28 )
+    return 0;
+  v1 = (int (__stdcall *)(int, MACRO_CALG, _DWORD, _DWORD, int *))procAddr_CryptCreateHash;
+  v2 = (void (__stdcall *)(int))procAddr_CryptDestroyHash;
+  v3 = (void (__stdcall *)(int, _DWORD))procAddr_CryptReleaseContext;
+  v16 = (int (__stdcall *)(int, int *, int, _DWORD))procAddr_CryptHashData;
+  v15 = (int (__stdcall *)(int, MACRO_CALG, int, _DWORD, int *))procAddr_CryptDeriveKey;
+  v13 = (int (__stdcall *)(int, _DWORD, int, _DWORD, void *, size_t *, size_t))procAddr_CryptEncrypt;
+  v17 = (void (__stdcall *)(int))procAddr_CryptDestroyKey;
+  if ( !procAddr_CryptAcquireContextA(&v21, 0, 0, 1, 0) )
+    return 0;
+  if ( v1(v21, CALG_SHA1, 0, 0, &v20) )
+  {
+    v22[0] = 0xDEDADAC6;
+    v4 = v22;
+    v22[1] = 0x818194DD;
+    v5 = 0x2B;
+    v22[2] = 0x80D9D9D9;
+    v22[3] = 0xDADBC1D7;
+    v22[4] = 0x80CBCCDB;
+    v22[5] = 0x81C3C1CD;
+    v22[6] = 0xCDDACFD9;
+    v22[7] = 0x93D891C6;
+    v22[8] = 0x9AD9FFCA;
+    v22[9] = 0xC9F997D9;
+    v23 = 0xCDF6;
+    v24 = 0xFF;
+    do
+    {
+      *(_BYTE *)v4 ^= 0xAEu;                    // https://www.youtube.com/watch?v=dQw4w9WgXcQ
+      v4 = (int *)((char *)v4 + 1);
+      --v5;
+    }
+    while ( v5 );
+    if ( v16(v20, v22, 0x2B, 0) )
+    {
+      v6 = v15(v21, CALG_RC4, v20, 0, &v19);
+      v12 = v20;
+      if ( v6 )
+      {
+        v2(v20);
+        v7 = Size + 1;
+        v8 = malloc(Size + 1);
+        memcpy(v8, this, Size);
+        *((_BYTE *)v8 + Size) = 0;
+        if ( v13(v19, 0, 1, 0, v8, &Size, v7) )
+        {
+          v9 = 0;
+          v10 = (_BYTE *)v8 - byte_FC31F8;
+          while ( byte_FC31F8[v10 + v9] == byte_FC31F8[v9] )
+          {
+            if ( ++v9 >= 0x28 )
+            {
+              v17(v19);
+              v3(v21, 0);
+              return 1;
+            }
+          }
+        }
+        v17(v19);
+        goto LABEL_16;
+      }
+    }
+    else
+    {
+      v12 = v20;
+    }
+    v2(v12);
+  }
+LABEL_16:
+  v3(v21, 0);
+  return 0;
+}
+```
+- Hàm này sẽ có nhiệm vụ mã hóa input của user bằng thuật toán `SHA1` với key là link yt `Rick Roll`, cuối cùng thì kiểm tra với `byte_FC31F8`. Với những dữ kiện như này, ta có thể viết script giải như sau
+## Script and Flag
+```C
+#include <windows.h>
+#include <wincrypt.h>
+#include <stdio.h>
+
+#pragma comment(lib, "Advapi32.lib")
+
+#define KEY_LENGTH 16 // 128-bit key length
+
+void HandleError(const char* errorMessage) {
+    printf("Error: %s (code: %lu)\n", errorMessage, GetLastError());
+    exit(1);
+}
+
+int main() {
+    HCRYPTPROV hProv = 0;
+    HCRYPTHASH hHash = 0;
+    HCRYPTKEY hKey = 0;
+    BYTE key[KEY_LENGTH];
+    BYTE ciphertext[] = {
+0xE7, 0x7B, 0xFA, 0xF3, 0xF0, 0x7F, 0x0E, 0xD6, 0x37, 0x2B,
+0xBE, 0xCB, 0xF7, 0x61, 0xF1, 0xDC, 0xF4, 0x45, 0xBC, 0xA5,
+0x0B, 0x81, 0x5D, 0xD1, 0x65, 0x4A, 0x5F, 0xAE, 0x59, 0x3B,
+0x0B, 0xCB, 0xCC, 0x17, 0x9B, 0x7E, 0x55, 0xA0, 0x18, 0xB5
+    };
+    DWORD plaintextLen = sizeof(ciphertext);
+
+    // Example ciphertext in hexadecimal (F850CCEFE63A1ECB3106B2E7C561C59BCE5EA988379A7AFD406277B637)
+
+    DWORD ciphertextLen = sizeof(ciphertext);
+
+    // Define the input string (URL)
+    const char* inputString = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+
+    // Acquire a cryptographic provider context
+    if (!CryptAcquireContext(&hProv, NULL, NULL, PROV_RSA_AES, CRYPT_VERIFYCONTEXT)) {
+        HandleError("Failed to acquire cryptographic context");
+    }
+
+    // Create a SHA-1 hash object
+    if (!CryptCreateHash(hProv, CALG_SHA1, 0, 0, &hHash)) {
+        HandleError("Failed to create hash object");
+    }
+
+    // Hash the input string
+    if (!CryptHashData(hHash, (BYTE*)inputString, strlen(inputString), 0)) {
+        HandleError("Failed to hash data");
+    }
+
+    // Derive the RC4 key from the hash
+    if (!CryptDeriveKey(hProv, CALG_RC4, hHash, 0, &hKey)) {
+        HandleError("Failed to derive key");
+    }
+
+    // Encrypt the plaintext
+    if (!CryptDecrypt(hKey, 0, TRUE, 0, (BYTE*)ciphertext, &ciphertextLen)) {
+        HandleError("Failed to encrypt data");
+    }
+
+
+    for (DWORD i = 0; i < plaintextLen; i++) {
+        printf("%c", ciphertext[i]);
+    }
+    printf("\n");
+
+    // Cleanup
+    if (hKey) CryptDestroyKey(hKey);
+    if (hHash) CryptDestroyHash(hHash);
+    if (hProv) CryptReleaseContext(hProv, 0);
+
+    return 0;
+}
+```
+**Flag:** `KCSC{The_m1xture_mak3_hard_challenge_4_y0u!!!}`
