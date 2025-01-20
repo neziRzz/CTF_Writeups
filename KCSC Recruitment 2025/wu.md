@@ -1067,4 +1067,348 @@ int __cdecl main(int argc, const char **argv, const char **envp)
 }
 ```
 - Hàm này sẽ thực hiện gọi `SystemFunction036` để gen ra số ngẫu nghiên (Hàm này thực chât là ``RtlGenRandom``) làm key và nonce cho quá trình mã hóa, tiếp đến là mở file `important_note.txt` và tiến hành mã hóa file này (với tên bài như vậy thì ta cũng có thể phần nào đoán được thuật toán mã hóa là ChaCha20). Sau khi mã hóa xong thì chương trình sẽ in ra `Some important file has been encrypted!!!`
-- Về việc tại sao có thể xác định được hàm `SystemFunction036` là `RtlGenRandom` thì theo như (MSDN)[https://learn.microsoft.com/en-us/windows/win32/api/ntsecapi/nf-ntsecapi-rtlgenrandom] thì hàm này không có import library của riêng nó và tên của nó trong resource là `SystemFunction036`
+- Về việc tại sao có thể xác định được hàm `SystemFunction036` là `RtlGenRandom` thì theo như [MSDN](https://learn.microsoft.com/en-us/windows/win32/api/ntsecapi/nf-ntsecapi-rtlgenrandom) thì hàm này không có import library của riêng nó và tên của nó trong resource là `SystemFunction036`
+- Tiếp theo, để kiểm chứng thuật toán mã hóa là gì, ta sẽ phân tích hàm `sub_4013D0`
+```C
+int __fastcall sub_4013D0(_DWORD *a1, unsigned __int8 *a2, int a3, unsigned __int8 *a4)
+{
+  int v5; // esi
+  int v6; // ecx
+  int v7; // eax
+  int v8; // ecx
+  int v9; // eax
+  int v10; // ecx
+  int v11; // eax
+  int v12; // ecx
+  int v13; // eax
+  int v14; // ecx
+  int v15; // eax
+  int v16; // ecx
+  int v17; // eax
+  int v18; // ecx
+  int v19; // eax
+  int v21; // ecx
+  int v22; // eax
+  int v23; // ecx
+  int v24; // eax
+  int v25; // ecx
+  int result; // eax
+
+  v5 = *a2 | ((a2[1] | (*((unsigned __int16 *)a2 + 1) << 8)) << 8);
+  v6 = *((unsigned __int16 *)a2 + 3);
+  qmemcpy(a1, "expand 32-byte k", 16);
+  v7 = a2[10];
+  a1[5] = a2[4] | ((a2[5] | (v6 << 8)) << 8);
+  v8 = v7 | (a2[11] << 8);
+  a1[4] = v5;
+  v9 = a2[14];
+  a1[6] = a2[8] | ((a2[9] | (v8 << 8)) << 8);
+  v10 = a2[12] | ((a2[13] | ((v9 | (a2[15] << 8)) << 8)) << 8);
+  v11 = a2[18];
+  a1[7] = v10;
+  v12 = a2[16] | ((a2[17] | ((v11 | (a2[19] << 8)) << 8)) << 8);
+  v13 = a2[22];
+  a1[8] = v12;
+  v14 = a2[20] | ((a2[21] | ((v13 | (a2[23] << 8)) << 8)) << 8);
+  v15 = a2[26];
+  a1[9] = v14;
+  v16 = a2[24] | ((a2[25] | ((v15 | (a2[27] << 8)) << 8)) << 8);
+  v17 = a2[30];
+  a1[10] = v16;
+  v18 = a2[29] | ((v17 | (a2[31] << 8)) << 8);
+  v19 = a2[28];
+  a1[11] = v19 | (v18 << 8);
+  v21 = *((unsigned __int16 *)a4 + 1);
+  a1[12] = 'CSCK'; // Custom counter
+  v22 = a4[6];
+  a1[13] = *a4 | ((a4[1] | (v21 << 8)) << 8);
+  v23 = a4[4] | ((a4[5] | ((v22 | (a4[7] << 8)) << 8)) << 8);
+  v24 = a4[10];
+  a1[14] = v23;
+  v25 = a4[9] | ((v24 | (a4[11] << 8)) << 8);
+  result = a4[8];
+  a1[15] = result | (v25 << 8);
+  return result;
+}
+```
+- Hàm này có chức năng khởi tạo state cho ChaCha20, ta có thể thấy rõ dấu hiệu nhận biết là string `expand 32-byte k`. Thông thường trong thuật toán này thì counter thường là 0 nhưng trong trường hợp này thì author để là `KCSC` ở dạng hex (Mình đã đổi lại sang string cho dễ phát hiện)
+- Vậy để tổng kết lại thì chương trình sẽ khởi tạo key và nonce cho ChaCha20 bằng cách gọi hàm gen số ngẫu nghiên `RtlGenRandom`. Tiếp đến thì khởi tạo state để mã hóa với custom counter. Vậy để giải mã ta chỉ cần được tìm lại key và nonce. May thay, author có để cho chúng ta một file DMP
+
+- Tiến hành phân tích file này bằng IDA
+
+![image](https://github.com/user-attachments/assets/3306d21e-7ed5-4ed1-a9ab-9abe75635f2f)
+
+- Nhấn make code (trỏ vào các byte rồi nhần C ) để xem có gì thay đổi hay không
+
+![image](https://github.com/user-attachments/assets/6828ba65-e1e0-4393-8bf5-0c20b89eebf8)
+
+- Có vẻ như là chúng ta được 1 function, nhấn f5 để gen pseudocode
+
+```C
+void *__fastcall sub_C713D0(_DWORD *a1, unsigned __int8 *a2, int a3, unsigned __int8 *a4)
+{
+  int v5; // esi
+  int v6; // ecx
+  int v7; // eax
+  int v8; // ecx
+  int v9; // eax
+  int v10; // ecx
+  int v11; // eax
+  int v12; // ecx
+  int v13; // eax
+  int v14; // ecx
+  int v15; // eax
+  int v16; // ecx
+  int v17; // eax
+  int v18; // ecx
+  int v19; // eax
+  int v20; // ecx
+  int v21; // eax
+
+  v5 = *a2 | ((a2[1] | (*((unsigned __int16 *)a2 + 1) << 8)) << 8);
+  v6 = *((unsigned __int16 *)a2 + 3);
+  qmemcpy(a1, "expand 32-byte k", 16);
+  v7 = a2[10];
+  a1[5] = a2[4] | ((a2[5] | (v6 << 8)) << 8);
+  v8 = v7 | (a2[11] << 8);
+  a1[4] = v5;
+  v9 = a2[14];
+  a1[6] = a2[8] | ((a2[9] | (v8 << 8)) << 8);
+  v10 = a2[12] | ((a2[13] | ((v9 | (a2[15] << 8)) << 8)) << 8);
+  v11 = a2[18];
+  a1[7] = v10;
+  v12 = a2[16] | ((a2[17] | ((v11 | (a2[19] << 8)) << 8)) << 8);
+  v13 = a2[22];
+  a1[8] = v12;
+  v14 = a2[20] | ((a2[21] | ((v13 | (a2[23] << 8)) << 8)) << 8);
+  v15 = a2[26];
+  a1[9] = v14;
+  v16 = a2[24] | ((a2[25] | ((v15 | (a2[27] << 8)) << 8)) << 8);
+  v17 = a2[30];
+  a1[10] = v16;
+  a1[11] = a2[28] | ((a2[29] | ((v17 | (a2[31] << 8)) << 8)) << 8);
+  v18 = *((unsigned __int16 *)a4 + 1);
+  a1[12] = 1129530187;
+  v19 = a4[6];
+  a1[13] = *a4 | ((a4[1] | (v18 << 8)) << 8);
+  v20 = a4[4] | ((a4[5] | ((v19 | (a4[7] << 8)) << 8)) << 8);
+  v21 = a4[10];
+  a1[14] = v20;
+  a1[15] = a4[8] | ((a4[9] | ((v21 | (a4[11] << 8)) << 8)) << 8);
+  __debugbreak();
+  __debugbreak();
+  __debugbreak();
+  __debugbreak();
+  __debugbreak();
+  __debugbreak();
+  __debugbreak();
+  __debugbreak();
+  __debugbreak();
+  __debugbreak();
+  __debugbreak();
+  __debugbreak();
+  __debugbreak();
+  return &unk_C743E8;
+}
+```
+- Đây chính là hàm khởi tạo state cho ChaCha20 vừa rồi, giờ ta chỉ cần tìm lại key và nonce trong các biến để và sau đó viết script giải mã, bên dưới là script của mình
+
+```python
+import struct
+
+# ChaCha20 quarter-round function
+def quarter_round(state, a, b, c, d):
+    state[a] = (state[a] + state[b]) & 0xFFFFFFFF
+    state[d] ^= state[a]
+    state[d] = ((state[d] << 16) | (state[d] >> 16)) & 0xFFFFFFFF
+
+    state[c] = (state[c] + state[d]) & 0xFFFFFFFF
+    state[b] ^= state[c]
+    state[b] = ((state[b] << 12) | (state[b] >> 20)) & 0xFFFFFFFF
+
+    state[a] = (state[a] + state[b]) & 0xFFFFFFFF
+    state[d] ^= state[a]
+    state[d] = ((state[d] << 8) | (state[d] >> 24)) & 0xFFFFFFFF
+
+    state[c] = (state[c] + state[d]) & 0xFFFFFFFF
+    state[b] ^= state[c]
+    state[b] = ((state[b] << 7) | (state[b] >> 25)) & 0xFFFFFFFF
+
+# ChaCha20 block function
+def chacha20_block(state):
+    # Copy the state
+    working_state = state[:]
+
+    # Perform 20 rounds (10 column rounds + 10 diagonal rounds)
+    for _ in range(10):
+        # Column rounds
+        quarter_round(working_state, 0, 4, 8, 12)
+        quarter_round(working_state, 1, 5, 9, 13)
+        quarter_round(working_state, 2, 6, 10, 14)
+        quarter_round(working_state, 3, 7, 11, 15)
+
+        # Diagonal rounds
+        quarter_round(working_state, 0, 5, 10, 15)
+        quarter_round(working_state, 1, 6, 11, 12)
+        quarter_round(working_state, 2, 7, 8, 13)
+        quarter_round(working_state, 3, 4, 9, 14)
+
+    # Add the original state to the working state
+    for i in range(16):
+        working_state[i] = (working_state[i] + state[i]) & 0xFFFFFFFF
+
+    # Serialize the state into bytes
+    return b''.join(struct.pack("<I", word) for word in working_state)
+
+# Custom state setup
+constants = struct.unpack("<4I", b"expand 32-byte k")  # Constants
+key = struct.unpack("<8I", bytes.fromhex(
+    "D9FABB420C2DB808D1F8BFA5890AC3B3"
+    "849F69E2F330D4A90DB119BD4EA0B830"
+))  # Key
+nonce = struct.unpack("<3I", bytes.fromhex(
+    "DB7BE693EE9BC1A47073CA4B"
+))  # Nonce (split into 3 integers)
+counter = 0x4353434B  # Custom counter(KCSC)
+
+# Initial state (combine constants, key, counter, and nonce)
+initial_state = list(constants) + list(key) + [counter] + list(nonce)
+
+# Decrypt ciphertext
+def chacha20_decrypt(custom_state, ciphertext):
+    plaintext = bytearray()
+    for i in range(0, len(ciphertext), 64):
+        # Generate block for current position
+        block = chacha20_block(custom_state)
+        custom_state[12] += 1  # Increment counter
+        chunk = ciphertext[i:i + 64]
+        plaintext.extend(a ^ b for a, b in zip(chunk, block))
+    return plaintext
+
+# Read ciphertext from file
+with open("D:\\KCSC RE\\ChaChaCha\\encrypted.txt", "rb") as file:
+    ciphertext = file.read()
+
+# Decrypt
+plaintext = chacha20_decrypt(initial_state, ciphertext)
+
+# Write the decrypted plaintext to a file
+with open("decrypted_output.bin", "wb") as file:
+    file.write(plaintext)
+
+print("Decrypted text saved to 'decrypted_output.bin'")
+
+```
+- Sau khi giải mã xong, ta được 1 file PE64
+
+![image](https://github.com/user-attachments/assets/c4360f65-5d6b-4c05-aea2-a342129f0eae)
+
+- Tiến hành phân tích file này
+
+```C
+int __fastcall main(int argc, const char **argv, const char **envp)
+{
+  HANDLE FileW; // r14
+  HRSRC ResourceW; // rax
+  HRSRC v5; // rbx
+  HGLOBAL Resource; // rdi
+  unsigned int v7; // ebx
+  const void *v8; // rsi
+  char *v9; // rax
+  char *v10; // rdi
+  __int64 v11; // rdx
+  __m128 si128; // xmm2
+  unsigned int v13; // r8d
+  __int64 v14; // rax
+  char *v15; // rax
+  __int64 v16; // rdx
+  DWORD NumberOfBytesWritten; // [rsp+40h] [rbp-448h] BYREF
+  WCHAR FileName[264]; // [rsp+50h] [rbp-438h] BYREF
+  WCHAR Buffer[264]; // [rsp+260h] [rbp-228h] BYREF
+
+  if ( GetTempPathW(0x104u, Buffer) - 1 <= 0x103 )
+  {
+    wsprintfW(FileName, L"%s%s", Buffer, L"REAL_FLAG_IN_HERE");
+    FileW = CreateFileW(FileName, 0x40000000u, 0, 0i64, 2u, 0x80u, 0i64);
+    if ( FileW != (HANDLE)-1i64 )
+    {
+      NumberOfBytesWritten = 0;
+      ResourceW = FindResourceW(0i64, (LPCWSTR)0x65, L"FLAG");
+      v5 = ResourceW;
+      if ( ResourceW )
+      {
+        Resource = LoadResource(0i64, ResourceW);
+        if ( Resource )
+        {
+          v7 = SizeofResource(0i64, v5);
+          if ( v7 )
+          {
+            v8 = LockResource(Resource);
+            if ( v8 )
+            {
+              v9 = (char *)malloc(v7);
+              v10 = v9;
+              if ( v9 )
+              {
+                memcpy(v9, v8, v7);
+                v11 = 0i64;
+                if ( v7 < 0x40 )
+                  goto LABEL_13;
+                si128 = (__m128)_mm_load_si128((const __m128i *)&xmmword_140003330);
+                v13 = 32;
+                do
+                {
+                  *(__m128 *)&v10[v11] = _mm_xor_ps(si128, (__m128)_mm_loadu_si128((const __m128i *)&v10[v11]));
+                  v11 = (unsigned int)(v11 + 64);
+                  *(__m128 *)&v10[v13 - 16] = _mm_xor_ps(
+                                                (__m128)_mm_loadu_si128((const __m128i *)&v10[v13 - 16]),
+                                                si128);
+                  *(__m128 *)&v10[v13] = _mm_xor_ps(si128, (__m128)_mm_loadu_si128((const __m128i *)&v10[v13]));
+                  v14 = v13 + 16;
+                  v13 += 64;
+                  *(__m128 *)&v10[v14] = _mm_xor_ps((__m128)_mm_loadu_si128((const __m128i *)&v10[v14]), si128);
+                }
+                while ( (unsigned int)v11 < (v7 & 0xFFFFFFC0) );
+                if ( (unsigned int)v11 < v7 )
+                {
+LABEL_13:
+                  v15 = &v10[(unsigned int)v11];
+                  v16 = v7 - (unsigned int)v11;
+                  do
+                  {
+                    *v15++ ^= 0x88u;
+                    --v16;
+                  }
+                  while ( v16 );
+                }
+                WriteFile(FileW, v10, v7, &NumberOfBytesWritten, 0i64);
+                free(v10);
+                sub_140001010((wchar_t *)L"Here is your Flag: %s\n");
+                CloseHandle(FileW);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  return 0;
+}
+```
+
+- Chương trình sẽ thực hiện drop file `REAL_FLAG_IN_HERE` ở trong resource vào trong thư mục `Temp` của hệ điều hành, vậy ta chỉ cần nhặt ra là sẽ có flag
+
+- File nhận được là một file JPEG
+
+![image](https://github.com/user-attachments/assets/e9347fb6-a06b-40ea-ba82-529164837212)
+
+- Mở file này bằng Paint
+
+![image](https://github.com/user-attachments/assets/5e4aef1f-5014-47d7-b130-648f10b400cb)
+
+## Script and Flag
+**Flag:** `KCSC{chachacha_w1th_me_and_welc0me_2_KCSC}`
+# Reverse me
+- Đề cho 1 file ELF64
+
+![image](https://github.com/user-attachments/assets/2381d76d-3cc0-4dfb-95da-fe3d08722116)
