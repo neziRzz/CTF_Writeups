@@ -538,3 +538,419 @@ while(count<len(dest)-1):
 ![image](https://github.com/user-attachments/assets/83547248-353a-4e82-bcd0-6c807390472c)
 
 ## Detailed Analysis
+- Hàm `main` (đừng nhìn vào cái graph của nó 💀)
+```C
+int __fastcall main(int argc, const char **argv, const char **envp)
+{
+  unsigned __int8 v3; // di
+  unsigned int v4; // esi
+  __int64 v5; // r14
+  __int64 v6; // rbp
+  __int64 v7; // r15
+  __int64 v8; // r12
+  __int64 v9; // r13
+  char v10; // al
+  __int64 v11; // rdx
+  char *v12; // rcx
+  __int64 v14; // rcx
+  __int64 v15; // rcx
+  __int64 v16; // rcx
+  __int64 v17; // rcx
+  __int64 v18; // rcx
+  __int64 v19; // rcx
+  __int64 v20; // rcx
+  char v21[80]; // [rsp+20h] [rbp-88h]
+
+  v3 = 0;
+  sub_140001020("Show your skill :))\n");
+  v4 = 0;
+  v5 = 0x1000008020020i64;
+  v6 = 0i64;
+  v7 = 0x60010020000100i64;
+  v8 = 0x100020080408000i64;
+  v9 = 0x844000044000i64;
+  do
+  {
+    sub_140001080("%c");
+    v10 = v21[v6];
+    if ( (unsigned __int8)v10 < 0x43u )
+    {
+LABEL_190:
+      Sleep(0); // I patched this so no need to wait for like eternity
+      goto LABEL_191;
+    }
+    switch ( v10 )
+    {
+      case 'C':
+        v3 += ((v4 - 1) & 0xFFFFFFFD) == 0;
+        break;
+      case 'D':
+      case 'E':
+      case 'F':
+      case 'G':
+      case 'H':
+      case 'I':
+      case 'J':
+        goto LABEL_190;
+      case 'K':
+        v3 += v4 == 0;
+        break;
+      case 'L':
+      case 'M':
+      case 'N':
+      case 'O':
+      case 'P':
+      case 'Q':
+      case 'R':
+        goto LABEL_190;
+      case 'S':
+        v3 += v4 == 2;
+        break;
+      case 'T':
+      case 'U':
+      case 'V':
+      case 'W':
+      case 'X':
+      case 'Y':
+      case 'Z':
+      case '[':
+      case '\\':
+      case ']':
+      case '^':
+        goto LABEL_190;
+      case '_':
+        if ( v4 <= 0x31 )
+        {
+          v20 = 0x2101004011000i64;
+          if ( _bittest64(&v20, v4) )
+            ++v3;
+        }
+        break;
+      case '`':
+        goto LABEL_190;
+      case 'a':
+        if ( v4 <= 0x34 )
+        {
+          v19 = 0x10000210000040i64;
+          if ( _bittest64(&v19, v4) )
+            ++v3;
+        }
+        break;
+      case 'b':
+        goto LABEL_190;
+      case 'c':
+        v3 += v4 == 37;
+        break;
+      case 'd':
+        v3 += v4 == 20;
+        break;
+      case 'e':
+        if ( v4 <= 0x37 )
+        {
+          v18 = 0x80000040200000i64;
+          if ( _bittest64(&v18, v4) )
+            ++v3;
+        }
+        break;
+      case 'f':
+        if ( v4 <= 0x32 )
+        {
+          v17 = 0x4200100802000i64;
+          if ( _bittest64(&v17, v4) )
+            ++v3;
+        }
+        break;
+      case 'g':
+        if ( v4 == 11 || v4 == 60 )
+          ++v3;
+        break;
+      case 'h':
+        goto LABEL_190;
+      case 'i':
+        if ( v4 <= 0x3A )
+        {
+          v16 = 0x400000000000280i64;
+          if ( _bittest64(&v16, v4) )
+            ++v3;
+        }
+        break;
+      case 'j':
+      case 'k':
+        goto LABEL_190;
+      case 'l':
+        if ( v4 <= 0x33 )
+        {
+          v15 = 0x8480C02000000i64;
+          if ( _bittest64(&v15, v4) )
+            ++v3;
+        }
+        break;
+      case 'm':
+        goto LABEL_190;
+      case 'n':
+        if ( v4 <= 0x3B )
+        {
+          v14 = 0xA00008000080400i64;
+          if ( _bittest64(&v14, v4) )
+            ++v3;
+        }
+        break;
+      case 'o':
+        if ( v4 <= 0x2F && _bittest64(&v9, v4) )
+          ++v3;
+        break;
+      case 'p':
+      case 'q':
+        goto LABEL_190;
+      case 'r':
+        if ( v4 <= 0x38 && _bittest64(&v8, v4) )
+          ++v3;
+        break;
+      case 's':
+        goto LABEL_190;
+      case 't':
+        if ( v4 <= 0x36 && _bittest64(&v7, v4) )
+          ++v3;
+        break;
+      case 'u':
+        v3 += v4 == 24;
+        break;
+      case 'v':
+        goto LABEL_190;
+      case 'w':
+        if ( v4 <= 0x30 && _bittest64(&v5, v4) )
+          ++v3;
+        break;
+      case 'x':
+      case 'y':
+      case 'z':
+        goto LABEL_190;
+      case '{':
+        v3 += v4 == 4;
+        break;
+      case '|':
+        goto LABEL_190;
+      case '}':
+        v3 += v4 == 61;
+        break;
+      default:
+        if ( v10 > 125
+          || v10 == (char)0x80
+          || v10 == -127
+          || v10 == -126
+          || v10 == -125
+          || v10 == -124
+          || v10 == -123
+          || v10 == -122
+          || v10 == -121
+          || v10 == -120
+          || v10 == -119
+          || v10 == -118
+          || v10 == -117
+          || v10 == -116
+          || v10 == -115
+          || v10 == -114
+          || v10 == -113
+          || v10 == -112
+          || v10 == -111
+          || v10 == -110
+          || v10 == -109
+          || v10 == -108
+          || v10 == -107
+          || v10 == -106
+          || v10 == -105
+          || v10 == -104
+          || v10 == -103
+          || v10 == -102
+          || v10 == -101
+          || v10 == -100
+          || v10 == -99
+          || v10 == -98
+          || v10 == -97
+          || v10 == -96
+          || v10 == -95
+          || v10 == -94
+          || v10 == -93
+          || v10 == -92
+          || v10 == -91
+          || v10 == -90
+          || v10 == -89
+          || v10 == -88
+          || v10 == -87
+          || v10 == -86
+          || v10 == -85
+          || v10 == -84
+          || v10 == -83
+          || v10 == -82
+          || v10 == -81
+          || v10 == -80
+          || v10 == -79
+          || v10 == -78
+          || v10 == -77
+          || v10 == -76
+          || v10 == -75
+          || v10 == -74
+          || v10 == -73
+          || v10 == -72
+          || v10 == -71
+          || v10 == -70
+          || v10 == -69
+          || v10 == -68
+          || v10 == -67
+          || v10 == -66
+          || v10 == -65
+          || v10 == -64
+          || v10 == -63
+          || v10 == -62
+          || v10 == -61
+          || v10 == -60
+          || v10 == -59
+          || v10 == -58
+          || v10 == -57
+          || v10 == -56
+          || v10 == -55
+          || v10 == -54
+          || v10 == -53
+          || v10 == -52
+          || v10 == -51
+          || v10 == -50
+          || v10 == -49
+          || v10 == -48
+          || v10 == -47
+          || v10 == -46
+          || v10 == -45
+          || v10 == -44
+          || v10 == -43
+          || v10 == -42
+          || v10 == -41
+          || v10 == -40
+          || v10 == -39
+          || v10 == -38
+          || v10 == -37
+          || v10 == -36
+          || v10 == -35
+          || v10 == -34
+          || v10 == -33
+          || v10 == -32
+          || v10 == -31
+          || v10 == -30
+          || v10 == -29
+          || v10 == -28
+          || v10 == -27
+          || v10 == -26
+          || v10 == -25
+          || v10 == -24
+          || v10 == -23
+          || v10 == -22
+          || v10 == -21
+          || v10 == -20
+          || v10 == -19
+          || v10 == -18
+          || v10 == -17
+          || v10 == -16
+          || v10 == -15
+          || v10 == -14
+          || v10 == -13
+          || v10 == -12
+          || v10 == -11
+          || v10 == -10
+          || v10 == -9
+          || v10 == -8
+          || v10 == -7
+          || v10 == -6
+          || v10 == -5
+          || v10 == -4
+          || v10 == -3
+          || v10 == -2 )
+        {
+          goto LABEL_190;
+        }
+        break;
+    }
+LABEL_191:
+    ++v4;
+    ++v6;
+  }
+  while ( (int)v4 < 62 );
+  v11 = -1i64;
+  do
+    ++v11;
+  while ( v21[v11] );
+  v12 = "Correct\n";
+  if ( v3 != v11 )
+    v12 = ":((";
+  sub_140001020(v12);
+  return 0;
+}
+```
+- Chương trình này đã bị obfuscated bằng kĩ thuật `Control Flow Flattening`, nói ngắn gọn thi kĩ thuật này sẽ đưa hết tất cả các chức năng của chương trình vào trong 1 state và thực thi các state này thông qua 1 switch case (về cơ bản thì khá giống VM), nếu các bạn muốn tìm hiểu thêm thì có thể tham khảo tại (đây)[https://zerotistic.blog/posts/cff-remover/]
+- Về hướng giải quyết thì ta có 2 cách, 1 sẽ là viết một disassembler (symbolic executioner) cho nó hoặc ta có thể ngồi debug
+- Cơ bản thì chương trình sẽ gán cho 1 số kí tự các giá trị cụ thể và index của một vài kí tự nhất định. Sau đó thì dựa vào các bit của giá trị này để kiểm tra đúng sai. Bên dưới là script giải của mình
+
+## Script and Flag
+```python
+def is_bit_set(value, index):
+    """Check if the bit at 'index' is set in 'value'."""
+    return (value & (1 << index)) != 0
+
+def find_valid_input():
+
+    patterns = {
+        '_': 0x2101004011000,
+        'a': 0x10000210000040,
+        'e': 0x80000040200000,
+        'f': 0x4200100802000,
+        'i': 0x400000000000280,
+        'l': 0x8480C02000000,
+        'n': 0xA00008000080400,
+        'o': 0x844000044000,
+        'r': 0x100020080408000,
+        't': 0x60010020000100,
+        'w': 0x1000008020020,
+    }
+
+
+    special_cases = {
+        'C': lambda v4: ((v4 - 1) & 0xFFFFFFFD) == 0,
+        'K': lambda v4: v4 == 0,
+        'S': lambda v4: v4 == 2,
+        'c': lambda v4: v4 == 0x25,
+        'd': lambda v4: v4 == 0x14,
+        'g': lambda v4: v4 in [0xB, 0x3C],
+        'u': lambda v4: v4 == 0x18,
+        '{': lambda v4: v4 == 4,
+        '}': lambda v4: v4 == 0x3D,
+    }
+
+
+    length = 62
+    result = ['?'] * length
+
+
+    for v4 in range(length):
+        for char, condition in special_cases.items():
+            if condition(v4):
+                result[v4] = char
+                break
+        else:
+            for char, pattern in patterns.items():
+                if v4 <= 0x3F and is_bit_set(pattern, v4):
+                    result[v4] = char
+                    break
+
+    return ''.join(result)
+
+
+valid_input = find_valid_input()
+print(valid_input)
+
+```
+**Flag:** `KCSC{waiting_for_wonderful_waterfall_control_flow_flatterning}`
+
+# ChaChaCha
+## Mics
+- Đề cho 1 file PE32
+
+![image](https://github.com/user-attachments/assets/69f8d999-655a-49b9-a591-ca431f0f98b0)
+
+## Detailed Analysis
