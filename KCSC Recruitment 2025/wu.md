@@ -1637,6 +1637,7 @@ __int64 __fastcall sub_14010DFD0(int a1)
 # Cat Laughing At You
 ## Mics
 - Đề cho 1 file PE32
+
 ![image](https://github.com/user-attachments/assets/6b54156a-5d92-4a18-9ca4-cea16a00cf2b)
 
 ## Detailed Analysis
