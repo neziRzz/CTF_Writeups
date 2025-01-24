@@ -757,15 +757,27 @@ s.add(uint8[31] & 128 == 0)
 s.add(uint8[2] & 128 == 0)
 s.add(uint8[84] + 3 == 128)
 s.add(uint8[39] & 128 == 0)
-s.add(uint8[52] & 128 == 0)
+s.add(uint8[52] & 128 == 0)[Uploading mememaker3000.html…]()
+
 if(s.check() == sat):
     print(s.model())
 else:
     print("Failed")
 ```
-- After bruteforcing the remaining hashing conditions, we have the flag
+- After bruteforcing the remaining hashing conditions, we got the flag
 
 ![image](https://github.com/user-attachments/assets/eabd8bfa-a4e6-45e1-a67f-9f0ec67d1d3e)
 
 ## Script and Flag
 **Flag:** `1RuleADayK33p$Malw4r3Aw4y@flare-on.com`
+
+# 4. FLARE Meme Maker 3000
+## Mics
+- Given a HTML template
+
+![image](https://github.com/user-attachments/assets/4c224802-fb47-4ced-9d68-1d0c47deca92)
+
+## Detailed Analysis
+- As the name suggested, it is indeed a `Meme Maker`
+
+![image](https://github.com/user-attachments/assets/4729bb2d-3843-41b1-a71c-a5fa32ca0439)
