@@ -757,7 +757,7 @@ s.add(uint8[31] & 128 == 0)
 s.add(uint8[2] & 128 == 0)
 s.add(uint8[84] + 3 == 128)
 s.add(uint8[39] & 128 == 0)
-s.add(uint8[52] & 128 == 0)[Uploading mememaker3000.html…]()
+s.add(uint8[52] & 128 == 0)
 
 if(s.check() == sat):
     print(s.model())
