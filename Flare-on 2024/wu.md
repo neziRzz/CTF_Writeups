@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/77fc8230-a8e7-46af-a00d-78794ffce17a)# 1. frog
+# 1. frog
 ## Mics
 - Given a PE32 executable built with Python and a Python source
 
