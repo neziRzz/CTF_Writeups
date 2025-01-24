@@ -1136,7 +1136,7 @@ __int64 __fastcall sub_DC2(__int64 a1, __int64 a2)
   + Connect to `10.0.2.15` with port `1337`
   + Receive data from the above adress
   + Open a file and then send that file back
-- Since the received data size is 32,12 and 4 respectively, It is mostly certain that those data will be used as key, nonce and counter for `ChaCha20`. What we will need to find next is the cyphertext. It is known that the shellcode was open a file, we can try and find a filename inside the coredump (txt)
+- Since the received data size is 32,12 and 4 respectively, It is mostly certain that those data will be used as key, nonce and counter for `ChaCha20`. What we will need to find next is the cyphertext. It is known that the shellcode opened a file, we can try and find a filename inside the coredump (txt)
 
 ![image](https://github.com/user-attachments/assets/6ca4d40e-562e-4559-a7ea-8e4d9443aae0)
 
