@@ -1085,3 +1085,49 @@ print("Decrypted text saved to 'decrypted_output.bin'")
 ![image](https://github.com/user-attachments/assets/320e31ad-e57f-4531-b732-993c7329caac)
 ![image](https://github.com/user-attachments/assets/5b4c0072-0ea3-48b7-8536-8c28bb9b4729)
 
+- Open the string window, I noticed that instead of `expand 32-byte k`, the string is `expand 32-byte K`, this suggest that this shellcode may use a custom constant variation of `ChaCha20`
+
+![image](https://github.com/user-attachments/assets/6a686dcc-2161-4403-8b33-8ac0b8c8476c)
+
+- When we get to the main function of the shellcode, there are a bunch of syscalls
+```C
+__int64 __fastcall sub_DC2(__int64 a1, __int64 a2)
+{
+  __int64 v2; // rcx
+  __int64 v3; // rcx
+  char v5[32]; // [rsp+410h] [rbp-1278h] BYREF
+  char v6[272]; // [rsp+430h] [rbp-1258h] BYREF
+  char v7[4224]; // [rsp+540h] [rbp-1148h] BYREF
+  unsigned int v8; // [rsp+15C4h] [rbp-C4h]
+
+  LOWORD(a2) = 1337;
+  sub_1A(a1, a2);
+  __asm
+  {
+    syscall; Low latency system call
+    syscall; Low latency system call
+    syscall; Low latency system call
+    syscall; Low latency system call
+  }
+  v6[61] = 0;
+  __asm
+  {
+    syscall; Low latency system call
+    syscall; Low latency system call
+  }
+  v8 = strlen(v7);
+  chacha20_init((__int64)v6, (__int64)v5, 0i64);
+  chacha20_encrypt_decrypt(v8, (__int64)v7);
+  __asm
+  {
+    syscall; Low latency system call
+    syscall; Low latency system call
+  }
+  sub_B(v2, v8, 0i64, 0i64);
+  sub_8F(v3, 0i64);
+  return 0i64;
+}
+```
+- So instead of reading the assembly to know what those syscalls does, I wrote a shellcode loader in C and use `strace` to trace the loader instead
+
+![image](https://github.com/user-attachments/assets/6bc8f629-b88d-4052-ac27-3aa234526250)
