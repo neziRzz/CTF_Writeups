@@ -782,4 +782,152 @@ else:
 
 ![image](https://github.com/user-attachments/assets/4729bb2d-3843-41b1-a71c-a5fa32ca0439)
 
-- To 
+- Usually, you can find the `script` header when you try to inspect the HTML's source code, it is where the javascript code of the template is. Sadly, the javascript code is obfuscated
+
+![image](https://github.com/user-attachments/assets/8a8c1c9b-38c1-4c00-b513-c7a89293aae1)
+
+- To deobfuscate, i used [this](https://deobfuscate.relative.im/) website and find the flag validating function
+```javascript
+    function a0k() {
+      const a = a0g.alt.split('/').pop();
+      const b = a0l.textContent;
+      const c = a0m.textContent;
+      const d = a0n.textContent;
+    
+      var f =
+        d[3] +
+        'h' +
+        a[10] +
+        b[2] +
+        a[3] +
+        c[5] +
+        c[c.length - 1] +
+        '5' +
+        a[3] +
+        '4' +
+        a[3] +
+        c[2] +
+        c[4] +
+        c[3] +
+        '3' +
+        d[2] +
+        a[3] +
+        'j4' +
+        a0c[1][2] +
+        d[4] +
+        '5' +
+        c[2] +
+        d[5] +
+        '1' +
+        c[11] +
+        '7' +
+        a0c[21][1] +
+        b.replace(' ', '-') +
+        a[11] +
+        a0c[4].substring(12, 15);
+    
+      f = f.toLowerCase();
+      alert(atob('Q29uZ3JhdHVsYXRpb25zISBIZXJlIHlvdSBnbzog') + f);
+    }
+      }
+      const b = a0l.textContent,
+        c = a0m.textContent,
+        d = a0n.textContent
+      if (
+        a0c.indexOf(b) == 14 &&
+        a0c.indexOf(c) == a0c.length - 1 &&
+        a0c.indexOf(d) == 22
+      ) {
+        var e = new Date().getTime()
+        while (new Date().getTime() < e + 3000) {}
+        var f =
+          d[3] +
+          'h' +
+          a[10] +
+          b[2] +
+          a[3] +
+          c[5] +
+          c[c.length - 1] +
+          '5' +
+          a[3] +
+          '4' +
+          a[3] +
+          c[2] +
+          c[4] +
+          c[3] +
+          '3' +
+          d[2] +
+          a[3] +
+          'j4' +
+          a0c[1][2] +
+          d[4] +
+          '5' +
+          c[2] +
+          d[5] +
+          '1' +
+          c[11] +
+          '7' +
+          a0c[21][1] +
+          b.replace(' ', '-') +
+          a[11] +
+          a0c[4].substring(12, 15)
+        f = f.toLowerCase()
+        alert(atob('Q29uZ3JhdHVsYXRpb25zISBIZXJlIHlvdSBnbzog') + f)
+      }
+```
+- This function will display the flag in an alert box if the meme's caption and image meet certain conditions. With the help of ChatGPT, it generated for me the solve script as following
+```python
+import base64
+a0c = [
+    'When you find a buffer overflow in legacy code',
+    'Reverse Engineer',
+    'When you decompile the obfuscated code and it makes perfect sense',
+    'Me after a week of reverse engineering',
+    'When your decompiler crashes',
+    "It's not a bug, it's a feature",
+    "Security 'Expert'",
+    'AI',
+    "That's great, but can you hack it?",
+    'When your code compiles for the first time',
+    "If it ain't broke, break it",
+    "Reading someone else's code",
+    'EDR',
+    'This is fine',
+    'FLARE On',
+    "It's always DNS",
+    'strings.exe',
+    "Don't click on that.",
+    'When you find the perfect 0-day exploit',
+    'Security through obscurity',
+    'Instant Coffee',
+    'H@x0r',
+    'Malware',
+    '$1,000,000',
+    'IDA Pro',
+    'Security Expert',
+]
+
+a = "boy_friend0.jpg"
+b = 'FLARE On'
+c = 'Security Expert'
+d = 'Malware'
+
+def gen_string():
+
+        f = (
+            d[3] + 'h' + a[10] + b[2] + a[3] + c[5] + c[-1] + '5' + a[3] +
+            '4' + a[3] + c[2] + c[4] + c[3] + '3' + d[2] + a[3] + 'j4' +
+            a0c[1][2] + d[4] + '5' + c[2] + d[5] + '1' + c[11] + '7' +
+            a0c[21][1] + b.replace(' ', '-') + a[11] + a0c[4][12:15]
+        ).lower()
+
+        message = base64.b64decode('Q29uZ3JhdHVsYXRpb25zISBIZXJlIHlvdSBnbzog').decode('utf-8')
+        final_message = message + f
+
+        print(final_message)
+        
+gen_string()
+
+```
+## Script and Flag
+**Flag:** `wh0a_it5_4_cru3l_j4va5cr1p7@flare-on.com`
