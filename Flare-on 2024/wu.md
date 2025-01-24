@@ -956,4 +956,5 @@ root@1729c7775492:/sbin# gdb sshd /var/lib/systemd/coredump/sshd.core.93794.0.0.
 ```
 ![image](https://github.com/user-attachments/assets/7b5ae448-215b-4a0a-980f-2f1c349ea87c)
 
-- It crashed in `liblzma.so.5` 
+- It crashed in `liblzma.so.5`, which leads us to the infamous [CVE-2024-3094](https://en.wikipedia.org/wiki/XZ_Utils_backdoor)
+- 
