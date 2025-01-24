@@ -933,4 +933,16 @@ gen_string()
 **Flag:** `wh0a_it5_4_cru3l_j4va5cr1p7@flare-on.com`
 
 # 5. sshd
-- Given a image 
+## Mics
+- Given a container of a Linux server
+
+ ![image](https://github.com/user-attachments/assets/8da3fe77-4b40-40c8-9998-3a1acd3044bb)
+
+## Detailed Analysis
+- We were given a hint that the server crashed and it is related to `sshd`. So i decided to find the `sshd` coredump (equivalent of memdump) in `/var/lib/systemd/coredump/` which is `sshd.core.93794.0.0.11.1725917676`
+
+- Before loading the coredump in GDB, we need to either tell GDB where's the library located (not on your own system but of the given Linux server container) or use Docker to emulate the server
+- In my case I use Docker with these commands
+```bash
+docker import '/home/kali/Desktop/ssh_container.tar'
+```
