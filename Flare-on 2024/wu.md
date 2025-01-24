@@ -41,6 +41,10 @@ for i in range(801):
 ```
 **Flag:** `welcome_to_11@flare-on.com`
 # 2. Checksum
+## Mics
 - Given a PE64 executable built with Go
 
 ![image](https://github.com/user-attachments/assets/645769ac-e026-45f4-86f8-0f6a0bc91811)
+
+## Detailed Analysis
+- 
