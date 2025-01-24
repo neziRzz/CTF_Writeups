@@ -941,7 +941,7 @@ gen_string()
 ## Detailed Analysis
 - We were given a hint that the server crashed and it is related to `sshd`. So i decided to find the `sshd` coredump (equivalent of memdump) in `/var/lib/systemd/coredump/` which is `sshd.core.93794.0.0.11.1725917676`
 
-- Before loading the coredump in GDB, we need to either tell GDB where's the library located (not on your own system but of the given Linux server container) or use Docker to emulate the server
+- Before loading the coredump in GDB, we need to either tell GDB where the is library located (not of your own system but of the given Linux server container) or use Docker to emulate the server
 - In my case I use Docker with these commands
 ```bash
 docker import '/home/kali/Desktop/ssh_container.tar' # this will generate a hash for the below command
@@ -956,3 +956,4 @@ root@1729c7775492:/sbin# gdb sshd /var/lib/systemd/coredump/sshd.core.93794.0.0.
 ```
 ![image](https://github.com/user-attachments/assets/7b5ae448-215b-4a0a-980f-2f1c349ea87c)
 
+- It crashed in `liblzma.so.5` 
