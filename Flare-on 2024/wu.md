@@ -47,4 +47,6 @@ for i in range(801):
 ![image](https://github.com/user-attachments/assets/645769ac-e026-45f4-86f8-0f6a0bc91811)
 
 ## Detailed Analysis
-- 
+- Luckily, the symbols are not stripped, in case they are you can use [this](https://github.com/mandiant/GoReSym) tool to recover them 
+
+![Uploading image.png…]()
