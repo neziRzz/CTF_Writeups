@@ -944,5 +944,8 @@ gen_string()
 - Before loading the coredump in GDB, we need to either tell GDB where's the library located (not on your own system but of the given Linux server container) or use Docker to emulate the server
 - In my case I use Docker with these commands
 ```bash
-docker import '/home/kali/Desktop/ssh_container.tar'
+docker import '/home/kali/Desktop/ssh_container.tar' # this will generate a hash for the below command
+```
+```bash
+sudo docker run --rm -it <hash> /bin/bash
 ```
