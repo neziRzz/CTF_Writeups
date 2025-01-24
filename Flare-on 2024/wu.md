@@ -949,3 +949,10 @@ docker import '/home/kali/Desktop/ssh_container.tar' # this will generate a hash
 ```bash
 sudo docker run --rm -it <hash> /bin/bash
 ```
+
+- Load the coredump into GDB and use the `bt` command to identify where it crashed
+```bash
+root@1729c7775492:/sbin# gdb sshd /var/lib/systemd/coredump/sshd.core.93794.0.0.11.1725917676
+```
+![image](https://github.com/user-attachments/assets/7b5ae448-215b-4a0a-980f-2f1c349ea87c)
+
