@@ -1,4 +1,4 @@
-# 1. frog
+![image](https://github.com/user-attachments/assets/77fc8230-a8e7-46af-a00d-78794ffce17a)# 1. frog
 ## Mics
 - Given a PE32 executable built with Python and a Python source
 
@@ -1170,3 +1170,14 @@ __int64 __fastcall sub_DC2(__int64 a1, __int64 a2)
 ⠀⠀⠉⠑⠒⠀⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 if only it were that easy......
 ```
+- Change the approach, I'm pretty sure cyphertext must be nearby and it should be a string with null terminator so after a bit of digging, i found some wierd blob of data
+
+ ![image](https://github.com/user-attachments/assets/8b724fb1-58f5-4313-8937-9b28f1a45408)
+
+- Decrypt this blob of data with key and nonce from above, we get the flag
+
+![image](https://github.com/user-attachments/assets/9b326148-ae48-42eb-88c6-c81f98da5d1e)
+
+## Script and Flag
+**Flag:** `supp1y_cha1n_sund4y@flare-on.com`
+
