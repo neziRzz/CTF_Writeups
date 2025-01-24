@@ -50,3 +50,562 @@ for i in range(801):
 - Luckily, the symbols are not stripped, in case they are you can use [this](https://github.com/mandiant/GoReSym) tool to recover them 
 
 ![image](https://github.com/user-attachments/assets/949ef992-0f60-4531-b731-a5766a6754ba)
+
+- `main_main` function
+```C
+// main.main
+// local variable allocation has failed, the output may be wrong!
+void __fastcall main_main()
+{
+  // [COLLAPSED LOCAL DECLARATIONS. PRESS KEYPAD CTRL-"+" TO EXPAND]
+
+  while ( (unsigned __int64)&v218 <= *(_QWORD *)(v5 + 16) )
+    runtime_morestack_noctxt();
+  v231 = math_rand_v2__ptr_Rand_uint64n((_DWORD)math_rand_v2_globalRand, 5, v0, v1, v2, v3, v4);
+  p_int = (int *)runtime_newobject(&RTYPE_int);
+  for ( i = 0LL; ; i = v223 + 1 )
+  {
+    v16 = v231 + 3;
+    if ( i >= v231 + 3 )
+      break;
+    v223 = i;
+    v230 = math_rand_v2__ptr_Rand_uint64n((_DWORD)math_rand_v2_globalRand, 10000, i, v1, v16, v7, v8);
+    v229 = math_rand_v2__ptr_Rand_uint64n(
+             (_DWORD)math_rand_v2_globalRand,
+             10000,
+             (_DWORD)math_rand_v2_globalRand,
+             v1,
+             v16,
+             v17,
+             v18);
+    v244 = v6;
+    v245 = v6;
+    v24 = runtime_convT64(v230, 10000, v19, v1, v16, v20, v21, v22, v23, v145);
+    *(_QWORD *)&v244 = &RTYPE_int;
+    *((_QWORD *)&v244 + 1) = v24;
+    v29 = runtime_convT64(v229, 10000, (unsigned int)&RTYPE_int, v1, v16, v25, v26, v27, v28, v146);
+    *(_QWORD *)&v245 = &RTYPE_int;
+    *((_QWORD *)&v245 + 1) = v29;
+    v228 = v230 + v229;
+    fmt_Fprintf(
+      (unsigned int)go_itab__os_File_io_Writer,
+      os_Stdout,
+      (unsigned int)"Check sum: %d + %d = ",
+      21,
+      (unsigned int)&v244,
+      2,
+      2,
+      v30,
+      v31,
+      v147,
+      v166,
+      v185,
+      v201,
+      v208,
+      v213,
+      v216);
+    v243[0] = &RTYPE__ptr_int;
+    v243[1] = p_int;
+    v32 = os_Stdin;
+    fmt_Fscanf(
+      (unsigned int)go_itab__os_File_io_Reader,
+      os_Stdin,
+      (unsigned int)"%d\n%s\nnil01_\\\\?adxaesshaavxfmaEOF m=125625nanNaNintmapptr...finobjgc %: gp  *(in  n= )\n -   P  MPC= < end > ]:\n???pc=  Gopenread",
+      3,
+      (unsigned int)v243,
+      1,
+      1,
+      v33,
+      v34,
+      v148,
+      v167,
+      v186,
+      v199,
+      v202,
+      v206,
+      v209,
+      v211,
+      v214,
+      v215,
+      v216);
+    v1 = 21;
+    v40 = main_b(
+            v32,
+            v35,
+            (unsigned int)"Not a valid answer...",
+            21,
+            (unsigned int)v243,
+            v36,
+            v37,
+            v38,
+            v39,
+            v149,
+            v168,
+            v187);
+    if ( *(_QWORD *)p_int != v228 )
+    {
+      runtime_printlock(v40);
+      v46 = runtime_printstring(
+              (unsigned int)"Try again! ;)\nis a directoryunexpected EOFinvalid syntax1907348632812595367431640625unsafe.Pointer on zero Valueunknown methodOpenSCManagerWModule32FirstWuserArenaStateread mem statsallocfreetracegcstoptheworldGC assist waitfinalizer waitsync.Cond.Waits.allocCount= nil elem type! to finalizer GC worker initruntime: full=runtime: want=MB; allocated timeEndPeriod",
+              14,
+              v41,
+              21,
+              (unsigned int)v243,
+              v42,
+              v43,
+              v44,
+              v45,
+              v150,
+              v169);
+      runtime_printunlock(v46);
+      return;
+    }
+    runtime_printlock(v40);
+    v15 = runtime_printstring(
+            (unsigned int)"Good math!!!\n------------------------------\n",
+            44,
+            v10,
+            21,
+            (unsigned int)v243,
+            v11,
+            v12,
+            v13,
+            v14,
+            v150,
+            v169);
+    runtime_printunlock(v15);
+  }
+  p_string = (string *)runtime_newobject(&RTYPE_string);
+  p_string->ptr = 0LL;
+  v242[0] = &RTYPE_string;
+  v242[1] = &off_4EDAB0;
+  fmt_Fprint(
+    (unsigned int)go_itab__os_File_io_Writer,
+    os_Stdout,
+    (unsigned int)v242,
+    1,
+    1,
+    v47,
+    v48,
+    v49,
+    v50,
+    v145,
+    v166,
+    v185,
+    v201,
+    v208);
+  v241[0] = &RTYPE__ptr_string;
+  v241[1] = p_string;
+  v51 = os_Stdin;
+  fmt_Fscanf(
+    (unsigned int)go_itab__os_File_io_Reader,
+    os_Stdin,
+    (unsigned int)"%s\nnil01_\\\\?adxaesshaavxfmaEOF m=125625nanNaNintmapptr...finobjgc %: gp  *(in  n= )\n -   P  MPC= < end > ]:\n???pc=  Gopenread",
+    3,
+    (unsigned int)v241,
+    1,
+    1,
+    v52,
+    v53,
+    v151,
+    v170,
+    v188,
+    v200,
+    v203,
+    v207,
+    v210,
+    v212,
+    v213,
+    HIDWORD(v213),
+    v216);
+  main_b(
+    v51,
+    v54,
+    (unsigned int)"Fail to read checksum input...",
+    30,
+    (unsigned int)v241,
+    v55,
+    v56,
+    v57,
+    v58,
+    v152,
+    v171,
+    v189);
+  ptr = p_string->ptr;
+  v234 = (chacha20poly1305_xchacha20poly1305 *)runtime_stringtoslicebyte(
+                                                 (unsigned int)&v219,
+                                                 p_string->ptr,
+                                                 p_string->len,
+                                                 30,
+                                                 (unsigned int)v241,
+                                                 v60,
+                                                 v61,
+                                                 v62,
+                                                 v63,
+                                                 v153,
+                                                 v172,
+                                                 v190);
+  v221 = v64;
+  v68 = encoding_hex_Decode(
+          (_DWORD)v234,
+          (_DWORD)ptr,
+          v64,
+          (_DWORD)v234,
+          (_DWORD)ptr,
+          v64,
+          v65,
+          v66,
+          v67,
+          v154,
+          v173,
+          v191,
+          v204);
+  if ( v68 > v221 )
+    runtime_panicSliceAcap(v68, ptr, v68);
+  v222 = v68;
+  main_b(
+    (_DWORD)ptr,
+    v69,
+    (unsigned int)"Not a valid checksum...",
+    23,
+    (_DWORD)ptr,
+    v70,
+    v71,
+    v72,
+    v73,
+    v155,
+    v174,
+    v192);
+  v78 = runtime_makeslice((unsigned int)&RTYPE_uint8, 24, 24, 23, (_DWORD)ptr, v74, v75, v76, v77, v156, v175, v193);
+  v83 = v222;
+  v84 = v234;
+  for ( j = 0LL; v83 > (__int64)j; ++j )
+  {
+    v79 = v84->key[j];
+    if ( j == 24 )
+      break;
+    if ( j >= 0x18 )
+      runtime_panicIndex(j, 24LL, 24LL, 23LL);
+    *(_BYTE *)(v78 + j) = v79;
+  }
+  v237.cap = v78;
+  if ( v83 == 32 )
+  {
+    p_chacha20poly1305_xchacha20poly1305 = (chacha20poly1305_xchacha20poly1305 *)runtime_newobject(&RTYPE_chacha20poly1305_xchacha20poly1305);
+    if ( p_chacha20poly1305_xchacha20poly1305 != v234 )
+    {
+      v235 = p_chacha20poly1305_xchacha20poly1305;
+      runtime_memmove(p_chacha20poly1305_xchacha20poly1305, v234, 32LL, 23LL, v84);
+      p_chacha20poly1305_xchacha20poly1305 = v235;
+    }
+    v86 = go_itab__golang_org_x_crypto_chacha20poly1305_xchacha20poly1305_crypto_cipher_AEAD;
+    LODWORD(v87) = 0;
+    v88 = p_chacha20poly1305_xchacha20poly1305;
+    LODWORD(v89) = 0;
+  }
+  else
+  {
+    v240[1] = 32LL;
+    v240[0] = "chacha20poly1305: bad key length";
+    v86 = 0LL;
+    v87 = go_itab__errors_errorString_error;
+    v88 = 0LL;
+    v89 = v240;
+  }
+  v233 = v88;
+  v220 = v86;
+  main_b(
+    (_DWORD)v87,
+    (_DWORD)v89,
+    (unsigned int)"Maybe it's time to analyze the binary! ;)",
+    41,
+    (_DWORD)v89,
+    v79,
+    v80,
+    v81,
+    v82,
+    v157,
+    v176,
+    v194);
+  v158 = main_encryptedFlagData;
+  v177 = qword_59A4F8;
+  v195 = qword_59A500;
+  *(_OWORD *)&v196[8] = v6;
+  cap = v237.cap;
+  v237.ptr = (uint8 *)((__int64 (__golang *)(chacha20poly1305_xchacha20poly1305 *, _QWORD, _QWORD, _QWORD, size_t, __int64, __int64))v220[4])(
+                        v233,
+                        0LL,
+                        0LL,
+                        0LL,
+                        v237.cap,
+                        24LL,
+                        24LL);
+  *(_QWORD *)v225 = 0LL;
+  *(_QWORD *)v226 = v92;
+  main_b(
+    0,
+    cap,
+    (unsigned int)"Maybe it's time to analyze the binary! ;)",
+    41,
+    cap,
+    v93,
+    v94,
+    v95,
+    v96,
+    (__int64)v158,
+    v177,
+    v195);
+  *(_OWORD *)v232.h = v6;
+  ((void (__fastcall *)(__int64 *))loc_463086)(&v231);
+  crypto_sha256__ptr_digest_Reset(&v232);
+  v248.ptr = v237.ptr;
+  v248.len = *(_QWORD *)v225;
+  v248.cap = *(_QWORD *)v226;
+  crypto_sha256__ptr_digest_Write(&v232, v248);
+  v248.ptr = 0LL;
+  v248.len = 0LL;
+  v97 = 0LL;
+  v248 = crypto_sha256__ptr_digest_Sum(&v232, *(_slice_uint8 *)(&v97 - 2));
+  v224 = v248.ptr;
+  v236 = v98;
+  v228 = 2 * (__int64)v248.ptr;
+  v103 = runtime_makeslice(
+           (unsigned int)&RTYPE_uint8,
+           2 * LODWORD(v248.ptr),
+           2 * LODWORD(v248.ptr),
+           0,
+           cap,
+           v99,
+           v100,
+           v101,
+           v102,
+           v159,
+           v178,
+           *(__int64 *)v196);
+  v107 = v224;
+  v108 = v228;
+  v109 = v236;
+  v110 = 0LL;
+  v111 = 0LL;
+  while ( (__int64)v107 > v110 )
+  {
+    v112 = *(_BYTE *)(v109 + v110);
+    v105 = "0123456789abcdef";
+    v113 = (unsigned __int8)a0123456789abcd[v112 >> 4];
+    if ( v111 >= v108 )
+      runtime_panicIndex(v111, v111, v108, v113);
+    *(_BYTE *)(v103 + v111) = v113;
+    v97 = v111 + 1;
+    v104 = (unsigned __int8)a0123456789abcd[v112 & 0xF];
+    if ( v108 <= v111 + 1 )
+      runtime_panicIndex(v111 + 1, v111, v108, v97);
+    *(_BYTE *)(v111 + v103 + 1) = v104;
+    ++v110;
+    v111 += 2LL;
+  }
+  len = v103;
+  v115 = runtime_slicebytetostring(
+           (unsigned int)&v217,
+           v103,
+           v108,
+           v97,
+           v108,
+           v109,
+           v104,
+           (_DWORD)v105,
+           v106,
+           v160,
+           v179,
+           *(__int64 *)v196);
+  if ( len == p_string->len )
+  {
+    len = (__int64)p_string->ptr;
+    if ( (unsigned __int8)runtime_memequal(v115, p_string->ptr) )
+    {
+      len = p_string->len;
+      v119 = main_a(p_string->ptr, len, (_DWORD)p_string, v97, v108, v120, v116, v117, v118, v161, v180);
+    }
+    else
+    {
+      v119 = 0;
+    }
+  }
+  else
+  {
+    v119 = 0;
+  }
+  if ( !v119 )
+  {
+    v239[0] = &RTYPE_string;
+    v239[1] = &off_4EDAC0;
+    len = os_Stdout;
+    LODWORD(v97) = 1;
+    LODWORD(v108) = 1;
+    fmt_Fprintln(
+      (unsigned int)go_itab__os_File_io_Writer,
+      os_Stdout,
+      (unsigned int)v239,
+      1,
+      1,
+      (unsigned int)&off_4EDAC0,
+      v116,
+      v117,
+      v118,
+      v161,
+      v180,
+      *(__int64 *)v196,
+      v6);
+  }
+  v237.len = os_UserCacheDir();
+  v227 = len;
+  main_b(v121, v97, (unsigned int)"Fail to get path...", 19, v108, v122, v123, v124, v125, v161, v180, *(__int64 *)v196);
+  v126 = v237.len;
+  v131 = runtime_concatstring2(
+           0,
+           v237.len,
+           v227,
+           (unsigned int)"\\REAL_FLAREON_FLAG.JPG",
+           22,
+           v127,
+           v128,
+           v129,
+           v130,
+           v162,
+           v181,
+           *(__int64 *)v196,
+           *(__int64 *)&v196[8]);
+  v132 = v226[0];
+  v136 = os_WriteFile(
+           v131,
+           v126,
+           (int)v237.ptr,
+           v225[0],
+           v226[0],
+           420,
+           v133,
+           v134,
+           v135,
+           v163,
+           v182,
+           *(_slice_uint8 *)v196,
+           0);
+  main_b(v136, v126, (unsigned int)"Fail to write file...", 21, v132, v137, v138, v139, v140, v164, v183, v197);
+  v238[0] = &RTYPE_string;
+  v238[1] = &off_4EDAD0;
+  fmt_Fprintln(
+    (unsigned int)go_itab__os_File_io_Writer,
+    os_Stdout,
+    (unsigned int)v238,
+    1,
+    1,
+    v141,
+    v142,
+    v143,
+    v144,
+    v165,
+    v184,
+    v198,
+    v205);
+}
+```
+- Since this is Golang, the pseudocode is obnoxiously hard to read, to somewhat understand what the program is doing we will have to debug
+- After some debugging, we can deduce the program functionality as following
+  + First it generates two random numbers and users will have to calculate the sum of those numbers
+  + After some calculation, we will have to enter some kind of `checksum` (with this clue we can at least guess that some kind of hashing algorithm will be used)
+  + If the checksum is correct, the program will decrypt a file name `REAL_FLAREON_FLAG.JPG` and drop it into the `temp` directory of the operating system
+ 
+- Now what we have to do is find where the checking is being done. After some digging, I came across a function called `main_a`
+```C
+// main.a
+__int64 __golang main_a(void *a1, __int64 a2, __int64 a3, int a4, __int64 a5, int a6, int a7, int a8, int a9)
+{
+  __int64 v9; // r14
+  __int64 v10; // rax
+  const char *v11; // r8
+  int v12; // r9d
+  int v13; // r10d
+  int v14; // r11d
+  _BYTE *v16; // rdx
+  __int64 i; // rbx
+  _BYTE *v18; // rdi
+  unsigned __int64 v19; // rax
+  char v20; // dl
+  __int64 v21; // rbx
+  __int64 v22; // rax
+  __int64 v24; // [rsp-20h] [rbp-28h]
+  __int64 v25; // [rsp-18h] [rbp-20h]
+  __int64 v26; // [rsp-10h] [rbp-18h]
+  _BYTE *v27; // [rsp+0h] [rbp-8h]
+  void *retaddr; // [rsp+10h] [rbp+8h] BYREF
+  void *v30; // [rsp+18h] [rbp+10h]
+
+  while ( (unsigned __int64)&retaddr <= *(_QWORD *)(v9 + 16) )
+  {
+    v30 = a1;
+    runtime_morestack_noctxt();
+    a1 = v30;
+  }
+  if ( !a1 )
+    a1 = &runtime_noptrbss;
+  v27 = a1;
+  v10 = runtime_makeslice((unsigned int)&RTYPE_uint8, a2, a2, a4, a5, a6, a7, a8, a9);
+  v16 = v27;
+  for ( i = 0LL; a2 > i; ++i )
+  {
+    a5 = v10;
+    v18 = v16;
+    v19 = i - 11 * ((__int64)((unsigned __int128)(i * (__int128)0x5D1745D1745D1746LL) >> 64) >> 2);
+    v20 = v16[i];
+    if ( v19 >= 0xB )
+      runtime_panicIndex(v19, i, 11LL, v18);
+    v11 = "FlareOn2024bad verb '%0123456789_/dev/stdout/dev/stderrCloseHandleOpenProcessGetFileTypeshort write30517578125bad argSizemethodargs(reflect.SetProcessPrngMoveFileExWNetShareAddNetShareDeluserenv.dllassistQueuenetpollInitreflectOffsglobalAllocmSpanManualstart traceclobberfreegccheckmarkscheddetailcgocall nilunreachable s.nelems=   of size  runtime: p  ms clock,  nBSSRoots=runtime: P  exp.) for minTrigger=GOMEMLIMIT=bad m value, elemsize= freeindex= span.list=, npages = tracealloc( p->status= in status  idleprocs= gcwaiting= schedtick= timerslen= mallocing=bad timedivfloat64nan1float64nan2float64nan3float32nan2GOTRACEBACK) at entry+ (targetpc= , plugin: runtime: g : frame.sp=created by broken pipebad messagefile existsbad addressRegCloseKeyCreateFileWDeleteFileWExitProcessFreeLibrarySetFileTimeVirtualLockWSARecvFromclosesocketgetpeernamegetsocknamecrypt32.dllmswsock.dllsecur32.dllshell32.dlli/o timeoutavx512vnniwavx512vbmi2LocalAppDatashort buffer152587890625762939453125OpenServiceWRevertToSelfCreateEventWGetConsoleCPUnlockFileExVirtualQueryadvapi32.dlliphlpapi.dllkernel32.dllnetapi32.dllsweepWaiterstraceStringsspanSetSpinemspanSpecialgcBitsArenasmheapSpecialgcpacertracemadvdontneedharddecommitdumping heapchan receivelfstack.push span.limit= span.state=bad flushGen MB stacks, worker mode  nDataRoots= nSpanRoots= wbuf1=<nil> wbuf2=<nil> gcscandone runtime: gp= found at *( s.elemsize= B (";
+    v12 = (unsigned __int8)aTrueeeppfilepi[v19 + 3060];
+    *(_BYTE *)(a5 + i) = v12 ^ v20;
+    v10 = a5;
+    v16 = v18;
+  }
+  v21 = v10;
+  v22 = encoding_base64__ptr_Encoding_EncodeToString(
+          runtime_bss,
+          v10,
+          a2,
+          a2,
+          a5,
+          (_DWORD)v11,
+          v12,
+          v13,
+          v14,
+          v24,
+          v25,
+          v26);
+  if ( v21 == 88 )
+    return runtime_memequal(
+             v22,
+             "cQoFRQErX1YAVw1zVQdFUSxfAQNRBXUNAxBSe15QCVRVJ1pQEwd/WFBUAlElCFBFUnlaB1ULByRdBEFdfVtWVA==");
+  else
+    return 0LL;
+}
+```
+- This function xor our checksum input with string `FlareOn2024` and then encode it with base64, then compare it to a hardcoded base64 string. With these clue, i wrote a script to find the original checksum value
+
+```python
+import base64
+base64_string = "cQoFRQErX1YAVw1zVQdFUSxfAQNRBXUNAxBSe15QCVRVJ1pQEwd/WFBUAlElCFBFUnlaB1ULByRdBEFdfVtWVA=="
+flare_on="FlareOn2024"
+byte_data = base64.b64decode(base64_string)
+byte_list = list(byte_data)
+for i in range(len(byte_list)):
+    byte_list[i]^=ord(flare_on[i%len(flare_on)])
+for i in range(len(byte_list)):
+    print(chr(byte_list[i]),end='')
+```
+- We got the checksum value as `7fd7dd1d0e959f74c133c13abb740b9faa61ab06bd0ecd177645e93b1e3825dd`
+
+![image](https://github.com/user-attachments/assets/cb49152d-bc32-4fae-b3bb-8af155855f04)
+
+- Find the decrypted file in the `temp` directory and open it
+
+![image](https://github.com/user-attachments/assets/b4d07600-828e-469d-8cae-fb3a71690981)
+
+## Script and Flag
+**Flag:** `Th3_M4tH_Do_b3_mAth1ng@flare-on.com`
