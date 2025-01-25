@@ -1128,7 +1128,7 @@ __int64 __fastcall sub_DC2(__int64 a1, __int64 a2)
   return 0i64;
 }
 ```
-- So instead of reading the assembly to know what those syscalls does, I wrote a shellcode loader in C and use `strace` to trace the loader instead
+- So instead of reading the assembly to know what those syscalls do, I wrote a shellcode loader in C and use `strace` to trace the loader instead
 
 ![image](https://github.com/user-attachments/assets/6bc8f629-b88d-4052-ac27-3aa234526250)
 
