@@ -992,7 +992,7 @@ __int64 __fastcall sub_9820(unsigned int a1, _DWORD *a2, __int64 a3, __int64 a4,
 
 ![image](https://github.com/user-attachments/assets/d6dacadd-0d69-49a2-9829-fc6be14bca01)
 
-- Knowing that ChaCha20's state consist of a 32 bytes constant, 32 bytes key, 4 bytes counter and 12 bytes nonce we can a Python script to decrypt as following
+- Knowing that ChaCha20's state consist of a 32 bytes constant, 32 bytes key, 4 bytes counter and 12 bytes nonce we can write a Python script to decrypt as following
 
 ```python
 import struct
