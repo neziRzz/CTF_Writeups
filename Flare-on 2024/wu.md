@@ -1132,7 +1132,7 @@ __int64 __fastcall sub_DC2(__int64 a1, __int64 a2)
 
 ![image](https://github.com/user-attachments/assets/6bc8f629-b88d-4052-ac27-3aa234526250)
 
-- This shellcode functionality can be roughly deduce as
+- This shellcode functionality can be roughly deduced as
   + Connect to `10.0.2.15` with port `1337`
   + Receive data from the above adress
   + Open a file and then send that file back
