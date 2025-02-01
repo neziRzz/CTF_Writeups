@@ -502,7 +502,7 @@ LABEL_12:
   free(v6);
 }
 ```
-- This function will take our md5 hashed flag as key and string `sce` for RC4 encryption, then encode cyphertext in base64 and send it to server, the server then send back base64 encoded data and this function will decode it and decrypt it using RC4 (same key). Allocate a memory region that that has `PAGE_EXECUTE_READWRITE` attribute then execute it, so i updated my http server code as follows
+- This function will take our md5 hashed flag as key and string `sce` for RC4 encryption, then encode cyphertext in base64 and send it to server, the server then send back base64 encoded data and this function will decode it and decrypt it using RC4 (same key). Allocate a memory region that has `PAGE_EXECUTE_READWRITE` attribute then execute it, so i updated my http server code as follows
 ```python
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
