@@ -35,3 +35,243 @@ int sub_171020()
 ![image](https://github.com/user-attachments/assets/9158f6cd-5f1d-4265-95c8-c16cc8761ce7)
 ![image](https://github.com/user-attachments/assets/21c9a387-e8a1-461a-a33f-236f3e43f846)
 
+- After a little bit of debugging, we come across this md5-like function
+
+![image](https://github.com/user-attachments/assets/0f676f37-6e24-4ba8-a5c2-5b965c6626b8)
+
+```C
+void __thiscall sub_1737A0(void **this, _DWORD *Block, int a3, int a4, int a5, int a6, unsigned int a7)
+{
+  _DWORD **p_Block; // edx
+  char *v9; // esi
+  char *v10; // ecx
+  __int16 v11; // dx
+  char *v12; // ecx
+
+  p_Block = &Block;
+  if ( a7 >= 8 )
+    p_Block = (_DWORD **)Block;
+  v9 = (char *)(*((int (__stdcall **)(_DWORD **))*this + 10))(p_Block);// call to md5 hash
+  v10 = v9;
+  do
+  {
+    v11 = *(_WORD *)v10;
+    v10 += 2;
+  }
+  while ( v11 );
+  memmove_thing(this + 11, v9, (v10 - (v9 + 2)) >> 1);
+  j_j__free(v9);
+  if ( a7 >= 8 )
+  {
+    v12 = (char *)Block;
+    if ( 2 * a7 + 2 >= 0x1000 )
+    {
+      v12 = (char *)*(Block - 1);
+      if ( (unsigned int)((char *)Block - v12 - 4) > 0x1F )
+        _invalid_parameter_noinfo_noreturn();
+    }
+    free(v12);
+  }
+}
+```
+- When I tried to see what arguments the `md5` function takes. I saw a familliar value
+
+![image](https://github.com/user-attachments/assets/152e6b86-9622-4daa-9ed8-53142151f0ce)
+
+- This is the value(encoded in `UTF-16LE` format) that was generated in `sub_171020`, this value will be hased with md5
+- Then comes the `HTTP` function
+```C
+bool __thiscall send_http_requests(
+        WCHAR *this,
+        _DWORD *Block,
+        int a3,
+        int a4,
+        int a5,
+        int a6,
+        unsigned int a7,
+        char a8)
+{
+  // [COLLAPSED LOCAL DECLARATIONS. PRESS KEYPAD CTRL-"+" TO EXPAND]
+
+  v49 = 0;
+  v9 = 2 * a6;
+  v35 = (LPDWORD)(2 * a6);
+  p_Block = &Block;
+  if ( a7 >= 8 )
+    p_Block = (_DWORD **)Block;
+  v34 = p_Block;
+  another_memmove(v33, (_DWORD *)this + 11);
+  v11 = (*(int (__thiscall **)(WCHAR *, _DWORD, _DWORD, _DWORD, _DWORD, _DWORD, _DWORD, HINTERNET, LPDWORD))(*(_DWORD *)this + 24))(
+          this,
+          v33[0],
+          v33[1],
+          v33[2],
+          v33[3],
+          v33[4],
+          v33[5],
+          v34,
+          v35);                                 // call to RC4
+  (*(void (__thiscall **)(WCHAR *, LPVOID *, int, int))(*(_DWORD *)this + 12))(this, lpOptional, v11, v9);// call to b64
+  v12 = 0;
+  LOBYTE(v49) = 1;
+  dwNumberOfBytesRead = 0;
+  v38 = 0;
+  memset(pszUAOut, 0, sizeof(pszUAOut));
+  memset(DstBuf, 0, sizeof(DstBuf));
+  cbSize = 512;
+  if ( ObtainUserAgentString(0, pszUAOut, &cbSize) )
+  {
+    if ( v45 >= 8 )
+    {
+      v13 = lpOptional[0];
+      v14 = (DWORD *)(2 * v45 + 2);
+      if ( (unsigned int)v14 >= 0x1000 )
+      {
+        v13 = (void *)*((_DWORD *)lpOptional[0] - 1);
+        v14 = (DWORD *)(2 * v45 + 37);
+        if ( (unsigned int)(lpOptional[0] - v13 - 4) > 0x1F )
+          goto LABEL_50;
+      }
+      v35 = v14;
+      free(v13);
+    }
+    v44 = 0;
+    v45 = 7;
+    LOWORD(lpOptional[0]) = 0;
+    if ( a7 < 8 )
+      return 0;
+    v15 = Block;
+    v16 = (DWORD *)(2 * a7 + 2);
+    if ( (unsigned int)v16 < 0x1000
+      || (v15 = (_DWORD *)*(Block - 1),
+          v16 = (DWORD *)(2 * a7 + 37),
+          (unsigned int)((char *)Block - (char *)v15 - 4) <= 0x1F) )
+    {
+      v35 = v16;
+      free(v15);
+      return 0;
+    }
+LABEL_50:
+    _invalid_parameter_noinfo_noreturn();
+  }
+  if ( cbSize - 2 >= 0x200 )
+    __report_rangecheckfailure();
+  v18 = dword_1C0870;
+  pszUAOut[cbSize - 2] = 0;
+  another_memmove_lmao((void **)Source, v18);
+  mbstowcs_s(&PtNumOfCharConverted, DstBuf, 0x200u, pszUAOut, strlen(pszUAOut));
+  wcscat_s(DstBuf, 0x200u, L"; ");
+  if ( a8 )
+  {
+    v19 = (const wchar_t *)Source;
+    if ( v41 >= 8 )
+      v19 = Source[0];
+  }
+  else
+  {
+    v19 = L"CLR";
+  }
+  wcscat_s(DstBuf, 0x200u, v19);
+  wcscat_s(DstBuf, 0x200u, L")");
+  v20 = WinHttpOpen(DstBuf, 0, 0, 0, 0);
+  v37 = v20;
+  if ( v20 )
+  {
+    v21 = this + 10;
+    if ( *((_DWORD *)this + 10) >= 8u )
+      v21 = *(WCHAR **)v21;
+    v22 = (void (__stdcall *)(HINTERNET))WinHttpCloseHandle;
+    v23 = WinHttpConnect(v20, v21, 0x50u, 0);
+    hInternet = v23;
+    if ( v23 )
+    {
+      v24 = WinHttpOpenRequest(v23, this + 2, 0, 0, 0, 0, 0);
+      if ( v24 )
+      {
+        v25 = lpOptional;
+        if ( v45 >= 8 )
+          v25 = (LPVOID *)lpOptional[0];
+        v38 = WinHttpSendRequest(v24, 0, 0, v25, 2 * v44, 2 * v44, 0);
+        if ( v38 )
+        {
+          v38 = WinHttpReceiveResponse(v24, 0);
+          if ( v38 )
+          {
+            v26 = (DWORD *)(this + 36);
+            do
+            {
+              while ( 1 )
+              {
+                v35 = (LPDWORD)(this + 36);
+                v34 = v24;
+                *v26 = 0;
+                WinHttpQueryDataAvailable(v34, v35);
+                if ( *v26 <= 0x800 )
+                  break;
+                *((_DWORD *)this + 18) = 2048;
+              }
+              WinHttpReadData(v24, *((LPVOID *)this + 17), *v26, &dwNumberOfBytesRead);
+            }
+            while ( *((_DWORD *)this + 18) );
+            v22 = (void (__stdcall *)(HINTERNET))WinHttpCloseHandle;
+          }
+        }
+        v22(v24);
+      }
+      v22(hInternet);
+      v12 = v38;
+    }
+    v22(v37);
+  }
+  if ( v41 >= 8 )
+  {
+    v27 = Source[0];
+    v28 = (DWORD *)(2 * v41 + 2);
+    if ( (unsigned int)v28 >= 0x1000 )
+    {
+      v27 = (wchar_t *)*((_DWORD *)Source[0] - 1);
+      v28 = (DWORD *)(2 * v41 + 37);
+      if ( (unsigned int)((char *)Source[0] - (char *)v27 - 4) > 0x1F )
+        goto LABEL_50;
+    }
+    v35 = v28;
+    free(v27);
+  }
+  Source[4] = 0;
+  v41 = 7;
+  LOWORD(Source[0]) = 0;
+  if ( v45 >= 8 )
+  {
+    v29 = lpOptional[0];
+    v30 = (DWORD *)(2 * v45 + 2);
+    if ( (unsigned int)v30 >= 0x1000 )
+    {
+      v29 = (void *)*((_DWORD *)lpOptional[0] - 1);
+      v30 = (DWORD *)(2 * v45 + 37);
+      if ( (unsigned int)(lpOptional[0] - v29 - 4) > 0x1F )
+        goto LABEL_50;
+    }
+    v35 = v30;
+    free(v29);
+  }
+  v44 = 0;
+  v45 = 7;
+  LOWORD(lpOptional[0]) = 0;
+  if ( a7 >= 8 )
+  {
+    v31 = (char *)Block;
+    v32 = (DWORD *)(2 * a7 + 2);
+    if ( (unsigned int)v32 >= 0x1000 )
+    {
+      v31 = (char *)*(Block - 1);
+      v32 = (DWORD *)(2 * a7 + 37);
+      if ( (unsigned int)((char *)Block - v31 - 4) > 0x1F )
+        goto LABEL_50;
+    }
+    v35 = v32;
+    free(v31);
+  }
+  return v12;
+}
+```
+- First, this function will used the hased `md5` value as key and string `ahoy` as plaintext for `RC4` encryption, then encoded the encrypted data in base64 then finally sent the encoded data to `flare-on.com` (HTTP protocol with POST method) and receive the server's response. Knowing that we also given a `PCAPNG` file, I decided to write a server that emulates the HTTP protocol (with `flare-on.com` pointed to `localhost` (you can change the dns information in `C:\Windows\System32\drivers\etc\hosts`)
