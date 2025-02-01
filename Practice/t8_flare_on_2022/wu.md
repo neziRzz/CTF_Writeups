@@ -319,3 +319,125 @@ except KeyboardInterrupt:
     server.server_close()
 
 ```
+- Run the server to confirm that it is working
+
+![image](https://github.com/user-attachments/assets/ce77a718-5fbd-4317-83c9-0ca562aab669)
+![image](https://github.com/user-attachments/assets/ccc4cbf4-be05-43e2-88c8-df71d9923c1e)
+
+```C
+wchar_t *__thiscall b64_decode_and_rc4_decode(void *this, wchar_t *a2)
+{
+  wchar_t *v2; // esi
+  wchar_t *v3; // eax
+  unsigned int *v4; // ecx
+  int v5; // eax
+  unsigned int v6; // kr00_4
+  int v7; // edx
+  int v8; // edi
+  void **v9; // esi
+  void *v10; // ecx
+  wchar_t *v11; // ecx
+  int v13; // [esp+10h] [ebp-4Ch]
+  wchar_t *Context; // [esp+14h] [ebp-48h] BYREF
+  wchar_t *String[5]; // [esp+18h] [ebp-44h] BYREF
+  unsigned int v16; // [esp+2Ch] [ebp-30h]
+  void *Block[4]; // [esp+30h] [ebp-2Ch] BYREF
+  int v18; // [esp+40h] [ebp-1Ch]
+  unsigned int v19; // [esp+44h] [ebp-18h]
+  int Src; // [esp+48h] [ebp-14h] BYREF
+  int v21; // [esp+58h] [ebp-4h]
+
+  v2 = a2;
+  Context = a2;
+  (*(void (__thiscall **)(void *, wchar_t **))(*(_DWORD *)this + 36))(this, String);// call to base64_decode and RC4
+  v21 = 0;
+  v3 = (wchar_t *)String;
+  if ( v16 >= 8 )
+    v3 = String[0];
+  v4 = (unsigned int *)wcstok_s(v3, L",", &Context);
+  v18 = 0;
+  v19 = 7;
+  LOWORD(Block[0]) = 0;
+  LOBYTE(v21) = 1;
+  if ( v4 )                                     // generate decrypted data
+  {
+    do
+    {
+      v5 = moon_phase_calc(*v4, v4[1]);
+      Src = (unsigned __int16)sub_1741E0(v5);
+      v6 = wcslen((const unsigned __int16 *)&Src);
+      v7 = v18;
+      if ( v6 > v19 - v18 )
+      {
+        LOBYTE(v13) = 0;
+        still_memmove(Block, v6, v13, &Src, v6);
+      }
+      else
+      {
+        v8 = v18 + v6;
+        v9 = Block;
+        v18 += v6;
+        if ( v19 >= 8 )
+          v9 = (void **)Block[0];
+        memmove((char *)v9 + 2 * v7, &Src, 2 * v6);
+        *((_WORD *)v9 + v8) = 0;
+      }
+      v4 = (unsigned int *)wcstok_s(0, L",", &Context);
+    }
+    while ( v4 );
+    v2 = a2;
+  }
+  another_memmove(v2, Block);
+  if ( v19 >= 8 )
+  {
+    v10 = Block[0];
+    if ( 2 * v19 + 2 >= 0x1000 )
+    {
+      v10 = (void *)*((_DWORD *)Block[0] - 1);
+      if ( (unsigned int)(Block[0] - v10 - 4) > 0x1F )
+        goto LABEL_20;
+    }
+    free(v10);
+  }
+  v18 = 0;
+  v19 = 7;
+  LOWORD(Block[0]) = 0;
+  if ( v16 >= 8 )
+  {
+    v11 = String[0];
+    if ( 2 * v16 + 2 < 0x1000
+      || (v11 = (wchar_t *)*((_DWORD *)String[0] - 1), (unsigned int)((char *)String[0] - (char *)v11 - 4) <= 0x1F) )
+    {
+      free(v11);
+      return v2;
+    }
+LABEL_20:
+    _invalid_parameter_noinfo_noreturn();
+  }
+  return v2;
+}
+```
+- Next,this function will decode the response form base64 and decrypt it with RC4(with the same key from the decryption process). Knowing that the key is randomly generated, i wrote a script to find the right key (cyphertext provided by the `PCAPNG` file)
+```python
+import base64 as b64
+import Crypto.Cipher.ARC4 as RC4
+from hashlib import md5
+from itertools import product
+
+key_prefix = "FO".encode("utf-16le")
+cyphertext = b"ydN8BXq16RE="
+plaintext = "ahoy".encode("utf-16le")
+for c in product("0123456789",repeat=6):
+    suffix = "".join(c).encode("utf-16le")
+    true_key = key_prefix + suffix
+    hash = md5(true_key).hexdigest()
+    utf_16le_key = hash.encode("utf-16le")
+    cypher = RC4.new(utf_16le_key)
+    b64_cypher = b64.b64encode(cypher.encrypt(plaintext))
+    if b64_cypher == cyphertext:
+        print(true_key.decode("utf-8"))
+
+```
+- Patching the right key into the memory, after a bit of debugging and we have the flag
+
+![image](https://github.com/user-attachments/assets/cc37edb4-90df-44a5-873a-7aab7245bff5)
