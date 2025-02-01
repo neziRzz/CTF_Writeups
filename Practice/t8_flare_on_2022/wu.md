@@ -274,4 +274,48 @@ LABEL_50:
   return v12;
 }
 ```
-- First, this function will used the hased `md5` value as key and string `ahoy` as plaintext for `RC4` encryption, then encoded the encrypted data in base64 then finally sent the encoded data to `flare-on.com` (HTTP protocol with POST method) and receive the server's response. Knowing that we also given a `PCAPNG` file, I decided to write a server that emulates the HTTP protocol (with `flare-on.com` pointed to `localhost` (you can change the dns information in `C:\Windows\System32\drivers\etc\hosts`)
+- First, this function will used the hased `md5` value as key and string `ahoy` as plaintext for `RC4` encryption, then encoded the encrypted data in base64 then finally sent the encoded data to `flare-on.com` (HTTP protocol with POST method) and receive the server's response. Knowing that we are also given a `PCAPNG` file, I decided to build a server in python that emulates the HTTP protocol (with `flare-on.com` points to `localhost` (you can change the dns information in `C:\Windows\System32\drivers\etc\hosts`)
+```python
+from http.server import HTTPServer, BaseHTTPRequestHandler
+import base64
+
+class Base64ResponseHandler(BaseHTTPRequestHandler):
+    def do_POST(self):
+        # Read the length of the incoming data
+        content_length = int(self.headers.get('Content-Length', 0))
+        
+        # Read the data sent in the POST request
+        post_data = self.rfile.read(content_length).decode('utf-8')
+
+        # Log the received data
+        print(f"Received POST data: {post_data}")
+        
+        
+        # Encode the response text in Base64a
+        encoded_response = "TdQdBRa1nxGU06dbB27E7SQ7TJ2+cd7zstLXRQcLbmh2nTvDm1p5IfT/Cu0JxShk6tHQBRWwPlo9zA1dISfslkLgGDs41WK12ibWIflqLE4Yq3OYIEnLNjwVHrjL2U4Lu3ms+HQc4nfMWXPgcOHb4fhokk93/AJd5GTuC5z+4YsmgRh1Z90yinLBKB+fmGUyagT6gon/KHmJdvAOQ8nAnl8K/0XG+8zYQbZRwgY6tHvvpfyn9OXCyuct5/cOi8KWgALvVHQWafrp8qB/JtT+t5zmnezQlp3zPL4sj2CJfcUTK5copbZCyHexVD4jJN+LezJEtrDXP1DJNg=="
+        
+        # Send HTTP response headers
+        self.send_response(200)
+        self.send_header("Content-Type", "text/plain")
+        self.end_headers()
+
+        # Write the Base64-encoded response back
+        self.wfile.write(encoded_response.encode("utf-8"))
+
+        # Notify that the response was sent
+        print(f"Base64-encoded response sent: {encoded_response}")
+
+# Server details
+host = "localhost"
+port = 80
+
+# Create and start the server
+server = HTTPServer((host, port), Base64ResponseHandler)
+print(f"Handling POST requests on http://{host}:{port}")
+try:
+    server.serve_forever()
+except KeyboardInterrupt:
+    print("\nShutting down the server...")
+    server.server_close()
+
+```
