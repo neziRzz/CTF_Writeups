@@ -502,6 +502,54 @@ LABEL_12:
   free(v6);
 }
 ```
+- This function will take our md5 hashed flag as key and string `sce` for RC4 encryption, then encode cyphertext in base64 and send it to server, the server then send back base64 encoded data and this function will decode it and decrypt it using RC4 (same key). Allocate a memory region that that has `PAGE_EXECUTE_READWRITE` attribute then execute it, so i updated my http server code as follows
+```python
+from http.server import HTTPServer, BaseHTTPRequestHandler
 
+# Global toggle variable
+toggle = 0
+
+class Base64ResponseHandler(BaseHTTPRequestHandler):
+    response_data = [
+        "TdQdBRa1nxGU06dbB27E7SQ7TJ2+cd7zstLXRQcLbmh2nTvDm1p5IfT/Cu0JxShk6tHQBRWwPlo9zA1dISfslkLgGDs41WK12ibWIflqLE4Yq3OYIEnLNjwVHrjL2U4Lu3ms+HQc4nfMWXPgcOHb4fhokk93/AJd5GTuC5z+4YsmgRh1Z90yinLBKB+fmGUyagT6gon/KHmJdvAOQ8nAnl8K/0XG+8zYQbZRwgY6tHvvpfyn9OXCyuct5/cOi8KWgALvVHQWafrp8qB/JtT+t5zmnezQlp3zPL4sj2CJfcUTK5copbZCyHexVD4jJN+LezJEtrDXP1DJNg==",
+        "F1KFlZbNGuKQxrTD/ORwudM8S8kKiL5F906YlR8TKd8XrKPeDYZ0HouiBamyQf9/Ns7u3C2UEMLoCA0B8EuZp1FpwnedVjPSdZFjkieYqWzKA7up+LYe9B4dmAUM2lYkmBSqPJYT6nEg27n3X656MMOxNIHt0HsOD0d+"
+    ]
+
+    def do_POST(self):
+        global toggle  # Use the global toggle variable
+
+        # Read the length of the incoming data
+        content_length = int(self.headers.get('Content-Length', 0))
+        post_data = self.rfile.read(content_length).decode('utf-8')
+        print(f"Received POST data: {post_data}")
+
+        # Select response and toggle
+        encoded_response = self.response_data[toggle]
+        toggle = 1 - toggle  # Switch between 0 and 1
+
+        # Send response
+        self.send_response(200)
+        self.send_header("Content-Type", "text/plain")
+        self.end_headers()
+        self.wfile.write(encoded_response.encode("utf-8"))
+
+        print(f"Base64-encoded response sent: {encoded_response}")
+
+# Server details
+host = "localhost"
+port = 80  # Port 80 requires admin privileges, so use 8080 instead
+
+# Create and start the server
+server = HTTPServer((host, port), Base64ResponseHandler)
+print(f"Handling POST requests on http://{host}:{port}")
+
+try:
+    server.serve_forever()
+except KeyboardInterrupt:
+    print("\nShutting down the server...")
+    server.server_close()
+
+```
 ![image](https://github.com/user-attachments/assets/a1901803-c939-494a-9ee7-b292aa50bba2)
-
+# Script and Flag
+**Flag:** `i_s33_you_m00n@flare-on.com`
