@@ -1,5 +1,10 @@
 # Mics
+- Given a PE64 file
+
+![image](https://github.com/user-attachments/assets/05e335ea-b41e-47c5-8859-7fd1823b14b1)
+
 # Detailed Analysis
+
 # Script and Flag
 ```python
 def rol(val, bits, bit_size):
