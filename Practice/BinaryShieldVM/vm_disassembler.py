@@ -906,27 +906,3 @@ while(vip<len(bytecode)):
     vip +=4
     opcode = merge_bytes(bytecode,vip,"dword")
     vip+=4
-  
-  
-  
-  
-
-
-
-
-
-  
-  
-  
-
-
-
-
-  
-
-        
-
-
-    
-
-    
