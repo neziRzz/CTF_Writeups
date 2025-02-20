@@ -15,6 +15,7 @@
 
 ![image](https://github.com/user-attachments/assets/6aa1ccf5-b8ce-47bc-8114-8d91ab3fac5a)
 
+- First the program will check the user's input length with `0x31`, then `lodsb` will be used to load XOR key from `RSI`, the XORed input will be checked in `sub_44EE72` with cyphertext loaded with `lodsb`, with these informations, we can write a solve script as follows
 
 ## Script and Flag
 ```python
