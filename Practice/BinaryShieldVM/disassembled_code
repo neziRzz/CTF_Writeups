@@ -1,0 +1,835 @@
+vip:  0x4:pop QWORD [r0]
+vip:  0x9:pop QWORD [r1]
+vip:  0xe:pop QWORD [r2]
+vip:  0x13:pop QWORD [r3]
+vip:  0x18:pop QWORD [r4]
+vip:  0x1d:pop QWORD [r5]
+vip:  0x22:pop QWORD [r6]
+vip:  0x27:pop QWORD [r7]
+vip:  0x2c:pop QWORD [r8]
+vip:  0x31:pop QWORD [r9]
+vip:  0x36:pop QWORD [r10]
+vip:  0x3b:pop QWORD [r11]
+vip:  0x40:pop QWORD [r12]
+vip:  0x45:pop QWORD [r13]
+vip:  0x4a:pop QWORD [r14]
+vip:  0x4f:pop QWORD [r15]
+vip:  0x54:pop QWORD [r16]
+vip:  0x59:push QWORD [r7]
+vip:  0x5e:push QWORD virt.sp
+vip:  0x62:pop QWORD [r7]
+vip:  0x67:push QWORD virt.sp
+vip:  0x6b:push QWORD 0x10
+vip:  0x77:sub QWORD
+vip:  0x7b:pop QWORD [r0]
+vip:  0x80:pop QWORD virt.sp
+vip:  0x84:push QWORD [r7]
+vip:  0x89:push QWORD 0x0
+vip:  0x95:push QWORD 0x10
+vip:  0xa1:add QWORD
+vip:  0xa5:pop QWORD [r16]
+vip:  0xaa:add QWORD
+vip:  0xae:pop QWORD [r16]
+vip:  0xb3:pop QWORD [r16]
+vip:  0xb8:push DWORD [r3]
+vip:  0xbd:push QWORD [r16]
+vip:  0xc2:store DWORD
+vip:  0xc6:push QWORD [r7]
+vip:  0xcb:push QWORD 0x0
+vip:  0xd7:push QWORD 0xfffffffffffffff8
+vip:  0xe3:add QWORD
+vip:  0xe7:pop QWORD [r16]
+vip:  0xec:add QWORD
+vip:  0xf0:pop QWORD [r16]
+vip:  0xf5:pop QWORD [r16]
+vip:  0xfa:push DWORD 0x77259243
+vip:  0x102:push QWORD [r16]
+vip:  0x107:store DWORD
+vip:  0x10b:push QWORD [r7]
+vip:  0x110:push QWORD 0x0
+vip:  0x11c:push QWORD 0xfffffffffffffff8
+vip:  0x128:add QWORD
+vip:  0x12c:pop QWORD [r16]
+vip:  0x131:add QWORD
+vip:  0x135:pop QWORD [r16]
+vip:  0x13a:push QWORD virt.sp
+vip:  0x13e:load QWORD
+vip:  0x142:pop QWORD [r16]
+vip:  0x147:load DWORD
+vip:  0x14b:push DWORD 0x23
+vip:  0x153:or DWORD
+vip:  0x157:pop QWORD [r0]
+vip:  0x15c:push QWORD [r16]
+vip:  0x161:store DWORD
+vip:  0x165:push QWORD [r7]
+vip:  0x16a:push QWORD 0x0
+vip:  0x176:push QWORD 0xfffffffffffffff8
+vip:  0x182:add QWORD
+vip:  0x186:pop QWORD [r16]
+vip:  0x18b:add QWORD
+vip:  0x18f:pop QWORD [r16]
+vip:  0x194:push QWORD virt.sp
+vip:  0x198:load QWORD
+vip:  0x19c:pop QWORD [r16]
+vip:  0x1a1:load DWORD
+vip:  0x1a5:push DWORD 0x23
+vip:  0x1ad:and DWORD
+vip:  0x1b1:pop QWORD [r0]
+vip:  0x1b6:push QWORD [r16]
+vip:  0x1bb:store DWORD
+vip:  0x1bf:push QWORD [r7]
+vip:  0x1c4:push QWORD 0x0
+vip:  0x1d0:push QWORD 0xfffffffffffffff8
+vip:  0x1dc:add QWORD
+vip:  0x1e0:pop QWORD [r16]
+vip:  0x1e5:add QWORD
+vip:  0x1e9:pop QWORD [r16]
+vip:  0x1ee:push QWORD virt.sp
+vip:  0x1f2:load QWORD
+vip:  0x1f6:pop QWORD [r16]
+vip:  0x1fb:load DWORD
+vip:  0x1ff:push DWORD 0x843
+vip:  0x207:add DWORD
+vip:  0x20b:pop QWORD [r0]
+vip:  0x210:push QWORD [r16]
+vip:  0x215:store DWORD
+vip:  0x219:push QWORD [r7]
+vip:  0x21e:push QWORD 0x0
+vip:  0x22a:push QWORD 0xfffffffffffffff8
+vip:  0x236:add QWORD
+vip:  0x23a:pop QWORD [r16]
+vip:  0x23f:add QWORD
+vip:  0x243:pop QWORD [r16]
+vip:  0x248:push QWORD virt.sp
+vip:  0x24c:load QWORD
+vip:  0x250:pop QWORD [r16]
+vip:  0x255:load DWORD
+vip:  0x259:push DWORD 0x5466
+vip:  0x261:and DWORD
+vip:  0x265:pop QWORD [r0]
+vip:  0x26a:push QWORD [r16]
+vip:  0x26f:store DWORD
+vip:  0x273:push QWORD [r7]
+vip:  0x278:push QWORD 0x0
+vip:  0x284:push QWORD 0xfffffffffffffff8
+vip:  0x290:add QWORD
+vip:  0x294:pop QWORD [r16]
+vip:  0x299:add QWORD
+vip:  0x29d:pop QWORD [r16]
+vip:  0x2a2:push QWORD virt.sp
+vip:  0x2a6:load QWORD
+vip:  0x2aa:pop QWORD [r16]
+vip:  0x2af:load DWORD
+vip:  0x2b3:push DWORD 0x843
+vip:  0x2bb:add DWORD
+vip:  0x2bf:pop QWORD [r0]
+vip:  0x2c4:push QWORD [r16]
+vip:  0x2c9:store DWORD
+vip:  0x2cd:push QWORD [r7]
+vip:  0x2d2:push QWORD 0x0
+vip:  0x2de:push QWORD 0xfffffffffffffff8
+vip:  0x2ea:add QWORD
+vip:  0x2ee:pop QWORD [r16]
+vip:  0x2f3:add QWORD
+vip:  0x2f7:pop QWORD [r16]
+vip:  0x2fc:push QWORD virt.sp
+vip:  0x300:load QWORD
+vip:  0x304:pop QWORD [r16]
+vip:  0x309:load DWORD
+vip:  0x30d:push DWORD 0x234
+vip:  0x315:or DWORD
+vip:  0x319:pop QWORD [r0]
+vip:  0x31e:push QWORD [r16]
+vip:  0x323:store DWORD
+vip:  0x327:push QWORD [r7]
+vip:  0x32c:push QWORD 0x0
+vip:  0x338:push QWORD 0xfffffffffffffffc
+vip:  0x344:add QWORD
+vip:  0x348:pop QWORD [r16]
+vip:  0x34d:add QWORD
+vip:  0x351:pop QWORD [r16]
+vip:  0x356:pop QWORD [r16]
+vip:  0x35b:push DWORD 0x0
+vip:  0x363:push QWORD [r16]
+vip:  0x368:store DWORD
+vip:  0x36c:push QWORD [r7]
+vip:  0x371:push QWORD 0x0
+vip:  0x37d:push QWORD 0xfffffffffffffff8
+vip:  0x389:add QWORD
+vip:  0x38d:pop QWORD [r16]
+vip:  0x392:add QWORD
+vip:  0x396:pop QWORD [r16]
+vip:  0x39b:push QWORD virt.sp
+vip:  0x39f:load QWORD
+vip:  0x3a3:pop QWORD [r16]
+vip:  0x3a8:load DWORD
+vip:  0x3ac:push DWORD 0x63654
+vip:  0x3b4:add DWORD
+vip:  0x3b8:pop QWORD [r0]
+vip:  0x3bd:push QWORD [r16]
+vip:  0x3c2:store DWORD
+vip:  0x3c6:push QWORD [r7]
+vip:  0x3cb:push QWORD 0x0
+vip:  0x3d7:push QWORD 0xfffffffffffffff8
+vip:  0x3e3:add QWORD
+vip:  0x3e7:pop QWORD [r16]
+vip:  0x3ec:add QWORD
+vip:  0x3f0:pop QWORD [r16]
+vip:  0x3f5:push QWORD virt.sp
+vip:  0x3f9:load QWORD
+vip:  0x3fd:pop QWORD [r16]
+vip:  0x402:load DWORD
+vip:  0x406:push DWORD 0x4545
+vip:  0x40e:and DWORD
+vip:  0x412:pop QWORD [r0]
+vip:  0x417:push QWORD [r16]
+vip:  0x41c:store DWORD
+vip:  0x420:push QWORD [r7]
+vip:  0x425:push QWORD 0x0
+vip:  0x431:push QWORD 0xfffffffffffffff8
+vip:  0x43d:add QWORD
+vip:  0x441:pop QWORD [r16]
+vip:  0x446:add QWORD
+vip:  0x44a:pop QWORD [r16]
+vip:  0x44f:push QWORD virt.sp
+vip:  0x453:load QWORD
+vip:  0x457:pop QWORD [r16]
+vip:  0x45c:load DWORD
+vip:  0x460:push DWORD 0x65466
+vip:  0x468:or DWORD
+vip:  0x46c:pop QWORD [r0]
+vip:  0x471:push QWORD [r16]
+vip:  0x476:store DWORD
+vip:  0x47a:push QWORD [r7]
+vip:  0x47f:push QWORD 0x0
+vip:  0x48b:push QWORD 0xfffffffffffffff8
+vip:  0x497:add QWORD
+vip:  0x49b:pop QWORD [r16]
+vip:  0x4a0:add QWORD
+vip:  0x4a4:pop QWORD [r16]
+vip:  0x4a9:push QWORD virt.sp
+vip:  0x4ad:load QWORD
+vip:  0x4b1:pop QWORD [r16]
+vip:  0x4b6:load DWORD
+vip:  0x4ba:push DWORD 0x5234
+vip:  0x4c2:sub DWORD
+vip:  0x4c6:pop QWORD [r0]
+vip:  0x4cb:push QWORD [r16]
+vip:  0x4d0:store DWORD
+vip:  0x4d4:push QWORD [r7]
+vip:  0x4d9:push QWORD 0x0
+vip:  0x4e5:push QWORD 0xfffffffffffffff8
+vip:  0x4f1:add QWORD
+vip:  0x4f5:pop QWORD [r16]
+vip:  0x4fa:add QWORD
+vip:  0x4fe:pop QWORD [r16]
+vip:  0x503:push QWORD virt.sp
+vip:  0x507:load QWORD
+vip:  0x50b:pop QWORD [r16]
+vip:  0x510:load DWORD
+vip:  0x514:push DWORD 0x863
+vip:  0x51c:sub DWORD
+vip:  0x520:pop QWORD [r0]
+vip:  0x525:push QWORD [r16]
+vip:  0x52a:store DWORD
+vip:  0x52e:push QWORD [r7]
+vip:  0x533:push QWORD 0x0
+vip:  0x53f:push QWORD 0xfffffffffffffff8
+vip:  0x54b:add QWORD
+vip:  0x54f:pop QWORD [r16]
+vip:  0x554:add QWORD
+vip:  0x558:pop QWORD [r16]
+vip:  0x55d:push QWORD virt.sp
+vip:  0x561:load QWORD
+vip:  0x565:pop QWORD [r16]
+vip:  0x56a:load DWORD
+vip:  0x56e:push DWORD 0x7
+vip:  0x576:xor DWORD
+vip:  0x57a:pop QWORD [r0]
+vip:  0x57f:push QWORD [r16]
+vip:  0x584:store DWORD
+vip:  0x588:push QWORD [r7]
+vip:  0x58d:push QWORD 0x0
+vip:  0x599:push QWORD 0x10
+vip:  0x5a5:add QWORD
+vip:  0x5a9:pop QWORD [r16]
+vip:  0x5ae:add QWORD
+vip:  0x5b2:pop QWORD [r16]
+vip:  0x5b7:push QWORD virt.sp
+vip:  0x5bb:load QWORD
+vip:  0x5bf:pop QWORD [r16]
+vip:  0x5c4:load DWORD
+vip:  0x5c8:push DWORD 0x743
+vip:  0x5d0:sub DWORD
+vip:  0x5d4:pop QWORD [r0]
+vip:  0x5d9:pop DWORD [r16]
+vip:  0x5de:push QWORD [r0]
+vip:  0x5e3:jnz 0x62c
+vip:  0x5eb:push QWORD [r7]
+vip:  0x5f0:push QWORD 0x0
+vip:  0x5fc:push QWORD 0xfffffffffffffffc
+vip:  0x608:add QWORD
+vip:  0x60c:pop QWORD [r16]
+vip:  0x611:add QWORD
+vip:  0x615:pop QWORD [r16]
+vip:  0x61a:pop QWORD [r16]
+vip:  0x61f:push DWORD 0x1
+vip:  0x627:push QWORD [r16]
+vip:  0x62c:store DWORD
+vip:  0x630:push QWORD [r7]
+vip:  0x635:push QWORD 0x0
+vip:  0x641:push QWORD 0xfffffffffffffff8
+vip:  0x64d:add QWORD
+vip:  0x651:pop QWORD [r16]
+vip:  0x656:add QWORD
+vip:  0x65a:pop QWORD [r16]
+vip:  0x65f:push QWORD virt.sp
+vip:  0x663:load QWORD
+vip:  0x667:pop QWORD [r16]
+vip:  0x66c:load DWORD
+vip:  0x670:push DWORD 0x65363
+vip:  0x678:add DWORD
+vip:  0x67c:pop QWORD [r0]
+vip:  0x681:push QWORD [r16]
+vip:  0x686:store DWORD
+vip:  0x68a:push QWORD [r7]
+vip:  0x68f:push QWORD 0x0
+vip:  0x69b:push QWORD 0xfffffffffffffff8
+vip:  0x6a7:add QWORD
+vip:  0x6ab:pop QWORD [r16]
+vip:  0x6b0:add QWORD
+vip:  0x6b4:pop QWORD [r16]
+vip:  0x6b9:push QWORD virt.sp
+vip:  0x6bd:load QWORD
+vip:  0x6c1:pop QWORD [r16]
+vip:  0x6c6:load DWORD
+vip:  0x6ca:push DWORD 0x75454
+vip:  0x6d2:and DWORD
+vip:  0x6d6:pop QWORD [r0]
+vip:  0x6db:push QWORD [r16]
+vip:  0x6e0:store DWORD
+vip:  0x6e4:push QWORD [r7]
+vip:  0x6e9:push QWORD 0x0
+vip:  0x6f5:push QWORD 0xfffffffffffffff8
+vip:  0x701:add QWORD
+vip:  0x705:pop QWORD [r16]
+vip:  0x70a:add QWORD
+vip:  0x70e:pop QWORD [r16]
+vip:  0x713:push QWORD virt.sp
+vip:  0x717:load QWORD
+vip:  0x71b:pop QWORD [r16]
+vip:  0x720:load DWORD
+vip:  0x724:push DWORD 0x754
+vip:  0x72c:or DWORD
+vip:  0x730:pop QWORD [r0]
+vip:  0x735:push QWORD [r16]
+vip:  0x73a:store DWORD
+vip:  0x73e:push QWORD [r7]
+vip:  0x743:push QWORD 0x0
+vip:  0x74f:push QWORD 0xfffffffffffffff8
+vip:  0x75b:add QWORD
+vip:  0x75f:pop QWORD [r16]
+vip:  0x764:add QWORD
+vip:  0x768:pop QWORD [r16]
+vip:  0x76d:push QWORD virt.sp
+vip:  0x771:load QWORD
+vip:  0x775:pop QWORD [r16]
+vip:  0x77a:load DWORD
+vip:  0x77e:push DWORD 0x1
+vip:  0x786:add DWORD
+vip:  0x78a:pop QWORD [r0]
+vip:  0x78f:push QWORD [r16]
+vip:  0x794:store DWORD
+vip:  0x798:push QWORD [r7]
+vip:  0x79d:push QWORD 0x0
+vip:  0x7a9:push QWORD 0xfffffffffffffff8
+vip:  0x7b5:add QWORD
+vip:  0x7b9:pop QWORD [r16]
+vip:  0x7be:add QWORD
+vip:  0x7c2:pop QWORD [r16]
+vip:  0x7c7:push QWORD virt.sp
+vip:  0x7cb:load QWORD
+vip:  0x7cf:pop QWORD [r16]
+vip:  0x7d4:load DWORD
+vip:  0x7d8:push DWORD 0x1
+vip:  0x7e0:sub DWORD
+vip:  0x7e4:pop QWORD [r0]
+vip:  0x7e9:push QWORD [r16]
+vip:  0x7ee:store DWORD
+vip:  0x7f2:push QWORD [r7]
+vip:  0x7f7:push QWORD 0x0
+vip:  0x803:push QWORD 0xfffffffffffffff8
+vip:  0x80f:add QWORD
+vip:  0x813:pop QWORD [r16]
+vip:  0x818:add QWORD
+vip:  0x81c:pop QWORD [r16]
+vip:  0x821:push QWORD virt.sp
+vip:  0x825:load QWORD
+vip:  0x829:pop QWORD [r16]
+vip:  0x82e:load DWORD
+vip:  0x832:push DWORD 0x711
+vip:  0x83a:add DWORD
+vip:  0x83e:pop QWORD [r0]
+vip:  0x843:push QWORD [r16]
+vip:  0x848:store DWORD
+vip:  0x84c:push QWORD [r7]
+vip:  0x851:push QWORD 0x0
+vip:  0x85d:push QWORD 0x10
+vip:  0x869:add QWORD
+vip:  0x86d:pop QWORD [r16]
+vip:  0x872:add QWORD
+vip:  0x876:pop QWORD [r16]
+vip:  0x87b:push QWORD virt.sp
+vip:  0x87f:load QWORD
+vip:  0x883:pop QWORD [r16]
+vip:  0x888:load DWORD
+vip:  0x88c:push DWORD 0x972
+vip:  0x894:sub DWORD
+vip:  0x898:pop QWORD [r0]
+vip:  0x89d:pop DWORD [r16]
+vip:  0x8a2:push QWORD [r0]
+vip:  0x8a7:jnz 0x8f0
+vip:  0x8af:push QWORD [r7]
+vip:  0x8b4:push QWORD 0x0
+vip:  0x8c0:push QWORD 0xfffffffffffffffc
+vip:  0x8cc:add QWORD
+vip:  0x8d0:pop QWORD [r16]
+vip:  0x8d5:add QWORD
+vip:  0x8d9:pop QWORD [r16]
+vip:  0x8de:pop QWORD [r16]
+vip:  0x8e3:push DWORD 0x1
+vip:  0x8eb:push QWORD [r16]
+vip:  0x8f0:store DWORD
+vip:  0x8f4:push QWORD [r7]
+vip:  0x8f9:push QWORD 0x0
+vip:  0x905:push QWORD 0xfffffffffffffff8
+vip:  0x911:add QWORD
+vip:  0x915:pop QWORD [r16]
+vip:  0x91a:add QWORD
+vip:  0x91e:pop QWORD [r16]
+vip:  0x923:push QWORD virt.sp
+vip:  0x927:load QWORD
+vip:  0x92b:pop QWORD [r16]
+vip:  0x930:load DWORD
+vip:  0x934:push DWORD 0x3643
+vip:  0x93c:add DWORD
+vip:  0x940:pop QWORD [r0]
+vip:  0x945:push QWORD [r16]
+vip:  0x94a:store DWORD
+vip:  0x94e:push QWORD [r7]
+vip:  0x953:push QWORD 0x0
+vip:  0x95f:push QWORD 0xfffffffffffffff8
+vip:  0x96b:add QWORD
+vip:  0x96f:pop QWORD [r16]
+vip:  0x974:add QWORD
+vip:  0x978:pop QWORD [r16]
+vip:  0x97d:push QWORD virt.sp
+vip:  0x981:load QWORD
+vip:  0x985:pop QWORD [r16]
+vip:  0x98a:load DWORD
+vip:  0x98e:push DWORD 0x54
+vip:  0x996:add DWORD
+vip:  0x99a:pop QWORD [r0]
+vip:  0x99f:push QWORD [r16]
+vip:  0x9a4:store DWORD
+vip:  0x9a8:push QWORD [r7]
+vip:  0x9ad:push QWORD 0x0
+vip:  0x9b9:push QWORD 0xfffffffffffffff8
+vip:  0x9c5:add QWORD
+vip:  0x9c9:pop QWORD [r16]
+vip:  0x9ce:add QWORD
+vip:  0x9d2:pop QWORD [r16]
+vip:  0x9d7:push QWORD virt.sp
+vip:  0x9db:load QWORD
+vip:  0x9df:pop QWORD [r16]
+vip:  0x9e4:load DWORD
+vip:  0x9e8:push DWORD 0x54
+vip:  0x9f0:or DWORD
+vip:  0x9f4:pop QWORD [r0]
+vip:  0x9f9:push QWORD [r16]
+vip:  0x9fe:store DWORD
+vip:  0xa02:push QWORD [r7]
+vip:  0xa07:push QWORD 0x0
+vip:  0xa13:push QWORD 0xfffffffffffffff8
+vip:  0xa1f:add QWORD
+vip:  0xa23:pop QWORD [r16]
+vip:  0xa28:add QWORD
+vip:  0xa2c:pop QWORD [r16]
+vip:  0xa31:push QWORD virt.sp
+vip:  0xa35:load QWORD
+vip:  0xa39:pop QWORD [r16]
+vip:  0xa3e:load DWORD
+vip:  0xa42:push DWORD 0x331
+vip:  0xa4a:or DWORD
+vip:  0xa4e:pop QWORD [r0]
+vip:  0xa53:push QWORD [r16]
+vip:  0xa58:store DWORD
+vip:  0xa5c:push QWORD [r7]
+vip:  0xa61:push QWORD 0x0
+vip:  0xa6d:push QWORD 0xfffffffffffffff8
+vip:  0xa79:add QWORD
+vip:  0xa7d:pop QWORD [r16]
+vip:  0xa82:add QWORD
+vip:  0xa86:pop QWORD [r16]
+vip:  0xa8b:push QWORD virt.sp
+vip:  0xa8f:load QWORD
+vip:  0xa93:pop QWORD [r16]
+vip:  0xa98:load DWORD
+vip:  0xa9c:push DWORD 0x12
+vip:  0xaa4:or DWORD
+vip:  0xaa8:pop QWORD [r0]
+vip:  0xaad:push QWORD [r16]
+vip:  0xab2:store DWORD
+vip:  0xab6:push QWORD [r7]
+vip:  0xabb:push QWORD 0x0
+vip:  0xac7:push QWORD 0xfffffffffffffff8
+vip:  0xad3:add QWORD
+vip:  0xad7:pop QWORD [r16]
+vip:  0xadc:add QWORD
+vip:  0xae0:pop QWORD [r16]
+vip:  0xae5:push QWORD virt.sp
+vip:  0xae9:load QWORD
+vip:  0xaed:pop QWORD [r16]
+vip:  0xaf2:load DWORD
+vip:  0xaf6:push DWORD 0x321
+vip:  0xafe:add DWORD
+vip:  0xb02:pop QWORD [r0]
+vip:  0xb07:push QWORD [r16]
+vip:  0xb0c:store DWORD
+vip:  0xb10:push QWORD [r7]
+vip:  0xb15:push QWORD 0x0
+vip:  0xb21:push QWORD 0x10
+vip:  0xb2d:add QWORD
+vip:  0xb31:pop QWORD [r16]
+vip:  0xb36:add QWORD
+vip:  0xb3a:pop QWORD [r16]
+vip:  0xb3f:push QWORD virt.sp
+vip:  0xb43:load QWORD
+vip:  0xb47:pop QWORD [r16]
+vip:  0xb4c:load DWORD
+vip:  0xb50:push DWORD 0x666
+vip:  0xb58:sub DWORD
+vip:  0xb5c:pop QWORD [r0]
+vip:  0xb61:pop DWORD [r16]
+vip:  0xb66:push QWORD [r0]
+vip:  0xb6b:jnz 0xbb4
+vip:  0xb73:push QWORD [r7]
+vip:  0xb78:push QWORD 0x0
+vip:  0xb84:push QWORD 0xfffffffffffffffc
+vip:  0xb90:add QWORD
+vip:  0xb94:pop QWORD [r16]
+vip:  0xb99:add QWORD
+vip:  0xb9d:pop QWORD [r16]
+vip:  0xba2:pop QWORD [r16]
+vip:  0xba7:push DWORD 0x1
+vip:  0xbaf:push QWORD [r16]
+vip:  0xbb4:store DWORD
+vip:  0xbb8:push QWORD [r7]
+vip:  0xbbd:push QWORD 0x0
+vip:  0xbc9:push QWORD 0xfffffffffffffff8
+vip:  0xbd5:add QWORD
+vip:  0xbd9:pop QWORD [r16]
+vip:  0xbde:add QWORD
+vip:  0xbe2:pop QWORD [r16]
+vip:  0xbe7:push QWORD virt.sp
+vip:  0xbeb:load QWORD
+vip:  0xbef:pop QWORD [r16]
+vip:  0xbf4:load DWORD
+vip:  0xbf8:push DWORD 0x97
+vip:  0xc00:sub DWORD
+vip:  0xc04:pop QWORD [r0]
+vip:  0xc09:push QWORD [r16]
+vip:  0xc0e:store DWORD
+vip:  0xc12:push QWORD [r7]
+vip:  0xc17:push QWORD 0x0
+vip:  0xc23:push QWORD 0xfffffffffffffff8
+vip:  0xc2f:add QWORD
+vip:  0xc33:pop QWORD [r16]
+vip:  0xc38:add QWORD
+vip:  0xc3c:pop QWORD [r16]
+vip:  0xc41:push QWORD virt.sp
+vip:  0xc45:load QWORD
+vip:  0xc49:pop QWORD [r16]
+vip:  0xc4e:load DWORD
+vip:  0xc52:push DWORD 0x744
+vip:  0xc5a:add DWORD
+vip:  0xc5e:pop QWORD [r0]
+vip:  0xc63:push QWORD [r16]
+vip:  0xc68:store DWORD
+vip:  0xc6c:push QWORD [r7]
+vip:  0xc71:push QWORD 0x0
+vip:  0xc7d:push QWORD 0xfffffffffffffff8
+vip:  0xc89:add QWORD
+vip:  0xc8d:pop QWORD [r16]
+vip:  0xc92:add QWORD
+vip:  0xc96:pop QWORD [r16]
+vip:  0xc9b:push QWORD virt.sp
+vip:  0xc9f:load QWORD
+vip:  0xca3:pop QWORD [r16]
+vip:  0xca8:load DWORD
+vip:  0xcac:push DWORD 0x54
+vip:  0xcb4:or DWORD
+vip:  0xcb8:pop QWORD [r0]
+vip:  0xcbd:push QWORD [r16]
+vip:  0xcc2:store DWORD
+vip:  0xcc6:push QWORD [r7]
+vip:  0xccb:push QWORD 0x0
+vip:  0xcd7:push QWORD 0xfffffffffffffff8
+vip:  0xce3:add QWORD
+vip:  0xce7:pop QWORD [r16]
+vip:  0xcec:add QWORD
+vip:  0xcf0:pop QWORD [r16]
+vip:  0xcf5:push QWORD virt.sp
+vip:  0xcf9:load QWORD
+vip:  0xcfd:pop QWORD [r16]
+vip:  0xd02:load DWORD
+vip:  0xd06:push DWORD 0x82
+vip:  0xd0e:sub DWORD
+vip:  0xd12:pop QWORD [r0]
+vip:  0xd17:push QWORD [r16]
+vip:  0xd1c:store DWORD
+vip:  0xd20:push QWORD [r7]
+vip:  0xd25:push QWORD 0x0
+vip:  0xd31:push QWORD 0xfffffffffffffff8
+vip:  0xd3d:add QWORD
+vip:  0xd41:pop QWORD [r16]
+vip:  0xd46:add QWORD
+vip:  0xd4a:pop QWORD [r16]
+vip:  0xd4f:push QWORD virt.sp
+vip:  0xd53:load QWORD
+vip:  0xd57:pop QWORD [r16]
+vip:  0xd5c:load DWORD
+vip:  0xd60:push DWORD 0x12
+vip:  0xd68:or DWORD
+vip:  0xd6c:pop QWORD [r0]
+vip:  0xd71:push QWORD [r16]
+vip:  0xd76:store DWORD
+vip:  0xd7a:push QWORD [r7]
+vip:  0xd7f:push QWORD 0x0
+vip:  0xd8b:push QWORD 0xfffffffffffffff8
+vip:  0xd97:add QWORD
+vip:  0xd9b:pop QWORD [r16]
+vip:  0xda0:add QWORD
+vip:  0xda4:pop QWORD [r16]
+vip:  0xda9:push QWORD virt.sp
+vip:  0xdad:load QWORD
+vip:  0xdb1:pop QWORD [r16]
+vip:  0xdb6:load DWORD
+vip:  0xdba:push DWORD 0x223
+vip:  0xdc2:add DWORD
+vip:  0xdc6:pop QWORD [r0]
+vip:  0xdcb:push QWORD [r16]
+vip:  0xdd0:store DWORD
+vip:  0xdd4:push QWORD [r7]
+vip:  0xdd9:push QWORD 0x0
+vip:  0xde5:push QWORD 0x10
+vip:  0xdf1:add QWORD
+vip:  0xdf5:pop QWORD [r16]
+vip:  0xdfa:add QWORD
+vip:  0xdfe:pop QWORD [r16]
+vip:  0xe03:push QWORD 0x0
+vip:  0xe0f:pop QWORD [r1]
+vip:  0xe14:load DWORD
+vip:  0xe18:pop DWORD [r1]
+vip:  0xe1d:push QWORD [r7]
+vip:  0xe22:push QWORD 0x0
+vip:  0xe2e:push QWORD 0xfffffffffffffff8
+vip:  0xe3a:add QWORD
+vip:  0xe3e:pop QWORD [r16]
+vip:  0xe43:add QWORD
+vip:  0xe47:pop QWORD [r16]
+vip:  0xe4c:load DWORD
+vip:  0xe50:push DWORD [r1]
+vip:  0xe55:sub DWORD
+vip:  0xe59:pop QWORD [r0]
+vip:  0xe5e:pop DWORD [r16]
+vip:  0xe63:push QWORD [r0]
+vip:  0xe68:jnz 0xeb1
+vip:  0xe70:push QWORD [r7]
+vip:  0xe75:push QWORD 0x0
+vip:  0xe81:push QWORD 0xfffffffffffffffc
+vip:  0xe8d:add QWORD
+vip:  0xe91:pop QWORD [r16]
+vip:  0xe96:add QWORD
+vip:  0xe9a:pop QWORD [r16]
+vip:  0xe9f:pop QWORD [r16]
+vip:  0xea4:push DWORD 0x1
+vip:  0xeac:push QWORD [r16]
+vip:  0xeb1:store DWORD
+vip:  0xeb5:push QWORD [r7]
+vip:  0xeba:push QWORD 0x0
+vip:  0xec6:push QWORD 0xfffffffffffffff8
+vip:  0xed2:add QWORD
+vip:  0xed6:pop QWORD [r16]
+vip:  0xedb:add QWORD
+vip:  0xedf:pop QWORD [r16]
+vip:  0xee4:push QWORD virt.sp
+vip:  0xee8:load QWORD
+vip:  0xeec:pop QWORD [r16]
+vip:  0xef1:load DWORD
+vip:  0xef5:push DWORD 0x7342
+vip:  0xefd:add DWORD
+vip:  0xf01:pop QWORD [r0]
+vip:  0xf06:push QWORD [r16]
+vip:  0xf0b:store DWORD
+vip:  0xf0f:push QWORD [r7]
+vip:  0xf14:push QWORD 0x0
+vip:  0xf20:push QWORD 0xfffffffffffffff8
+vip:  0xf2c:add QWORD
+vip:  0xf30:pop QWORD [r16]
+vip:  0xf35:add QWORD
+vip:  0xf39:pop QWORD [r16]
+vip:  0xf3e:push QWORD virt.sp
+vip:  0xf42:load QWORD
+vip:  0xf46:pop QWORD [r16]
+vip:  0xf4b:load DWORD
+vip:  0xf4f:push DWORD 0x42
+vip:  0xf57:xor DWORD
+vip:  0xf5b:pop QWORD [r0]
+vip:  0xf60:push QWORD [r16]
+vip:  0xf65:store DWORD
+vip:  0xf69:push QWORD [r7]
+vip:  0xf6e:push QWORD 0x0
+vip:  0xf7a:push QWORD 0xfffffffffffffff8
+vip:  0xf86:add QWORD
+vip:  0xf8a:pop QWORD [r16]
+vip:  0xf8f:add QWORD
+vip:  0xf93:pop QWORD [r16]
+vip:  0xf98:push QWORD virt.sp
+vip:  0xf9c:load QWORD
+vip:  0xfa0:pop QWORD [r16]
+vip:  0xfa5:load DWORD
+vip:  0xfa9:push DWORD 0x744
+vip:  0xfb1:xor DWORD
+vip:  0xfb5:pop QWORD [r0]
+vip:  0xfba:push QWORD [r16]
+vip:  0xfbf:store DWORD
+vip:  0xfc3:push QWORD [r7]
+vip:  0xfc8:push QWORD 0x0
+vip:  0xfd4:push QWORD 0xfffffffffffffff4
+vip:  0xfe0:add QWORD
+vip:  0xfe4:pop QWORD [r16]
+vip:  0xfe9:add QWORD
+vip:  0xfed:pop QWORD [r16]
+vip:  0xff2:pop QWORD [r16]
+vip:  0xff7:push DWORD 0x7443
+vip:  0xfff:push QWORD [r16]
+vip:  0x1004:store DWORD
+vip:  0x1008:push QWORD [r7]
+vip:  0x100d:push QWORD 0x0
+vip:  0x1019:push QWORD 0xfffffffffffffff8
+vip:  0x1025:add QWORD
+vip:  0x1029:pop QWORD [r16]
+vip:  0x102e:add QWORD
+vip:  0x1032:pop QWORD [r16]
+vip:  0x1037:push QWORD virt.sp
+vip:  0x103b:load QWORD
+vip:  0x103f:pop QWORD [r16]
+vip:  0x1044:load DWORD
+vip:  0x1048:push DWORD 0x33
+vip:  0x1050:xor DWORD
+vip:  0x1054:pop QWORD [r0]
+vip:  0x1059:push QWORD [r16]
+vip:  0x105e:store DWORD
+vip:  0x1062:push QWORD [r7]
+vip:  0x1067:push QWORD 0x0
+vip:  0x1073:push QWORD 0xfffffffffffffff8
+vip:  0x107f:add QWORD
+vip:  0x1083:pop QWORD [r16]
+vip:  0x1088:add QWORD
+vip:  0x108c:pop QWORD [r16]
+vip:  0x1091:push QWORD virt.sp
+vip:  0x1095:load QWORD
+vip:  0x1099:pop QWORD [r16]
+vip:  0x109e:load DWORD
+vip:  0x10a2:push DWORD 0x88
+vip:  0x10aa:or DWORD
+vip:  0x10ae:pop QWORD [r0]
+vip:  0x10b3:push QWORD [r16]
+vip:  0x10b8:store DWORD
+vip:  0x10bc:push QWORD [r7]
+vip:  0x10c1:push QWORD 0x0
+vip:  0x10cd:push QWORD 0xfffffffffffffff8
+vip:  0x10d9:add QWORD
+vip:  0x10dd:pop QWORD [r16]
+vip:  0x10e2:add QWORD
+vip:  0x10e6:pop QWORD [r16]
+vip:  0x10eb:push QWORD virt.sp
+vip:  0x10ef:load QWORD
+vip:  0x10f3:pop QWORD [r16]
+vip:  0x10f8:load DWORD
+vip:  0x10fc:push DWORD 0x764
+vip:  0x1104:add DWORD
+vip:  0x1108:pop QWORD [r0]
+vip:  0x110d:push QWORD [r16]
+vip:  0x1112:store DWORD
+vip:  0x1116:push QWORD [r7]
+vip:  0x111b:push QWORD 0x0
+vip:  0x1127:push QWORD 0x10
+vip:  0x1133:add QWORD
+vip:  0x1137:pop QWORD [r16]
+vip:  0x113c:add QWORD
+vip:  0x1140:pop QWORD [r16]
+vip:  0x1145:push QWORD 0x0
+vip:  0x1151:pop QWORD [r1]
+vip:  0x1156:load DWORD
+vip:  0x115a:pop DWORD [r1]
+vip:  0x115f:push QWORD [r7]
+vip:  0x1164:push QWORD 0x0
+vip:  0x1170:push QWORD 0xfffffffffffffff4
+vip:  0x117c:add QWORD
+vip:  0x1180:pop QWORD [r16]
+vip:  0x1185:add QWORD
+vip:  0x1189:pop QWORD [r16]
+vip:  0x118e:load DWORD
+vip:  0x1192:push DWORD [r1]
+vip:  0x1197:sub DWORD
+vip:  0x119b:pop QWORD [r0]
+vip:  0x11a0:pop DWORD [r16]
+vip:  0x11a5:push QWORD [r0]
+vip:  0x11aa:jnz 0x11f3
+vip:  0x11b2:push QWORD [r7]
+vip:  0x11b7:push QWORD 0x0
+vip:  0x11c3:push QWORD 0xfffffffffffffffc
+vip:  0x11cf:add QWORD
+vip:  0x11d3:pop QWORD [r16]
+vip:  0x11d8:add QWORD
+vip:  0x11dc:pop QWORD [r16]
+vip:  0x11e1:pop QWORD [r16]
+vip:  0x11e6:push DWORD 0x1
+vip:  0x11ee:push QWORD [r16]
+vip:  0x11f3:store DWORD
+vip:  0x11f7:push QWORD [r7]
+vip:  0x11fc:push QWORD 0x0
+vip:  0x1208:push QWORD 0xfffffffffffffffc
+vip:  0x1214:add QWORD
+vip:  0x1218:pop QWORD [r16]
+vip:  0x121d:add QWORD
+vip:  0x1221:pop QWORD [r16]
+vip:  0x1226:push QWORD 0x0
+vip:  0x1232:pop QWORD [r1]
+vip:  0x1237:load DWORD
+vip:  0x123b:pop DWORD [r1]
+vip:  0x1240:push QWORD virt.sp
+vip:  0x1244:push QWORD 0x10
+vip:  0x1250:add QWORD
+vip:  0x1254:pop QWORD [r0]
+vip:  0x1259:pop QWORD virt.sp
+vip:  0x125d:pop QWORD [r7]
+vip:  0x1262:push QWORD [r15]
+vip:  0x1267:push QWORD [r14]
+vip:  0x126c:push QWORD [r13]
+vip:  0x1271:push QWORD [r12]
+vip:  0x1276:push QWORD [r11]
+vip:  0x127b:push QWORD [r10]
+vip:  0x1280:push QWORD [r9]
+vip:  0x1285:push QWORD [r8]
+vip:  0x128a:push QWORD [r7]
+vip:  0x128f:push QWORD [r6]
+vip:  0x1294:push QWORD [r5]
+vip:  0x1299:push QWORD [r4]
+vip:  0x129e:push QWORD [r3]
+vip:  0x12a3:push QWORD [r2]
+vip:  0x12a8:push QWORD [r1]
+vip:  0x12ad:push QWORD [r0]
+vip:  0x12b2:vm exit
