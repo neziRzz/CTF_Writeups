@@ -1,4 +1,4 @@
-# Mics
+![image](https://github.com/user-attachments/assets/ff89fe73-afe2-4520-928a-fb9d43d7e03b)# Mics
 - Đề cho 1 file PE64
 
 ![image](https://github.com/user-attachments/assets/1ed449b6-a053-4e51-bbfe-06355346f053)
@@ -283,7 +283,130 @@ LABEL_52:
   }
 }
 ```
-- Đầu tiên chương trình sẽ tiến hành mở và tạo kết nối đên pipe để kết nối đến chương trình cha. Chương trình sẽ có 4 case chính, ta sẽ lần lượt phân tích qua các case này
-  +
-  
+- Đầu tiên chương trình sẽ tiến hành mở và tạo kết nối đên pipe để kết nối đến chương trình cha. Chương trình sẽ có 5 case chính, ta sẽ lần lượt phân tích qua các case này
+
+  + `Case 5` : Biến đổi lần lượt các kí tự của string base64 được gen ra từ `case 1` dựa trên các mã lỗi tương ứng của các kí tự (mã lỗi được gen ra từ tiến trình cha, mình sẽ phân tích hàm đó sau)
+  + `Case 1` : Biến đổi input đầu vào của user thành base64 và gửi lại data qua pipe
+  + `Case 8` : Kiểm tra input sau khi biến đổi hoàn tất
+  + `Case 0x54`: Thoát tiến trình con
+  + `Case 0x55`: Tạo tiến trình để troll user
+- Vậy để solve ta sẽ cần phải tìm lại string base64 trước khi bị biến đổi (bruteforce bởi string được biến đổi từng byte một), việc này tương đối dễ dàng bởi author đã cho ta các mã lỗi tương ứng cho từng kí tự tại `Case 5`, bây giờ ta sẽ quay lại `sub_7FF69C441520` ở tiến trình cha để tìm các mã lỗi cho các kí tự
+```C
+void __noreturn sub_7FF69C441520()
+{
+  __int64 v0; // rdx
+  _BYTE *v1; // [rsp+28h] [rbp-30h]
+
+  while ( 1 )
+  {
+    v1 = operator new(1u);
+    *v1 = 8;
+    pipe_handling(v1, 1u);
+    switch ( *v1 )
+    {
+      case '+':
+        stat_illg_inst();                       // 0xC000001D
+      case '/':
+      case 'C':
+      case 'D':
+      case 'F':
+      case 'N':
+      case 'P':
+      case 'c':
+      case 'j':
+      case 'k':
+      case 'p':
+      case 'q':
+      case 't':
+      case 'w':
+        stat_breakpoint();                      // 0x80000003
+        break;
+      case '0':
+      case '6':
+      case '7':
+      case 'A':
+      case 'B':
+      case 'K':
+      case 'L':
+      case 'O':
+      case 'T':
+      case 'b':
+      case 'g':
+      case 'y':
+      case 'z':
+        stat_access_violation();                // 0xC0000005
+        break;
+      case '1':
+      case '4':
+      case '5':
+      case '8':
+      case '=':
+      case 'I':
+      case 'J':
+      case 'U':
+      case 'W':
+      case 'd':
+      case 'f':
+      case 'r':
+      case 'u':
+        stat_priv_ins();                        // 0xC0000096
+        break;
+      case '2':
+        stat_illg_inst();                       // 0xC000001D
+      case '3':
+      case '9':
+      case 'E':
+      case 'G':
+      case 'M':
+      case 'Q':
+      case 'S':
+      case 'V':
+      case 'Y':
+      case 'e':
+      case 'h':
+      case 'i':
+      case 'n':
+        stat_div_0(0x7FF69C440000LL, v0);       // 0xC0000094
+        break;
+      case 'H':
+        stat_illg_inst();                       // 0xC000001D
+      case 'R':
+        stat_illg_inst();                       // 0xC000001D
+      case 'X':
+        stat_illg_inst();                       // 0xC000001D
+      case 'Z':
+        stat_illg_inst();                       // 0xC000001D
+      case 'a':
+        stat_illg_inst();                       // 0xC000001D
+      case 'l':
+        stat_illg_inst();                       // 0xC000001D
+      case 'm':
+        stat_illg_inst();                       // 0xC000001D
+      case 'o':
+        stat_illg_inst();                       // 0xC000001D
+      case 's':
+        stat_illg_inst();                       // 0xC000001D
+      case 'v':
+        stat_illg_inst();                       // 0xC000001D
+      case 'x':
+        stat_illg_inst();                       // 0xC000001D
+      case '\xCC':
+        *v1 = 0x54;
+        pipe_handling(v1, 1u);
+        ExitProcess(0);
+      default:
+        break;
+    }
+    j_j_free(v1);
+  }
+}
+```
+- Từ đây ta có thể thấy được các kí tự tương ứng với một số mã lỗi như `STATUS_ILLEGAL_INSTRUCTION`, `STATUS_PRIVILEGED_INSTRUCTION`,.... Từ những dữ kiện này, mình đã viết script giải (đề ở một file riêng trong cùng folder) và nhận được kết quả như sau
+
+![image](https://github.com/user-attachments/assets/79864e89-a8f4-49ee-a167-d982f369a8bd)
+
+- Decode string trên ta được flag
+
+**Flag:** `KMACTF{how_many_times_are_you_died_today?huh?}`
+
   
