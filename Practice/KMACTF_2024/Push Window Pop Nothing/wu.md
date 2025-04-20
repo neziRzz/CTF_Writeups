@@ -111,7 +111,8 @@ BOOL __fastcall pipe_handling(void *a1, DWORD a2)
 - Hàm này sẽ thực hiện mở pipe và data sẽ được trao đổi qua đây. Bởi pipe là một kĩ thuật cho phép 2 tiến trình có thể giao tiếp với nhau nên ta có thể đoán chương trình này có thể sẽ spawn ra một chương trình khác, bằng việc xref đến hàm `CreateProcess`, ta có thể thấy chương trình này spawn ra một chương trình khác có tên `Windows Update Checker 2.exe` và chương trình này được dropped tại thư mục `TEMP` của hệ điều hành
 
 ![image](https://github.com/user-attachments/assets/ec4196be-8291-47e1-8109-b4a3b04f76dc)
-![Uploading image.png…]()
+![image](https://github.com/user-attachments/assets/1daab832-3401-4b76-9c6f-31d1f49fca51)
+
 
 
   
