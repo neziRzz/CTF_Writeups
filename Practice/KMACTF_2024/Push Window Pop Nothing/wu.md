@@ -87,3 +87,31 @@ void __fastcall __noreturn sub_7FF69C441A30(HWND a1)
   sub_7FF69C441520();
 }
 ```
+- Trước tiên thì hàm này sẽ kiểm tra độ dài của input, nếu nhỏ hơn 47 thì hiện MSGBOX và gửi `0x55` qua pipe thông qua hàm `pipe_handling` ngược lại thì input sẽ tiếp tục được xử lí tại `sub_7FF69C441350`
+
+- Hàm `pipe_handling`
+```C
+BOOL __fastcall pipe_handling(void *a1, DWORD a2)
+{
+  DWORD NumberOfBytesWritten; // [rsp+40h] [rbp-18h] BYREF
+  DWORD NumberOfBytesRead; // [rsp+44h] [rbp-14h] BYREF
+
+  while ( 1 )
+  {
+    hObject = CreateFileW(L"\\\\.\\pipe\\KMACTF", 0xC0000000, 0, 0LL, 3u, 0, 0LL);
+    if ( hObject != (HANDLE)-1LL )
+      break;
+    Sleep(0x64u);
+  }
+  WriteFile(hObject, a1, a2, &NumberOfBytesWritten, 0LL);
+  ReadFile(hObject, a1, a2, &NumberOfBytesRead, 0LL);
+  return CloseHandle(hObject);
+}
+```
+- Hàm này sẽ thực hiện mở pipe và data sẽ được trao đổi qua đây. Bởi pipe là một kĩ thuật cho phép 2 tiến trình có thể giao tiếp với nhau nên ta có thể đoán chương trình này có thể sẽ spawn ra một chương trình khác, bằng việc xref đến hàm `CreateProcess`, ta có thể thấy chương trình này spawn ra một chương trình khác có tên `Windows Update Checker 2.exe` và chương trình này được dropped tại thư mục `TEMP` của hệ điều hành
+
+![image](https://github.com/user-attachments/assets/ec4196be-8291-47e1-8109-b4a3b04f76dc)
+![Uploading image.png…]()
+
+
+  
