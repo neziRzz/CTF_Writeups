@@ -407,6 +407,7 @@ void __noreturn sub_7FF69C441520()
 
 - Decode string trên ta được flag
 
+# Script and Flag
 **Flag:** `KMACTF{how_many_times_are_you_died_today?huh?}`
 
   
