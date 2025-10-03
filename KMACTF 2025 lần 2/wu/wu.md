@@ -2,19 +2,23 @@
 ## Elecryptor
 ### Initial Analysis
 * Ta được cung cấp 2 file, gồm file PE là `bh2.exe` và `Important_Note.txt`
+
 ![alt text](img/2.png)
 
 * Khi chạy chương trình, ta thấy rằng chương trình sẽ thực hiện tìm file `Important_Note.txt` trong thư mục `D:\`, nếu như không có thì prompt hiện lên như sau, phần nào đó ta có thể đoán được thuật toán encrypt
+
 ![alt text](img/3.png)
 ### Detailed Analysis
 
 * Load vào IDA, ta tìm các ta tìm xem trước `Main` có thể gọi những gì thấy rằng tại `initterm` có hàm sau
+
 ![alt text](img/4.png)
 ![alt text](img/5.png)
 
 * Hàm này truyền tham số cho hàm `atexit` là `sub_1400016F0` nhằm mục đích khi chương trình thoát thì sẽ chạy vào `sub_1400016F0` (sẽ phân tích hàm này sau)
 
 * Để phù hợp với luồng chương trình, ta sẽ tiếp tục phân tích `main`
+
 ![alt text](img/6.png)
 
 * Tại đây sẽ sử dụng WINAPI `WinExec` để thực hiện chạy command powershell đã bị base64 encoded kia, tiến hành decode command trên, ta được kết quả như sau
@@ -39,11 +43,13 @@ $output=New-Object byte[] ($cipher.Length+$key.Length);
 
 *  Hàm `sub_1400016F0` thực hiện các chức năng sau
    *  Kiểm tra nếu tiến tình hiện tại có đang chạy với quyền admin hay không, nếu có, vào hàm `sub_140001330`, thực hiện drop ra 1 con PE nữa trong resource bằng RC4 với key là `KMACTF_2025`, để decrypt phần header của file PE được drop, thực thi file này với cờ `CREATE_SUSPENDED`, sử dụng kỹ thuật `indirect syscall` để đọc thông tin tiến trình vừa được tạo, decrypt phần .text của file đổ đi và write lại vào trong mem của tiến trình
+     
    ![alt text](img/7.png)
    ![alt text](img/8.png)
    ![alt text](img/9.png)
    
    * Nếu như không chạy với quyền admin, thực hiện `Process Tampering` thông qua `sub_140001020` bằng cách overwrite 2 thông tin trong PEB là `ImagePathName` và `CommandLine` của tiến trình thành `path\\to\\folder\\of\\explorer.exe` đồng thời sử dụng kĩ thuật UAC Bypass bằng `ICMLuaUtil` lấy từ WINAPI `CoGetObject` với moniker là ```Elevation:Administrator!new:{3E5FC7F9-9A51-4367-9063-A120244FBEC7}```, cuối cùng gọi `ShellExecuteW` để chạy lại tiến trình một lần nữa dưới trạng thái elevated
+   
    ![alt text](img/10.png)
    ![alt text](img/11.png)
    ![alt text](img/12.png)
@@ -55,17 +61,22 @@ $output=New-Object byte[] ($cipher.Length+$key.Length);
   * XOR -> XOR -> Mã hóa ở PE thứ 2 
 
 * Vậy để tiếp tục ta sẽ phải phân tích con PE được drop ra, kết quả nhận được là 1 file PE64
+
 ![alt text](img/13.png)
 * Load vào IDA, ta thấy rằng đây là 1 file `.NET AOT`
+
 ![alt text](img/14.png)
 
 * Đặc điểm chung của các file PE được build theo kiểu này là các symbol đều đã bị stripped hết
+
 ![alt text](img/15.png)
 
 * Phân tích strings, ta có thể thấy phiên bản `.NET` cũng như là các thư viện và package được sử dụng
+
 ![alt text](img/16.png)
 
 * Để việc phân tích trở nên dễ dàng hơn ta sẽ build 1 file `.NET AOT` khác có sử dụng các hàm trong các thư viện kể trên để lấy file `.pdb`, từ đó extract ra file `.SIG` và áp nó vào con PE cần phân tích, về cách thức chi tiết để làm được việc này, ta có thể tham khảo ở ```https://harfanglab.io/insidethelab/reverse-engineering-ida-pro-aot-net/```, sau khi làm xong sẽ được kết quả như bên dưới
+
 ![alt text](img/17.png)
 
 * Hàm thực hiện encrypt file
@@ -142,22 +153,26 @@ Don't forget to add the Format Flag (KMACTF{...}) when submitting :3
 * Ta được cung cấp 1 file PE64
 
 ![alt text](img/18.png)
+
 * Một flag checker điển hình nhận input từ `argv`
 
 ![alt text](img/19.png)
 
 * Load vào IDA, ta có thể lập tức nhận ra đây là 1 binary được build sử dụng `.NET AOT`
+
 ![alt text](img/20.png)
 
 * Để giúp cho việc phân tích trở nên tiện lợi hơn, ta có thể áp dụng cách sử dụng file `SIG` như đã đề cập ở bài trên
 
 ## Detailed Analysis
 
-* Ta có thể thấy rẳng ở trước `main` có sử dụng 1 method khởi tạo 
+* Ta có thể thấy rẳng ở trước `main` có sử dụng 1 method khởi tạo
+
 ![alt text](img/21.png)
 ![alt text](img/22.png)
 
 * Tiến hành debug, ta thấy rằng có hàm sau được gọi
+
 ![alt text](img/23.png)
 ```cpp
 __int64 sub_7FF67F356AC0()
@@ -207,6 +222,7 @@ LABEL_9:
 ```
 
 * Hàm này thực hiện check debugger bằng WINAPI `IsDebuggerPresent`, tùy thuộc vào kết quả thì sẽ thực hiện biến đổi lên 1 data structure có format như sau
+
 ![alt text](img/24.png)
 
 * Trong quá trình debug khi ta nhấn đúp vào các biến chắc chăn sẽ gặp một số data structure như này, đây là một struct có format như sau (ptr|size_of_data|6_bytes_padding|data)
@@ -264,9 +280,11 @@ __int64 __fastcall sub_7FF67F356C40(__int64 a1)
 }
 ```
 * Hàm này trước hết kiểm tra số argc được cung cấp, nếu như là 1 (ngoại trừ path và tên chương trình) thì sẽ tiến hành convert argv từ UTF-16LE thành UTF-8, pad input nếu như độ dài input không phải là bội của 16, sử dụng encrypt khối tựa AES để encrypt input với 1 key 16 bytes, tuy nhiên khi vào bên trong hàm sinh khóa, ta có thể thấy biến thể này sử dụng S-Box custom (chính là 0x100 bytes mà ta gặp lúc đầu)
+
 ![alt text](img/25.png)
 
 * Đến đây thì luồng đã quá rõ ràng, chương trình sẽ thực hiện encrypt AES-128 ECB lên input sử dụng SBOX custom, vậy để decrypt ta sẽ phải dump SBOX ở bên trong mem (sau khi đã bypass anti debug), tìm inv_SBOX, về thuật toán thì ta có thể tìm ở trên mạng, thay lại SBOXes và sử dụng, kết quả sau khi decrypt là như sau
+
 ![alt text](img/26.png)
 ![alt text](img/27.png)
 
@@ -285,6 +303,7 @@ __int64 __fastcall sub_7FF67F356C40(__int64 a1)
 * Đây là một kĩ thuật anti debug khá hiệu quả vì nó chặn được hết tất cả các debugger user-mode, nếu như debug bằng IDA, debugger sẽ không theo được và ngay lập tức raise exception
  
 * Giới thiệu một chút về kĩ thuật này, thì `HeavenGate` thường được sử dụng khi các tiến trình 32bit (Windows On Windows 64, từ sau sẽ gọi là WOW64) cần sử dụng đến các APIs, interfaces, libraries mà chỉ bên 64 bit mới có, một ví dụ điển hình chính là cơ chế hoạt động của các hàm native (ntdll.dll) sử dụng syscall, mà bởi bản thân các tiến trình WOW64 lại không thể gọi syscall, thì lúc này sẽ phải sử dụng một cơ chế của Windows là `WoW64Transition`, cơ chế này sẽ có nhiệm vụ đổi context thực thi sang 64 bit, thực hiện các setup cần thiết để gọi syscall cho hàm Nt cụ thể, sau đó về lại context 32 bit ban đầu, dưới đây là ví dụ cho WINAPI `ntdll_NtQueryInformationProcess` bên trong 1 tiến trình `WOW64`
+
 ![alt text](img/31.png)
 ![alt text](img/32.png)
 ![alt text](img/33.png)
@@ -292,6 +311,7 @@ __int64 __fastcall sub_7FF67F356C40(__int64 a1)
 * Về cơ chế hoạt động thì `HeavenGate` sẽ thay đổi thanh ghi `code segment` `CS`. Đối với tiến trình `WOW64` sẽ có value là `0x23` và x64 là `0x33`. Dấu hiệu để nhận biết 1 binary có sử dung kĩ thuật `HeavenGate` sẽ là các instruction sẽ có chữ `far`, ví dụ như `call far`, `jmp far`, `retfar`,....
 
 * Quay lại phân tích, khi ta nhấn đúp vào địa chỉ call far của các instruction thì có vẻ là không thấy code hoặc là code rác
+
 ![alt text](img/34.png) 
 
 * Lí do cho điều này là bởi giá trị của `code segment` trong instruction `call far` làm IDA decompile sai
@@ -300,8 +320,10 @@ __int64 __fastcall sub_7FF67F356C40(__int64 a1)
 
 * Nhìn opcode của instruction trên ta có thể thấy `9A` sẽ là opcode cho `call far`, 4 bytes tiếp theo sẽ là địa chỉ tương đối với IP và 2 bytes còn lại là value `code segment` cần phải thay đổi
 * Vậy ý tưởng để làm sẽ là ta dump toàn bộ segment `.text` của binary ra, load vào IDA dưới dạng 64bit, patch lại các các instruction `call far`, `retfar`  thành các instruction `call`, `ret`,... thông thường và coi file dump như là shellcode, ta có thể sửa lại như sau
+
 ![alt text](img/36.png)
 * Cuối cùng là code 1 shellcode loader và load shellcode này là ta có thể debug được như bình thường
+
 ![alt text](img/37.png)
 * Hàm xử lí input có format như sau
 ```asm
@@ -411,6 +433,7 @@ debug034:00000173D8190179 jmp     rdi
 * Đoạn code này sẽ có nhiệm vụ đọc input 4 ký tự của user từ console sử dụng syscall của `NtReadFile`, sau syscall, input sẽ được đọc từ stack, 2 ký tự đầu được lưu vào `AX`, 2 ký tự còn lại được lưu vào `BX`, sử dụng các instruction `aesimc`, `aesdec`, `aesdeclast`  và xor để decrypt code và tính toán địa chỉ jump đến cho đoạn jmp cuối cùng nếu như sai thì chương trình sẽ crash. Nhìn qua thì có lẽ ta sẽ phải brute tận 4 bytes, tuy nhiên nếu để ý kỹ ta sẽ thấy được rằng `AX` sẽ quy định key cho AES và địa chỉ jump đến, còn `BX` sẽ là key để xor, điều này có nghĩa là chỉ có `AX` mới cần phải brute còn `BX` ta sẽ lấy plaintext xor lại nếu như ra ascii dạng lặp lại (eg: `ababab`, `aaaaaa`,....) thì sẽ là input chuẩn
 
 * Vậy vấn đề bây giờ sẽ là plaintext, may thay ta có thể test input là format flag, với input đầu tiên là `KMAC`, ta thấy rằng code sau khi decrypt có đoạn mở đầu y hệt đoạn code check ban đầu
+
 ![alt text](img/38.png)
 
 * Để giải ta sẽ build lại đoạn code ASM trên (vì code tương đối ngắn nên việc build lại cũng không quá khó khăn, hoặc ta có thể sử dụng các loại tool emulate để mô phỏng lại), bruteforce 2 kí tự đầu, xor đoạn code sau khi decrypt với byte code của instruction đầu tiên, nếu ra string ascii có dạng lặp lại thì đó sẽ là các kí tự đúng tuy nhiên có một điều phải lưu ý rằng tuy đoạn code sau khi decrypt ra không khác nhau đoạn đầu nhưng ở đoạn giữa sẽ khác đôi chút nhưng không quá nhiều, ta phải sửa script tương ứng (script brute sẽ được để ở 1 file riêng bởi nó khá dài)
@@ -438,4 +461,5 @@ lls}
 
 
 **Flag:** `KMACTF{32bit_heaven_crashed_into_64bit_hellish_syscalls}`
+
 
