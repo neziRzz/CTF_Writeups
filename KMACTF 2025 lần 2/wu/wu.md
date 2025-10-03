@@ -141,7 +141,7 @@ __int64 __fastcall sub_140067F70(__int64 a1)
 * Đến đây ta có thể tổng kết lại flow encrypt sẽ là
   *  XOR -> XOR -> AES-256 CBC
 
-* Để decrypt ta chỉ cẩn làm ngược lại quá trình trên là được, kết quả sau khi giãi mã
+* Để decrypt ta chỉ cẩn làm ngược lại quá trình trên là được, kết quả sau khi decrypt
 ```
 Congratulations!!! Here is your Flag: N00b_3ncryp70r_w1th_3l3v47i0n_us3_ICMLu4U7il_C0M_In73rf4c3_4nd_.N37_407_^.^
 Don't forget to add the Format Flag (KMACTF{...}) when submitting :3
@@ -461,5 +461,6 @@ lls}
 
 
 **Flag:** `KMACTF{32bit_heaven_crashed_into_64bit_hellish_syscalls}`
+
 
 
