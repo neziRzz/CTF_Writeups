@@ -293,6 +293,7 @@ __int64 __fastcall sub_7FF67F356C40(__int64 a1)
 ![alt text](img/34.png) 
 
 * Lí do cho điều này là bởi giá trị của `code segment` trong instruction `call far` làm IDA decompile sai
+
 ![alt text](img/35.png)
 
 * Nhìn opcode của instruction trên ta có thể thấy `9A` sẽ là opcode cho `call far`, 4 bytes tiếp theo sẽ là địa chỉ tương đối với IP và 2 bytes còn lại là value `code segment` cần phải thay đổi
@@ -432,5 +433,6 @@ lls}
 * Với check cuối cùng là compare string nhập vào với `to_64bit_hel`, ta được kết quả là 
 `KMACTF{32bit_heaven_crashed_in????????????lish_syscalls}to_64bit_hel`
 * Ghép nốt phần bên ngoài vào bên trong chỗ `????????????` ta được flag là 
+
 
 **Flag:** `KMACTF{32bit_heaven_crashed_into_64bit_hellish_syscalls}`
