@@ -275,9 +275,11 @@ __int64 __fastcall sub_7FF67F356C40(__int64 a1)
 ## chall2
 ### Initial Analysis
 * Ta được cung cấp 1 file PE32
+
 ![alt text](img/28.png)
 ### Detailed Analysis
 * Ta có thể thấy rằng chương trình sử dụng kĩ thuật `HeavenGate` sử dụng instruction `call far`
+
 ![alt text](img/29.png)
 
 * Đây là một kĩ thuật anti debug khá hiệu quả vì nó chặn được hết tất cả các debugger user-mode, nếu như debug bằng IDA, debugger sẽ không theo được và ngay lập tức raise exception
@@ -436,3 +438,4 @@ lls}
 
 
 **Flag:** `KMACTF{32bit_heaven_crashed_into_64bit_hellish_syscalls}`
+
